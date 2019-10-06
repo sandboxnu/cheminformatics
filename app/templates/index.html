@@ -1,3 +1,12 @@
-<html>
-  <h3> {{ title }}</h1>
-</html>
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+{% block content %}
+<div class="text-center">
+  <h1> Cheminformatics</h1>
+  <h3>Filter and cluster compounds for analysis</h3> 
+</div>
+
+{% endblock %}
