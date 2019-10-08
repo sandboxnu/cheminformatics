@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 
 inputs = ["COC1=CC2=C(C=C1OC)C(C1=CC=CC=C1)N(CC(=O)NS(=O)(=O)C1=CC=C(CN(C)CCC3=CC=CC=C3)C=C1)CC2",
@@ -13,13 +15,13 @@ inputs = ["COC1=CC2=C(C=C1OC)C(C1=CC=CC=C1)N(CC(=O)NS(=O)(=O)C1=CC=C(CN(C)CCC3=C
 
 bad_files = list(filter(os.path.isfile, ['bad0.smi', 'bad1.smi', 'bad2.smi', 'bad3.smi']))
 
-pains = os.system('ruby Lilly-Medchem-Rules/Lilly_Medchem_Rules.rb input.smi > okmedchem.smi')
+pains = os.system('ruby Lilly_Medchem_Rules.rb input.smi > okmedchem.smi')
 
 smiles = []
 bad_smiles_and_reasons = {}
 
 
-with open('Lilly-Medchem-Rules/input.smi', "w", newline='\n') as file:
+with open('input.smi', "w", newline='\n') as file:
     for input in inputs:
         file.write(input)
 
@@ -33,7 +35,7 @@ for bad_file in bad_files:
       bad_smiles_and_reasons[smile] = reason
 
 
-good_smiles = [line.rstrip('\n') for line in open('Lilly-Medchem-Rules/okmedchem.smi')]
+good_smiles = [line.rstrip('\n') for line in open('okmedchem.smi')]
 for smile in good_smiles:
   print(smile)
   smiles.append(smile)
