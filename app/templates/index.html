@@ -5,8 +5,13 @@
 {% endblock %}
 {% block content %}
 <div class="text-center">
-  <h1> Cheminformatics</h1>
+  <h1> {{ title }}</h1>
   <h3>Filter and cluster compounds for analysis</h3> 
+
+  {% for smile in smiles %}
+    <p> {{ smile }}</p>
+  {% endfor %}
+  
 </div>
 
 {% endblock %}
