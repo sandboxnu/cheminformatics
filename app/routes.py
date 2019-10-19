@@ -18,6 +18,6 @@ inputs = ["COC1=CC2=C(C=C1OC)C(C1=CC=CC=C1)N(CC(=O)NS(=O)(=O)C1=CC=C(CN(C)CCC3=C
 @app.route('/index')
 def index():
   
-  bad_smiles = [] #pains.get_bad_smiles_and_reasons(inputs)
+  bad_smiles = pains.get_bad_smiles_and_reasons(inputs)
 
   return render_template('index.html', title='Cheminformatics', smiles=bad_smiles)
