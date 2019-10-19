@@ -20,4 +20,4 @@ def index():
   
   bad_smiles = pains.get_bad_smiles_and_reasons(inputs)
 
-  return render_template('index.html', title='Cheminformatics', smiles=bad_smiles)
+  return render_template('index.html', title='Cheminformatic Analysis', smiles=bad_smiles)
