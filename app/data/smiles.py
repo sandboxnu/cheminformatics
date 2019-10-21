@@ -1,5 +1,5 @@
 ##example smile
-smile = dict([('smile', ''), ('murcko-smile', '')])
+#smile = dict([('smile', ''), ('murcko-smile', '')])
 
 ##example lists of smiles
 smile_strings = ["COC1=CC2=C(C=C1OC)C(C1=CC=CC=C1)N(CC(=O)NS(=O)(=O)C1=CC=C(CN(C)CCC3=CC=CC=C3)C=C1)CC2",
@@ -11,13 +11,15 @@ smile_strings = ["COC1=CC2=C(C=C1OC)C(C1=CC=CC=C1)N(CC(=O)NS(=O)(=O)C1=CC=C(CN(C
   "CN(CCC1=CC=CC=C1)CC1=CC=C(S(=O)(=O)NC(=O)C2=CC=C3OC(=CC3=C2)C2=CC=CC=C2)C=C1",
   "CN(CCC1=CC=CC=C1)CC1=CC=C(S(=O)(=O)NC(=O)C2=CC=C(CN3C(=O)C(=C(C4=CC=C(F)C=C4F)C3=O)C3=CC=C(F)C=C3F)C=C2)C=C1",
   "CN(CCC1=CC=CC=C1)CC1=CC=C(S(=O)(=O)NC(=O)C2=CC=CC(=C2)NCCC2=CC=CC=C2)C=C1",
-  "CN(CCC1=CC=CC=C1)CC1=CC=C(S(=O)(=O)NC(=O)C2=CC=C3C(=C2)C(=CN3C)C(=O)C2=CC=CS2)C=C1"]
+  "CN(CCC1=CC=CC=C1)CC1=CC=C(S(=O)(=O)NC(=O)C2=CC=C3C(=C2)C(=CN3C)C(=O)C2=CC=CS2)C=C1",
+  "[NH4+].[Cl-]"]
 
 smiles = dict.fromkeys(smile_strings, {})
 
 #add keys to smiles in the list
 for smile in smile_strings: 
-    smiles[smile]['murcko'] = ""
+    smiles[smile] = {}
+    smiles[smile]['murcko'] = smile
 
 
 
