@@ -124,3 +124,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+/scripts/pains/LillyMedchemRules/*
+/src/*
+
+!/scripts/pains/LillyMedchemRules/pains.py
