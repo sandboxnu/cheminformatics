@@ -1,3 +1,8 @@
+from rdkit import Chem
+from rdkit.Chem.Scaffolds import MurckoScaffold
+from rdkit.Chem import PandasTools
+
+
 ##example smile
 smile = dict([('smile', ''), ('murcko-smile', '')])
 
@@ -17,10 +22,14 @@ smiles = dict.fromkeys(smile_strings, {})
 
 #add keys to smiles in the list
 for smile in smile_strings: 
-    smiles[smile]['murcko'] = ""
+    smiles[smile] = {}
+    smiles[smile]['murcko'] = smile.apply(convert)
 
 
-
+def convert(mol_smile):
+    m = Chem.MolFromSmiles(mol_smile)
+    core = MurckoScaffold.GetScaffoldForMol(m)
+    return Chem.MolToSmiles(core)
 
 
 
