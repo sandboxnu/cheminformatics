@@ -7,9 +7,9 @@ def add_tanimoto_coefficients(smiles):
     #figure out how to get rdkit in here
     
     for smile in smiles:
-        #this won't work
-        smiles[smile]['tanimoto'] = 0 #some number here
-
+        similarities = []
+        for othersmile in smiles:
+            similarites.add({'othersmile': compare_two_smiles(smile, othersmile)})
     return smiles
 
 #need to get the comparison for each smile it would seem, what is the best way to store
