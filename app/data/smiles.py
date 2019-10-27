@@ -20,16 +20,19 @@ smile_strings = ["COC1=CC2=C(C=C1OC)C(C1=CC=CC=C1)N(CC(=O)NS(=O)(=O)C1=CC=C(CN(C
 
 smiles = dict.fromkeys(smile_strings, {})
 
-#add keys to smiles in the list
-for smile in smile_strings: 
-    smiles[smile] = {}
-    smiles[smile]['murcko'] = smile.apply(convert)
 
 
 def convert(mol_smile):
     m = Chem.MolFromSmiles(mol_smile)
     core = MurckoScaffold.GetScaffoldForMol(m)
     return Chem.MolToSmiles(core)
+
+
+#add keys to smiles in the list
+for smile in smile_strings: 
+    smiles[smile] = {}
+    smiles[smile]['murcko'] = convert(smile)
+
 
 
 
