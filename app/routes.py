@@ -15,7 +15,7 @@ def index():
   
   bad_smiles = pains.get_bad_smiles_and_reasons(inputs)
   
-  clustering.tanimoto_smiles = add_tanimoto_coefficients(smiles_with_murcko)
-  print(tanimoto_smiles)
+  tanimoto_smiles = clustering.add_tanimoto_coefficients(smiles_with_murcko)
+  
 
   return render_template('index.html', title='Cheminformatic Analysis', smiles=bad_smiles)
