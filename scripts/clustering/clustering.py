@@ -6,14 +6,15 @@ from rdkit.Chem.Fingerprints import FingerprintMols
 
 #add a key with the tanimoto coefficient
 def add_tanimoto_coefficients(smiles):
-    #figure out how to get rdkit in here
     for smile in smiles:
-        print("\n")
-        print(smiles[smile]['murcko'])
-        similarities = []
+        smileInfo = smiles[smile]
+        similarities = {}
         for othersmile in smiles:
-            similarities['othersmile'] = compare_two_smiles(smiles[smile]['murcko'], smiles[othersmile]['murcko'])})
-        smiles[smile]['similarities'] = "similarities"    
+            othersmileInfo = smiles[othersmile]
+            similarities[othersmile] = compare_two_smiles(smileInfo['murcko'], othersmileInfo['murcko'])
+
+            print(compare_two_smiles(smileInfo['murcko'], othersmileInfo['murcko']))
+        smileInfo['similarities'] = similarities
     return smiles
 
 #need to get the comparison for each smile it would seem, what is the best way to store
@@ -25,6 +26,6 @@ def compare_two_smiles(smile1, smile2):
     fps1 = FingerprintMols.FingerprintMol(smile1Ms)
     fps2 = FingerprintMols.FingerprintMol(smile2Ms)
 
-    DataStructs.FingerprintSimilarity(fps1, fps2)
+    return DataStructs.FingerprintSimilarity(fps1, fps2)
     
 
