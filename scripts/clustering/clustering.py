@@ -1,3 +1,4 @@
+from rdkit import Chem
 from rdkit import DataStructs
 from rdkit.Chem.Fingerprints import FingerprintMols
 #dictionary of dictionaries, each key is the smile
