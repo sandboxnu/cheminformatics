@@ -1,7 +1,5 @@
 from app import app
 from flask import render_template
-import sys
-sys.path.append('/scripts/pains/LillyMedchemRules/')
 import scripts.pains.LillyMedchemRules.pains as pains
 from app.data.smiles import smiles
 from app.data.smiles import smiles_with_murcko
