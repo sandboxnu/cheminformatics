@@ -5,9 +5,10 @@
 Initial Setup:
 
 - clone this repo
-- create a conda environment with rdkit: `conda create -c rdkit -n my-rdkit-env rdkit`
-- install flask: `conda install flask`
-- `export FLASK_APP=cheminformatcis.py`
+- create a conda environment: `conda create -n chem`
+- add rdkit `conda install -c conda-forge rdkit`
+- install flask: `conda install -c anaconda flask`
+- `export FLASK_APP=cheminformatics.py`
 
 Add PAINs script
 - `git clone https://github.com/IanAWatson/Lilly-Medchem-Rules`
