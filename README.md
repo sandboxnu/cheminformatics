@@ -7,7 +7,7 @@ Initial Setup:
 - clone this repo
 - create a conda environment: `conda create -n chem`
 - add rdkit `conda install -c conda-forge rdkit`
-- install flask: `conda install -c anaconda flask`
+- install flask: `conda install -c conda-forge flask`
 - `export FLASK_APP=cheminformatics.py`
 
 Add PAINs script
