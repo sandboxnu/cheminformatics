@@ -16,11 +16,5 @@ Add PAINs script
 - make sure ruby is installed on your machine
 - run `make` to build the project
 
-Add cytoscape
-- in the main project directory, mkdir `static` 
-- `cd static`
-- `git clone https://github.com/cytoscape/cytoscape.js`
-- now you have cytoscape!
-
 And to run the site locally:
 - `flask run`

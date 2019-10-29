@@ -4,7 +4,7 @@
 {{ title }}
 {% endblock %}
 {% block content %}
-<script type="module" src= "{{ url_for('static', filename='cytoscape.js/dist/cytoscape.min.js') }}" >
+<script type="module" src= "https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.9.4/cytoscape.min.js" >
 
   var cy = cytoscape({
     container: document.getElementById('cy')
