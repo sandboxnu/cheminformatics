@@ -1,14 +1,29 @@
-<html>
-  <head>
-    <title>Circle demo</title>
+{% extends 'bootstrap/base.html' %}
+{% block styles %}
+<link rel="stylesheet" href="{{url_for('static', filename='css/cluster.css')}}">
+{{super()}}
 
-    <link rel="stylesheet" href="{{url_for('static', filename='css/cluster.css')}}">
-    <script src= "https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.9.4/cytoscape.min.js" ></script>
+{% endblock %}
 
-</head>
-<body> 
-<div id="cy">
-</div>
+{% block head %}
+<script src= "https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.9.4/cytoscape.min.js" ></script>
+{{super()}}
+
+{% endblock %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="text-center"> 
+    <h1> {{ title }}</h1>
+    <h3>Filter and cluster compounds</h3> 
+  </div>
+<div id="cy"></div>
+{% endblock %}
+{% block scripts %}
+{{super()}}
 
 <script>
   const data = {"nodes": [
@@ -72,5 +87,4 @@
     layout.run();
 
 </script>
-</body>
-</html>
+{% endblock %}
