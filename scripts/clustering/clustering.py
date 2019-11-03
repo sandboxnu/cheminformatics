@@ -10,7 +10,7 @@ def add_tanimoto_coefficients(smiles):
         similarities = {}
         for othersmile in smiles:
             othersmileInfo = smiles[othersmile]
-            similarities[othersmile] = compare_two_smiles(smileInfo['murcko'], othersmileInfo['murcko'])
+            similarities[othersmileInfo['murcko']] = compare_two_smiles(smileInfo['murcko'], othersmileInfo['murcko'])
 
             print(compare_two_smiles(smileInfo['murcko'], othersmileInfo['murcko']))
         smileInfo['similarities'] = similarities

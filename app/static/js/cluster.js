@@ -1,3 +1,4 @@
+//example empty data
 const data = {"nodes": [{"data": {"id": '1', "type": "ellipse"}}]};
 
 let options = {
