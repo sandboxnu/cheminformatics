@@ -129,3 +129,5 @@ dmypy.json
 /src/*
 
 !/scripts/pains/LillyMedchemRules/pains.py
+
+/app/static/js/data.json

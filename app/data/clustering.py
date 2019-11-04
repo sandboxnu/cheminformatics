@@ -1,3 +1,5 @@
+import json
+import os
 
 cutoff = 0
 
@@ -26,4 +28,10 @@ def get_smiles_json(smiles):
     
     edges+= smile_edges
 
-  return {'nodes': nodes, 'edges': edges}
+  result = {'nodes': nodes, 'edges': edges}
+
+  os.chdir(os.path.abspath(os.path.dirname(__file__)))
+
+  with open('../static/js/data.json', 'w+') as outfile:
+    json.dump(result, outfile, indent=4, sort_keys=True)
+

@@ -5,6 +5,7 @@ from app.data.smiles import smiles
 from app.data.smiles import smiles_with_murcko
 import scripts.clustering.clustering as clustering
 from app.data.clustering import get_smiles_json
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -15,7 +16,7 @@ def index():
   
   tanimoto_smiles = clustering.add_tanimoto_coefficients(smiles)
 
-  cluster_data = get_smiles_json(tanimoto_smiles)
+  get_smiles_json(tanimoto_smiles)
   
   print("\n")
   print(tanimoto_smiles)
