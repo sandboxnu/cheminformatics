@@ -15,6 +15,14 @@
 {{ title }}
 {% endblock %}
 {% block content %}
+<script type="module" src= "https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.9.4/cytoscape.min.js" >
+
+  var cy = cytoscape({
+    container: document.getElementById('cy')
+  });
+
+</script>
+
 <div class="container">
   <div class="text-center"> 
     <h1> {{ title }}</h1>
