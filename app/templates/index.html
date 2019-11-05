@@ -1,16 +1,4 @@
 {% extends 'bootstrap/base.html' %}
-{% block styles %}
-<link rel="stylesheet" href="{{url_for('static', filename='css/cluster.css')}}">
-{{super()}}
-
-{% endblock %}
-
-{% block head %}
-<script src= "https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.9.4/cytoscape.min.js" ></script>
-{{super()}}
-
-{% endblock %}
-
 {% block title %}
 {{ title }}
 {% endblock %}
@@ -20,11 +8,4 @@
     <h1> {{ title }}</h1>
     <h3>Filter and cluster compounds</h3> 
   </div>
-<div id="cy"></div>
-{% endblock %}
-{% block scripts %}
-{{super()}}
-
-<script src="{{url_for('static', filename='js/cluster.js')}}">
-</script>
 {% endblock %}

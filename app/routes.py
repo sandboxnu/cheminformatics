@@ -9,6 +9,11 @@ from app.data.clustering import get_smiles_json
 @app.route('/')
 @app.route('/index')
 def index():
+  return render_template('index.html', title='Cheminformatic Analysis')
+
+@app.route('/')
+@app.route('/cluster')
+def cluster():
 
   inputs = smiles.keys()
   
@@ -17,9 +22,6 @@ def index():
   tanimoto_smiles = clustering.add_tanimoto_coefficients(smiles)
 
   get_smiles_json(tanimoto_smiles)
-  
-  print("\n")
-  print(tanimoto_smiles)
-  print("\n")
 
-  return render_template('index.html', title='Cheminformatic Analysis', smiles=bad_smiles)
+
+  return render_template('cluster.html', title='Cheminformatic Analysis')
