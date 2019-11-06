@@ -130,4 +130,5 @@ dmypy.json
 
 !/scripts/pains/LillyMedchemRules/pains.py
 
-app/static/cytoscape.js/*
+/app/static/js/data.json
+

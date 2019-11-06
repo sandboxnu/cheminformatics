@@ -2,12 +2,14 @@
 
 import os, sys
 
-os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
 smiles = []
 bad_smiles_and_reasons = {}
 
 def run_pains_filter(inputs):
+
+  os.chdir(os.path.abspath(os.path.dirname(__file__)))
+
   pains = os.system('ruby Lilly_Medchem_Rules.rb input.smi > okmedchem.smi')
 
   bad_files = list(filter(os.path.isfile, ['bad0.smi', 'bad1.smi', 'bad2.smi', 'bad3.smi']))
