@@ -1,7 +1,7 @@
 import json
 import os
 
-cutoff = 0
+cutoff = 0.7
 
 def get_smiles_json(smiles):
   nodes = []

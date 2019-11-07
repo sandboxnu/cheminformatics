@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template
+from flask import render_template, request, jsonify
 import scripts.pains.LillyMedchemRules.pains as pains
 from app.data.smiles import smiles
 from app.data.smiles import smiles_with_murcko
@@ -8,8 +8,19 @@ from app.data.clustering import get_smiles_json
 
 @app.route('/')
 @app.route('/index')
-def index():
+def index():     
   return render_template('index.html', title='Cheminformatic Analysis')
+
+
+@app.route("/upload", methods=['GET', 'POST'])
+def upload():
+    if request.method == 'POST':
+        f = request.files['file']
+        #f.save(f.filename)
+        print("hii")
+        #data = jsonify({"result": request.get_array(field_name='file')})
+        return render_template('cluster.html', title='Cheminformatic Analysis')
+
 
 @app.route('/')
 @app.route('/cluster')
