@@ -1,7 +1,7 @@
 import json
 import os
 
-cutoff = 0.7
+cutoff = 0.5
 
 def get_smiles_json(smiles):
   nodes = []
@@ -13,7 +13,7 @@ def get_smiles_json(smiles):
     smile_node = {}
     smile_node['murcko'] = smile_data['murcko']
     smile_node['data'] = {}
-    smile_node['data'] = {'id': smile_name }
+    smile_node['data'] = {'id': smile_name, 'label': smile_data['label']}
     nodes.append(smile_node)
     for sim, similarity_coefficient in smile_data['similarities'].items():
 
@@ -32,7 +32,9 @@ def get_smiles_json(smiles):
   result = {'nodes': nodes, 'edges': edges}
 
   os.chdir(os.path.abspath(os.path.dirname(__file__)))
-
+  
   with open('../static/js/data.json', 'w+') as outfile:
     json.dump(result, outfile, indent=4, sort_keys=True)
+
+
 
