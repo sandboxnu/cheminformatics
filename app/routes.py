@@ -27,3 +27,15 @@ def cluster():
 
 
   return render_template('cluster.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, tanimoto_smiles=tanimoto_smile_strings)
+
+@app.route('/')
+@app.route('/pains_verify_and_coefficient_use')
+def pains_verify_and_coefficient_use():
+  
+  inputs = smiles.keys()
+
+  
+  bad_smiles = pains.get_bad_smiles(inputs)
+  
+  print(bad_smiles.items())
+  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles)

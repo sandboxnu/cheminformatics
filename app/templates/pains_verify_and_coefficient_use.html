@@ -1,0 +1,15 @@
+{% extends 'bootstrap/base.html' %}
+{% block title %}
+{{ title }}
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="text-center"> 
+    <h1> {{ title }}</h1>
+    <h3>Verify Pains Filter</h3> 
+    {% for smile, reason in bad_smiles.items() %}
+    <p> {{ reason }}</p>
+    {% endfor %}
+
+  </div>
+{% endblock %}
