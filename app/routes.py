@@ -6,6 +6,9 @@ from app.data.smiles import smiles_with_murcko
 import scripts.clustering.clustering as clustering
 from app.data.clustering import get_smiles_json
 
+smiles = {}
+bad_smiles_and_reasons = {}
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -37,5 +40,11 @@ def pains_verify_and_coefficient_use():
   
   bad_smiles = pains.get_bad_smiles(inputs)
   
-  print(bad_smiles.items())
+  print(bad_smiles)
+  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles)
+
+@app.route('/')
+@app.route('/verify_pains')
+def verify_pains():
+
   return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles)
