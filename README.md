@@ -9,7 +9,9 @@ Initial Setup:
 - add rdkit `conda install -c conda-forge rdkit`
 - install flask: `conda install -c conda-forge flask`
 - install flask-excel `conda install -c conda-forge flask-excel`
+- install flask-wtf `conda install -c anaconda flask-wtf`
 - `export FLASK_APP=cheminformatics.py`
+
 
 Add PAINs script
 - `git clone https://github.com/IanAWatson/Lilly-Medchem-Rules`
