@@ -7,9 +7,25 @@
   <div class="text-center"> 
     <h1> {{ title }}</h1>
     <h3>Verify Pains Filter</h3> 
+    <table border=1>
+        <tr>
+            <th>Smile</th>
+            <th>Reason</th> 
+            <th>Action</th>
+          </tr>
     {% for smile, reason in bad_smiles.items() %}
-    <p> {{ reason }}</p>
+    <tr id={smile}>
+      <td>
+        {{smile}}
+      </td>
+    <td>
+      {{reason}}
+    </td>
+    <td>
+       <input type="checkbox" name={smile} value={smile}/>
+    </td>
+      </tr>
     {% endfor %}
-
+  </table>
   </div>
 {% endblock %}
