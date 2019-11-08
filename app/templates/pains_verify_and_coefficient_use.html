@@ -7,6 +7,7 @@
   <div class="text-center"> 
     <h1> {{ title }}</h1>
     <h3>Verify Pains Filter</h3> 
+    
     <table border=1>
         <tr>
             <th>Smile</th>
@@ -27,5 +28,14 @@
       </tr>
     {% endfor %}
   </table>
+  <br>
+  <div class="text-left">
+    <form action="\final_compounds">
+      Tanimoto Coefficient: 
+        <input type="number" name="tanimoto" step=".01" max=100 min=0/> 
+        <input type="submit" value="Cluster Compounds" >
+    </form>
+  </div>
+</br>
   </div>
 {% endblock %}
