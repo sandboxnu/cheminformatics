@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, request, jsonify
+from flask import render_template, request
 import scripts.pains.LillyMedchemRules.pains as pains
 from app.data.smiles import smiles, construct_smiles, filter_smiles
 import scripts.clustering.clustering as clustering
