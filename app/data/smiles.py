@@ -4,7 +4,6 @@ from rdkit.Chem import PandasTools
 
 smiles = {}
 
-
 #smiles with murcko smiles example:
 smiles_with_murcko = {'COc1cc(OC)cc(C(=O)NS(=O)(=O)c2ccc(CN3CCN(c4ccccc4)CC3)cc2)c1': {'murcko': 'O=C(NS(=O)(=O)c1ccc(CN2CCN(c3ccccc3)CC2)cc1)c1ccccc1'},
 'O=C(NS(=O)(=O)c1ccc(CN2CCN(c3ccccc3)CC2)cc1)c1ccc(CCc2ccccn2)cc1': {'murcko': 'O=C(NS(=O)(=O)c1ccc(CN2CCN(c3ccccc3)CC2)cc1)c1ccc(CCc2ccccn2)cc1'},
@@ -22,7 +21,9 @@ def construct_smiles(csv):
     smiles[smile_string]['murcko'] = convert(smile_string)
     smiles[smile_string]['label'] = row[1]
     smiles[smile_string]['mpo'] = row[2]
-     
+
+def filter_smiles(good_smiles):
+  return {smi: data for (smi, data) in smiles.items() if smi in good_smiles}
 
 def convert(mol_smile):
     m = Chem.MolFromSmiles(mol_smile)
