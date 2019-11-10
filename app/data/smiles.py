@@ -24,7 +24,6 @@ def construct_smiles(csv):
     smiles[smile_string]['mpo'] = row[2]
      
 
-
 def convert(mol_smile):
     m = Chem.MolFromSmiles(mol_smile)
     core = MurckoScaffold.GetScaffoldForMol(m)
