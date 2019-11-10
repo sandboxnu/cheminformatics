@@ -12,9 +12,11 @@ smiles_with_murcko = {'COc1cc(OC)cc(C(=O)NS(=O)(=O)c2ccc(CN3CCN(c4ccccc4)CC3)cc2
 
 
 def construct_smiles(csv):
+  if (csv[0] == ['snile', 'label', 'mpo']):
+    raise Exception("Malformed file input")
+
   csv = csv[1:]
   for row in csv:
-    print(str(row))
     smile_string = row[0] 
     smiles[smile_string] = {}
     smiles[smile_string]['murcko'] = convert(smile_string)

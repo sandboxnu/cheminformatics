@@ -8,10 +8,13 @@
     <h1> {{ title }}</h1>
     <h3>Filter and cluster compounds</h3> 
     <div>
-    <form action="/cluster" method=POST enctype=multipart/form-data><p>
-      <input class="form-control center" type=file name=file>
-      <input class="form-group" type=submit value=Submit>
-    </form>
+      <form action="/cluster" method=POST enctype=multipart/form-data><p>
+        <input class="form-control center" type=file name=file>
+        <input class="form-group" type=submit value=Submit>
+      </form>
+      {% for error in errors %}
+        <p class="error text-danger">{{ error }} </p> 
+      {% endfor %}
     </div>
   </div>
 {% endblock %}
