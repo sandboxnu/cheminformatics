@@ -33,7 +33,7 @@ def run_pains_filter(inputs):
 
   good_smiles = [line.rstrip("\n") for line in open('okmedchem.smi')]
   for smile in good_smiles:
-    smiles.append(smile)
+    smiles.append(smile.split(" ")[0])
 
 def get_smiles(inputs):
   run_pains_filter(inputs)

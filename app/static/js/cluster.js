@@ -36,7 +36,7 @@ fetch('js/data.json', {mode: 'no-cors'})
         style: {
           'height': 20,
           'width': 20,
-          'label': 'data(id)',
+          'label': 'data(label)',
         }
       },
 
