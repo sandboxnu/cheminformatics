@@ -70,7 +70,6 @@ def verify_pains():
 @app.route('/final_compounds', methods=['GET', 'POST'])
 def final_compounds():
   global good_smiles
-  global bad_smiles
   if request.method == 'POST':
     try:
       tanimoto = request.form['tanimoto']
@@ -80,13 +79,8 @@ def final_compounds():
     except:
       return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, errors=["Please input a valid tanimoto coefficient"])
   
-  #get real final smiles
-  bad_smiles={}
-
   tanimoto_smiles = clustering.add_tanimoto_coefficients(good_smiles)
-  
-  tanimoto_smile_strings = [" ".join([str(i) for i in v['similarities'].values()]) for v in tanimoto_smiles.values()]
 
   get_smiles_json(tanimoto_smiles, float(tanimoto))
 
-  return render_template('cluster.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, tanimoto_smiles=tanimoto_smile_strings)
+  return render_template('cluster.html', title='Cheminformatic Analysis')
