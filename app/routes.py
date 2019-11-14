@@ -74,7 +74,8 @@ def final_compounds():
   if request.method == 'POST':
     try:
       tanimoto = request.form['tanimoto']
-      if (not tanimoto.isNmmeric() or float(tanimoto) < 0 or float(tanimoto) > 1):
+      print(tanimoto)
+      if (float(tanimoto) < 0 or float(tanimoto) > 1):
         return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, errors=["Please input a valid tanimoto coefficient"])
     except:
       return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, errors=["Please input a valid tanimoto coefficient"])
