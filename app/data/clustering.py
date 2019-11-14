@@ -1,9 +1,8 @@
 import json
 import os
 
-cutoff = 0.3
 
-def get_smiles_json(smiles):
+def get_smiles_json(smiles, cutoff):
   nodes = []
   edges = []
 

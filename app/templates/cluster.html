@@ -20,14 +20,6 @@
     <h1> {{ title }}</h1>
     <h3>Filter and cluster compounds</h3> 
   </div>
-  {% for smile in bad_smiles %}
-    <p> {{ smile }}</p>
-  {% endfor %}
-  
-  {% for smile in tanimoto_smiles %}
-    <p> {{ smile }}</p>
-  {% endfor %}
-  
 <div id="cy"></div>
 {% endblock %}
 {% block scripts %}
