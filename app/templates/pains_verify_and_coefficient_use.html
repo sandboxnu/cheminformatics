@@ -39,6 +39,9 @@
         <input type="number" name="tanimoto" step=".01" max=100 min=0/> 
         <input type="submit" value="Cluster Compounds" >
     </form>
+      {% for error in errors %}
+        <p class="error text-danger">{{ error }} </p> 
+      {% endfor %}
   </div>
 </br>
   </div>
