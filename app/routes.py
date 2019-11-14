@@ -6,6 +6,7 @@ import scripts.clustering.clustering as clustering
 from app.data.clustering import get_smiles_json
 
 global bad_smiles 
+global good_smiles
 
 @app.route('/')
 @app.route('/index')
@@ -54,8 +55,8 @@ def verify_pains():
 
 @app.route('/final_compounds', methods=['GET', 'POST'])
 def final_compounds():
-  #;if request.method == 'POST':
-    #tanimoto = request.form.get('tanimoto'))
+  if request.method == 'POST':
+    tanimoto = request.form['tanimoto']
   
   #get real final smiles
   inputs = smiles.keys()
@@ -66,6 +67,6 @@ def final_compounds():
   
   tanimoto_smile_strings = [" ".join([str(i) for i in v['similarities'].values()]) for v in tanimoto_smiles.values()]
 
-  get_smiles_json(tanimoto_smiles)
+  get_smiles_json(tanimoto_smiles, .2)
 
   return render_template('cluster.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, tanimoto_smiles=tanimoto_smile_strings)
