@@ -28,10 +28,6 @@ def upload():
         good_smiles = filter_smiles(pains.get_smiles(inputs))
         global bad_smiles
         bad_smiles = pains.get_bad_smiles(inputs)
-
-        tanimoto_smiles = clustering.add_tanimoto_coefficients(good_smiles)
-
-        get_smiles_json(tanimoto_smiles)
         
     return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles)
 
@@ -46,10 +42,24 @@ def pains_verify_and_coefficient_use():
   print(bad_smiles)
   return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles)
 
-@app.route('/')
-@app.route('/verify_pains')
+
+@app.route('/verify_pains', methods=['GET', 'POST'])
 def verify_pains():
+  global good_smiles
   global bad_smiles
+  if request.method == 'POST':
+    form = request.form
+    if form['action'] == 'Drop Selected Compounds':
+      
+      for smile in form:
+        if(smile != 'action'):
+          del bad_smiles[smile]
+    elif form['action'] == 'Ignore Errors':
+      
+      for smile in form:
+        if(smile != 'action'):
+          del bad_smiles[smile]
+          good_smiles[smile] = {}
 
   return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles)
 

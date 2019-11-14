@@ -8,7 +8,7 @@
     <h1> {{ title }}</h1>
     <h3>Verify Pains Filter</h3> 
     
-    <form action="\verify_pains"> 
+    <form action="\verify_pains" method=POST enctype=multipart/form-data>
     <table border=1>
         <tr>
             <th>Smile</th>
@@ -24,12 +24,13 @@
       {{reason}}
     </td>
     <td>
-       <input type="checkbox" name={smile} value={smile}/>
+       <input type="checkbox" name={{smile}} value={{smile}}/>
     </td>
       </tr>
     {% endfor %}
   </table>
-  <input type="submit" value="Drop Selected Compounds">
+  <input type="submit" name='action' value="Drop Selected Compounds">
+  <input type="submit" name='action' value="Ignore Errors">
   </form>
   <br>
   <div class="text-left">
