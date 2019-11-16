@@ -30,7 +30,7 @@ def convert(mol_smile):
     core = MurckoScaffold.GetScaffoldForMol(m)
     return Chem.MolToSmiles(core)
 
-def conver_from_smart(smart):
+def convert_from_smart(smart):
   conv = Chem.MolFromSmiles(smart)
   back = Chem.MolToSmiles(conv)
   return back
@@ -40,7 +40,7 @@ def convert_to_smiles(bad_smiles):
   result = {}
   
   for (smart, reason) in bad_smiles.items():
-    smile = conver_from_smart(smart)
+    smile = convert_from_smart(smart)
     result[smile] = reason
 
   return result

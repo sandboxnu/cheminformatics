@@ -26,7 +26,7 @@ def upload():
 
         inputs = smiles.keys()
         global all_smiles 
-        all_smiles = smiles.copy()
+        all_smiles = convert_to_smiles(smiles.copy())
         global good_smiles
         good_smiles = convert_to_smiles(filter_smiles(pains.get_smiles(inputs)))
         global bad_smiles
