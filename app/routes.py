@@ -1,7 +1,7 @@
 from app import app
 from flask import render_template, request
 import scripts.pains.LillyMedchemRules.pains as pains
-from app.data.smiles import smiles, construct_smiles, filter_smiles, convert
+from app.data.smiles import smiles, construct_smiles, filter_smiles, convert, convert_to_smiles
 import scripts.clustering.clustering as clustering
 from app.data.clustering import get_smiles_json
 
@@ -25,26 +25,14 @@ def upload():
             return render_template('index.html', title='Cheminformatic Analysis', errors=["Please input a valid file format"])
 
         inputs = smiles.keys()
-        global good_smiles
-        good_smiles = filter_smiles(pains.get_smiles(inputs))
-        global bad_smiles
-        bad_smiles = pains.get_bad_smiles(inputs)
         global all_smiles 
-        all_smiles = smiles
+        all_smiles = convert_to_smiles(smiles.copy())
+        global good_smiles
+        good_smiles = convert_to_smiles(filter_smiles(pains.get_smiles(inputs)))
+        global bad_smiles
+        bad_smiles = convert_to_smiles(pains.get_bad_smiles(inputs))
         
     return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles)
-
-@app.route('/')
-@app.route('/pains_verify_and_coefficient_use')
-def pains_verify_and_coefficient_use():
-  inputs = smiles.keys()
-  global bad_smiles #use the global version 
-  
-  bad_smiles = pains.get_bad_smiles(inputs)
-  
-  print(bad_smiles)
-  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles)
-
 
 @app.route('/verify_pains', methods=['GET', 'POST'])
 def verify_pains():
@@ -54,7 +42,6 @@ def verify_pains():
   if request.method == 'POST':
     form = request.form
     if form['action'] == 'Drop Selected Compounds':
-      
       for smile in form:
         if(smile != 'action'):
           del bad_smiles[smile]
@@ -73,7 +60,7 @@ def final_compounds():
   if request.method == 'POST':
     try:
       tanimoto = request.form['tanimoto']
-      print(tanimoto)
+      
       if (float(tanimoto) < 0 or float(tanimoto) > 1):
         return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, errors=["Please input a valid tanimoto coefficient"])
     except:
