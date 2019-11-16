@@ -12,6 +12,7 @@ def run_pains_filter(inputs):
   os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
   os.remove("okmedchem.smi")
+  os.remove("input.smi")
 
   for filtered_file in filtered_files:
     os.remove(filtered_file)
