@@ -1,0 +1,19 @@
+import os
+import multiprocessing
+
+_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+_VAR = os.path.join(_ROOT, 'var')
+_ETC = os.path.join(_ROOT, 'etc')
+
+loglevel = 'info'
+
+errorlog = "-"
+accesslog = "-"
+
+bind = '0.0.0.0:5000'
+workers = multiprocessing.cpu_count() * 2 + 1
+
+timeout = 3 * 60
+keepalive = 24 * 60 * 60
+
+capture_output = True

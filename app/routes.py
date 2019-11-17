@@ -29,3 +29,7 @@ def upload():
         get_smiles_json(tanimoto_smiles)
 
         return render_template('cluster.html', title='Cheminformatic Analysis')
+
+#if __name__ == "__main__":
+#     app.run(host="0.0.0.0", port=80)
+
