@@ -71,3 +71,10 @@ def final_compounds():
   get_smiles_json(tanimoto_smiles, float(tanimoto))
 
   return render_template('cluster.html', title='Cheminformatic Analysis')
+
+
+@app.after_request
+def add_header(response):
+  response.cache_control.public = True
+  response.cache_control.max_age = 0
+  return response
