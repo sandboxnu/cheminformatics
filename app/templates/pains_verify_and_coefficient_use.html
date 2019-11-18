@@ -1,0 +1,48 @@
+{% extends 'bootstrap/base.html' %}
+{% block title %}
+{{ title }}
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="text-center"> 
+    <h1> {{ title }}</h1>
+    <h3>Verify Pains Filter</h3> 
+    
+    <form action="\verify_pains" method=POST enctype=multipart/form-data>
+    <table border=1>
+        <tr>
+            <th>Smile</th>
+            <th>Reason</th> 
+            <th>Action</th>
+          </tr>
+    {% for smile, reason in bad_smiles.items() %}
+    <tr id={smile}>
+      <td>
+        {{smile}}
+      </td>
+    <td>
+      {{reason}}
+    </td>
+    <td>
+       <input type="checkbox" name={{smile}} value={{smile}}/>
+    </td>
+      </tr>
+    {% endfor %}
+  </table>
+  <input type="submit" name='action' value="Drop Selected Compounds">
+  <input type="submit" name='action' value="Ignore Errors">
+  </form>
+  <br>
+  <div class="text-left">
+    <form action="\final_compounds" method=POST enctype=multipart/form-data>
+      Tanimoto Coefficient: 
+        <input type="number" name="tanimoto" step=".01" max=100 min=0/> 
+        <input type="submit" value="Cluster Compounds" >
+    </form>
+      {% for error in errors %}
+        <p class="error text-danger">{{ error }} </p> 
+      {% endfor %}
+  </div>
+</br>
+  </div>
+{% endblock %}

@@ -58,4 +58,8 @@ fetch('js/data.json', {mode: 'no-cors'})
   var layout = cy.layout( options );
 
   layout.run();
+  var png64 = cy.png();
+
+  $('<div class=\'text-center\'><a id="png" download>Download Image!</a></div>').insertBefore('#cy');
+    $('#png').attr('href', png64);
 });
