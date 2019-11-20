@@ -25,11 +25,26 @@ def compare_two_smiles(smile1, smile2):
     return DataStructs.FingerprintSimilarity(fps1, fps2)
     
 
-def cluster(smile_keys, cutoff=0.5):
-    npts = len(smile_keys)
-    print(npts)
+def cluster(smile_keys, cutoff=0.50):
+    #note: it seems cutoff is one - similarity coefficient
+    nfps = len(smile_keys)
+    dists = []
+    #turn into murckos??
+    data = [None] * nfps
+    for i in range(0, nfps):
+        murcko = convert(smile_keys[i])
+        mols = Chem.MolFromSmiles(murcko)
+        fps = FingerprintMols.FingerprintMol(mols)
+        data[i] = fps
+    
 
-    result = Butina.ClusterData(smile_keys, npts, cutoff, False, compare_murcko_smiles, False)
+    for i in range(1,nfps):
+        sims = DataStructs.BulkTanimotoSimilarity(data[i],data[:i])
+        dists.extend([1-x for x in sims])
+
+    print(dists)
+
+    result = Butina.ClusterData(dists,nfps,cutoff,isDistData=True)
     print(result)
 
 
