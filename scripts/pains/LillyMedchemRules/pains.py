@@ -8,17 +8,23 @@ bad_smiles_and_reasons = {}
 
 def run_pains_filter(inputs):
 
+  filtered_files = ['bad0.smi', 'bad1.smi', 'bad2.smi', 'bad3.smi']
   os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
-  pains = os.system('ruby Lilly_Medchem_Rules.rb input.smi > okmedchem.smi')
+  os.remove("okmedchem.smi")
+  os.remove("input.smi")
 
-  bad_files = list(filter(os.path.isfile, ['bad0.smi', 'bad1.smi', 'bad2.smi', 'bad3.smi']))
+  for filtered_file in filtered_files:
+    os.remove(filtered_file)
 
   with open('input.smi', "w") as file:
       for input_smile in inputs:
           file.write(input_smile)
           file.write("\n")
 
+  pains = os.system('ruby Lilly_Medchem_Rules.rb input.smi > okmedchem.smi')
+
+  bad_files = list(filter(os.path.isfile, filtered_files))
 
   for bad_file in bad_files:
     with open(bad_file) as file:
