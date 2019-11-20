@@ -11,10 +11,9 @@ def get_smiles_json(smiles, cutoff):
 
     smile_node = {}
     smile_node['murcko'] = smile_data['murcko']
-    smile_node['mpo'] = smile_data['mpo']
   
     smile_node['data'] = {}
-    smile_node['data'] = {'id': smile_name, 'label': smile_data['label']}
+    smile_node['data'] = {'id': smile_name, 'label': smile_data['label'] + '\nmpo: ' + str(smile_data['mpo'])}
   
     nodes.append(smile_node)
     for sim, similarity_coefficient in smile_data['similarities'].items():
