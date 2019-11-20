@@ -31,6 +31,8 @@ def upload():
         good_smiles = convert_to_smiles(filter_smiles(pains.get_smiles(inputs)))
         global bad_smiles
         bad_smiles = convert_to_smiles(pains.get_bad_smiles(inputs))
+
+        clustering.cluster(list(inputs))
         
     return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles)
 
