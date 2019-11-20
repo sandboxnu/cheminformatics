@@ -74,6 +74,7 @@ def final_compounds():
 
 @app.after_request
 def add_header(response):
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response.cache_control.public = True
     response.cache_control.max_age = 0
     return response

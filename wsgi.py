@@ -1,28 +1,21 @@
 from app import app
-
-from os import path, walk
-
+import os
 
 
 
 if __name__ == '__main__':
-    extra_files = []
+    extra_files = ['./app/static/js/data.json',]
     json_file = 'app/static/js/data.json'
-    extra_files.append(json_file)
     pains_files = ['bad0.smi', 'bad1.smi', 'bad2.smi', 'bad3.smi', "input.smi", "okmedchem.smi"]
     
     for pains in pains_files:
-        dir_name = '/scripts/pains/LillyMedchemRules/'
-        extra_files.append(dir_name + pains_files)
+        dir_name = './scripts/pains/LillyMedchemRules/'
+        file_name = os.path.join(dir_name, pains)
+        print(file_name)
+        if os.path.isfile(file_name):
+            extra_files.append(file_name)
+    print(os.getcwd())
 
-    """
-    for extra_dir in extra_dirs:
-        for dirname, dirs, files in walk(extra_dir):
-            for filename in files:
-                filename = path.join(dirname, filename)
-                if path.isfile(filename):
-                    extra_files.append(filename)
-    """
+
     app.run(extra_files=extra_files)
-    app.run()
 
