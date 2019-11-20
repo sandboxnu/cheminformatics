@@ -37,6 +37,7 @@ fetch('js/data.json', {mode: 'no-cors'})
           'height': 20,
           'width': 20,
           'label': 'data(label)',
+          'text-wrap': 'wrap'
         }
       },
 
