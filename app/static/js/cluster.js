@@ -13,7 +13,7 @@ fetch('js/data.json', {mode: 'no-cors'})
     animationDuration: undefined,
     animationEasing: undefined,
     fit: true,
-    padding: 30,
+    padding: 20,
     nodeSeparation: 20,
     idealInterClusterEdgeLengthCoefficient: 1.4,
     allowNodesInsideCircle: false,
@@ -36,10 +36,11 @@ fetch('js/data.json', {mode: 'no-cors'})
       {
         selector: 'node',
         style: {
-          'height': 10,
-          'width': 10,
+          'height': 6,
+          'width': 6,
           'label': 'data(label)',
-          'text-wrap': 'wrap'
+          'text-wrap': 'wrap',
+          'font-size': '3px'
         }
       },
 
