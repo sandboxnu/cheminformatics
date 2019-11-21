@@ -43,7 +43,6 @@ def cluster(smile_keys, cutoff=0.50):
         dists.extend([1-x for x in sims])
 
     result = Butina.ClusterData(dists,nfps,cutoff,isDistData=True)
-    #TODO: Turn this back into the smile ids
     clusters = []
     for tuple in result:
         set = []
@@ -54,3 +53,14 @@ def cluster(smile_keys, cutoff=0.50):
         clusters.append(set)
     return clusters   
 
+def cluster_dict(smile_dict):
+    keys_list = list(smile_dict.keys())
+    clusters = cluster(keys_list)
+
+    result = []
+    for clust in clusters:
+        clust_dict = {}
+        for key in clust:
+            clust_dict[key] = smile_dict[key]
+        result.append(clust_dict)    
+    return result    
