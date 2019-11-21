@@ -25,7 +25,7 @@ def compare_two_smiles(smile1, smile2):
     return DataStructs.FingerprintSimilarity(fps1, fps2)
     
 #return cluster of smile_keys
-def cluster(smile_keys, cutoff=0.50):
+def cluster(smile_keys, cutoff=0.15):
     #note: it seems cutoff is one - similarity coefficient, it's euclidean distance I think??
     nfps = len(smile_keys)
     dists = []
@@ -53,9 +53,9 @@ def cluster(smile_keys, cutoff=0.50):
         clusters.append(set)
     return clusters   
 
-def cluster_dict(smile_dict):
+def cluster_dict(smile_dict, cutoff=.15):
     keys_list = list(smile_dict.keys())
-    clusters = cluster(keys_list)
+    clusters = cluster(keys_list, cutoff)
 
     result = []
     for clust in clusters:

@@ -32,7 +32,7 @@ def upload():
         global bad_smiles
         bad_smiles = convert_to_smiles(pains.get_bad_smiles(inputs))
 
-        cluster = clustering.cluster_dict(good_smiles)
+        cluster = clustering.cluster_dict(good_smiles, .5)
         
     return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles)
 
