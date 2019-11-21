@@ -53,14 +53,10 @@ def cluster(smile_keys, cutoff=0.15):
         clusters.append(set)
     return clusters   
 
-def cluster_dict(smile_dict, cutoff=.15):
-    keys_list = list(smile_dict.keys())
-    clusters = cluster(keys_list, cutoff)
-
-    result = []
+def in_same_cluster(s1, s2, clusters):
     for clust in clusters:
-        clust_dict = {}
-        for key in clust:
-            clust_dict[key] = smile_dict[key]
-        result.append(clust_dict)    
-    return result    
+        if s1 in clust and s2 in clust:
+            return True
+        
+    return False            
+

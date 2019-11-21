@@ -1,5 +1,6 @@
 import json
 import os
+import scripts.clustering.clustering as clustering
 
 
 def get_smiles_json(smiles, cutoff, clusters):
@@ -18,8 +19,7 @@ def get_smiles_json(smiles, cutoff, clusters):
     nodes.append(smile_node)
     for sim, similarity_coefficient in smile_data['similarities'].items():
 
-      # TODO: use actual similarity cutoff
-      if similarity_coefficient >= cutoff and similarity_coefficient != 1:
+      if similarity_coefficient >= cutoff and similarity_coefficient != 1 and clustering.in_same_cluster(sim, smile_name, clusters):
         new_edge = {}
         new_edge['data'] = {}
         new_edge['data']['source'] = smile_name
