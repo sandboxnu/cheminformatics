@@ -6,7 +6,7 @@ fetch('js/data.json', {mode: 'no-cors'})
   let options = {
     name: 'cise',
 
-    clusters: function(node) { return 1},
+    clusters: data.clusterInfo,
     animate: false,
     
     refresh: 10, 

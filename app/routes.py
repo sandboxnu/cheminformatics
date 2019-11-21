@@ -31,8 +31,6 @@ def upload():
         good_smiles = convert_to_smiles(filter_smiles(pains.get_smiles(inputs)))
         global bad_smiles
         bad_smiles = convert_to_smiles(pains.get_bad_smiles(inputs))
-
-        cluster = clustering.cluster_dict(good_smiles, .5)
         
     return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles)
 
@@ -70,7 +68,10 @@ def final_compounds():
   
   tanimoto_smiles = clustering.add_tanimoto_coefficients(good_smiles)
 
-  get_smiles_json(tanimoto_smiles, float(tanimoto))
+
+  cluster = clustering.cluster(list(good_smiles.keys()), 1 - float(tanimoto))
+
+  get_smiles_json(tanimoto_smiles, float(tanimoto), cluster)
 
   return render_template('cluster.html', title='Cheminformatic Analysis')
 

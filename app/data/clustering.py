@@ -2,7 +2,7 @@ import json
 import os
 
 
-def get_smiles_json(smiles, cutoff):
+def get_smiles_json(smiles, cutoff, clusters):
   nodes = []
   edges = []
 
@@ -30,7 +30,7 @@ def get_smiles_json(smiles, cutoff):
     
     edges+= smile_edges
 
-  result = {'nodes': nodes, 'edges': edges}
+  result = {'nodes': nodes, 'edges': edges, 'clusterInfo': clusters}
 
   os.chdir(os.path.abspath(os.path.dirname(__file__)))
   
