@@ -4,24 +4,26 @@ fetch('js/data.json', {mode: 'no-cors'})
   })
   .then(function(data) {
   let options = {
-    name: 'circle',
+    name: 'cise',
 
-    fit: true, 
-    padding: 30,
-    boundingBox: undefined, 
-    avoidOverlap: true, 
-    nodeDimensionsIncludeLabels: false,
-    radius: undefined, 
-    startAngle: 3 / 2 * Math.PI, 
-    sweep: undefined,
-    clockwise: true, 
-    sort: undefined, 
-    animationEasing: undefined, 
-    animateFilter: function ( node, i ){ return true; }, 
-    ready: undefined,
-    stop: undefined, 
-    transform: function (node, position ){ return position; } 
-
+    clusters: function(node) { return 1},
+    animate: false,
+    
+    refresh: 10, 
+    animationDuration: undefined,
+    animationEasing: undefined,
+    fit: true,
+    padding: 20,
+    nodeSeparation: 20,
+    idealInterClusterEdgeLengthCoefficient: 1.4,
+    allowNodesInsideCircle: false,
+    maxRatioOfNodesInsideCircle: 0.1,
+    springCoeff: 0.45,
+    nodeRepulsion: 4500,
+    gravity: 0.25,
+    gravityRange: 3.8, 
+    ready: function(){}, 
+    stop: function(){},
   };
 
   var cy = window.cy = cytoscape({
@@ -34,10 +36,11 @@ fetch('js/data.json', {mode: 'no-cors'})
       {
         selector: 'node',
         style: {
-          'height': 20,
-          'width': 20,
+          'height': 6,
+          'width': 6,
           'label': 'data(label)',
-          'text-wrap': 'wrap'
+          'text-wrap': 'wrap',
+          'font-size': '3px'
         }
       },
 
@@ -46,7 +49,7 @@ fetch('js/data.json', {mode: 'no-cors'})
         style: {
           'curve-style': 'haystack',
           'haystack-radius': 0,
-          'width': 5,
+          'width': 2,
           'opacity': 0.5,
           'line-color': '#f2f08c'
         }
@@ -59,6 +62,7 @@ fetch('js/data.json', {mode: 'no-cors'})
   var layout = cy.layout( options );
 
   layout.run();
+
   var png64 = cy.png();
 
   $('<div class=\'text-center\'><a id="png" download>Download Image!</a></div>').insertBefore('#cy');
