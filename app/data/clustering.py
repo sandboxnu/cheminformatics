@@ -14,7 +14,8 @@ def get_smiles_json(smiles, cutoff, clusters):
     smile_node['murcko'] = smile_data['murcko']
   
     smile_node['data'] = {}
-    smile_node['data'] = {'id': smile_name, 'label': smile_data['label'] + '\nmpo: ' + str(smile_data['mpo'])}
+    smile_node['data'] = {'id': smile_name, 'label': smile_data['label'] + '\nmpo: ' + str(smile_data['mpo']),
+      'mpo': smile_data['mpo']}
   
     nodes.append(smile_node)
     for sim, similarity_coefficient in smile_data['similarities'].items():
