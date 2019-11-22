@@ -28,8 +28,8 @@ fetch('js/data.json', {mode: 'no-cors'})
 
 
 
-  let rgb1 = [255, 0, 0]    // red
-  let rgb2 = [255, 255, 0]  // yellow
+  let rgb1 = data['color1']   // red
+  let rgb2 = data['color2']  // yellow
 
   function getPoint(d, a1, a2) {
   // find a color d% between a1 and a2
