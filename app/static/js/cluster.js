@@ -6,7 +6,7 @@ fetch('js/data.json', {mode: 'no-cors'})
   let options = {
     name: 'cise',
 
-    clusters: function(node) { return 1},
+    clusters: data.clusterInfo,
     animate: false,
     
     refresh: 10, 
@@ -19,7 +19,7 @@ fetch('js/data.json', {mode: 'no-cors'})
     allowNodesInsideCircle: false,
     maxRatioOfNodesInsideCircle: 0.1,
     springCoeff: 0.45,
-    nodeRepulsion: 4500,
+    nodeRepulsion: 1,
     gravity: 0.25,
     gravityRange: 3.8, 
     ready: function(){}, 
@@ -62,8 +62,15 @@ fetch('js/data.json', {mode: 'no-cors'})
   var layout = cy.layout( options );
 
   layout.run();
+  const img_options =
+  {
+    "bg": "white",
+    "full": false,
+    "maxWidth": 15000,
+    "maxHeight": 11250,
+  };
 
-  var png64 = cy.png();
+  var png64 = cy.png(img_options);
 
   $('<div class=\'text-center\'><a id="png" download>Download Image!</a></div>').insertBefore('#cy');
     $('#png').attr('href', png64);

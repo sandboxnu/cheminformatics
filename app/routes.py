@@ -68,7 +68,10 @@ def final_compounds():
   
   tanimoto_smiles = clustering.add_tanimoto_coefficients(good_smiles)
 
-  get_smiles_json(tanimoto_smiles, float(tanimoto))
+
+  cluster = clustering.cluster(list(good_smiles.keys()), 1 - float(tanimoto))
+
+  get_smiles_json(tanimoto_smiles, float(tanimoto), cluster)
 
   return render_template('cluster.html', title='Cheminformatic Analysis')
 
