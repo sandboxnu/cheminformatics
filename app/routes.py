@@ -4,6 +4,7 @@ import scripts.pains.LillyMedchemRules.pains as pains
 from app.data.smiles import smiles, construct_smiles, filter_smiles, convert, convert_to_smiles
 import scripts.clustering.clustering as clustering
 from app.data.clustering import get_smiles_json
+from app.data.color_functions import color_hex_to_array
 
 global bad_smiles 
 global good_smiles
@@ -67,13 +68,19 @@ def final_compounds():
       return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, errors=["Please input a valid tanimoto coefficient"])
   
   tanimoto_smiles = clustering.add_tanimoto_coefficients(good_smiles)
+  #TODO: Allow user to input these colors
+  #TODO: Add legend for colors in the front end(It is very difficult)
+  color1 = '#33ccf'
+  color2 = '#ff99cc'
+  color1_array = color_hex_to_array(color1)
+  color2_array = color_hex_to_array(color2)
 
 
   cluster = clustering.cluster(list(good_smiles.keys()), 1 - float(tanimoto))
 
-  get_smiles_json(tanimoto_smiles, float(tanimoto), cluster)
+  get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, color1_array, color2_array)
 
-  return render_template('cluster.html', title='Cheminformatic Analysis')
+  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2)
 
 
 @app.after_request

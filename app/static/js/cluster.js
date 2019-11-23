@@ -67,10 +67,10 @@ fetch('js/data.json', {mode: 'no-cors'})
           'text-wrap': 'wrap',
           'font-size': '3px',
           'background-color' : function(ele)  {
-            console.log(ele)
+            console.log(rgb1)
+            console.log(rgb2)
             let colors = getPoint(ele.data('mpo')/6, rgb1, rgb2);
             let rgbColor = '#' + fullColorHex(colors[0], colors[1], colors[2]);
-            console.log(rgbColor)
             return rgbColor;
           }
         }
