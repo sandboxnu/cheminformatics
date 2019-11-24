@@ -70,8 +70,8 @@ def final_compounds():
   tanimoto_smiles = clustering.add_tanimoto_coefficients(good_smiles)
   #TODO: Allow user to input these colors
   #TODO: Add legend for colors in the front end(It is very difficult)
-  color1 = '#33ccf'
-  color2 = '#ff99cc'
+  color1 = '#135476'
+  color2 = '#ff0000'
   color1_array = color_hex_to_array(color1)
   color2_array = color_hex_to_array(color2)
 
