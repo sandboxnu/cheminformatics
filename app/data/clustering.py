@@ -3,7 +3,7 @@ import os
 import scripts.clustering.clustering as clustering
 
 
-def get_smiles_json(smiles, cutoff, clusters):
+def get_smiles_json(smiles, cutoff, clusters, mpo_color1=[255,0,0], mpo_color2=[0, 255, 0]):
   nodes = []
   edges = []
 
@@ -14,7 +14,8 @@ def get_smiles_json(smiles, cutoff, clusters):
     smile_node['murcko'] = smile_data['murcko']
   
     smile_node['data'] = {}
-    smile_node['data'] = {'id': smile_name, 'label': smile_data['label'] + '\nmpo: ' + str(smile_data['mpo'])}
+    smile_node['data'] = {'id': smile_name, 'label': smile_data['label'] + '\nmpo: ' + str(smile_data['mpo']),
+      'mpo': smile_data['mpo']}
   
     nodes.append(smile_node)
     for sim, similarity_coefficient in smile_data['similarities'].items():
@@ -30,7 +31,7 @@ def get_smiles_json(smiles, cutoff, clusters):
     
     edges+= smile_edges
 
-  result = {'nodes': nodes, 'edges': edges, 'clusterInfo': clusters}
+  result = {'nodes': nodes, 'edges': edges, 'clusterInfo': clusters, 'color1': mpo_color1, 'color2': mpo_color2}
 
   os.chdir(os.path.abspath(os.path.dirname(__file__)))
   

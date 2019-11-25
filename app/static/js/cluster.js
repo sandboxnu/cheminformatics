@@ -26,6 +26,31 @@ fetch('js/data.json', {mode: 'no-cors'})
     stop: function(){},
   };
 
+
+
+  let rgb1 = data['color1']   // red
+  let rgb2 = data['color2']  // yellow
+
+  function getPoint(d, a1, a2) {
+  // find a color d% between a1 and a2
+    return a1.map((p, i) => Math.floor(a1[i] + d * (a2[i] - a1[i])))
+  } 
+
+  let rgbToHex = function (rgb) {
+		let hex = Number(rgb).toString(16);
+		if (hex.length < 2) {
+			hex = "0" + hex;
+		}
+		return hex;
+	};
+
+  let fullColorHex = function(r,g,b) {
+		var red = rgbToHex(r);
+		var green = rgbToHex(g);
+		var blue = rgbToHex(b);
+		return red+green+blue;
+	};
+
   var cy = window.cy = cytoscape({
     container: document.getElementById('cy'),
 
@@ -40,7 +65,12 @@ fetch('js/data.json', {mode: 'no-cors'})
           'width': 6,
           'label': 'data(label)',
           'text-wrap': 'wrap',
-          'font-size': '3px'
+          'font-size': '3px',
+          'background-color' : function(ele)  {
+            let colors = getPoint(ele.data('mpo')/6, rgb1, rgb2);
+            let rgbColor = '#' + fullColorHex(colors[0], colors[1], colors[2]);
+            return rgbColor;
+          }
         }
       },
 
