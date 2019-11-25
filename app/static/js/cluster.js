@@ -65,7 +65,12 @@ fetch('js/data.json', {mode: 'no-cors'})
           'width': 6,
           'label': 'data(label)',
           'text-wrap': 'wrap',
-          'font-size': '3px'
+          'font-size': '3px',
+          'background-color' : function(ele)  {
+            let colors = getPoint(ele.data('mpo')/6, rgb1, rgb2);
+            let rgbColor = '#' + fullColorHex(colors[0], colors[1], colors[2]);
+            return rgbColor;
+          }
         }
       },
 
