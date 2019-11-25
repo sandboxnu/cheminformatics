@@ -9,6 +9,7 @@ from app.data.color_functions import color_hex_to_array
 global bad_smiles 
 global good_smiles
 global all_smiles
+global reasons_for_failure
 
 @app.route('/')
 @app.route('/index')
@@ -32,14 +33,22 @@ def upload():
         good_smiles = convert_to_smiles(filter_smiles(pains.get_smiles(inputs)))
         global bad_smiles
         bad_smiles = convert_to_smiles(pains.get_bad_smiles(inputs))
+
+        global reasons_for_failure
+        reasons_for_failure = []   
+        for i in bad_smiles.values():
+          if i not in reasons_for_failure:
+            reasons_for_failure.append(i) 
         
-    return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles)
+    return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure)
 
 @app.route('/verify_pains', methods=['GET', 'POST'])
 def verify_pains():
   global good_smiles
   global bad_smiles
   global all_smiles
+  global reasons_for_failure
+  #TODO: check if reasons are still even the list? Does it matter?
   if request.method == 'POST':
     form = request.form
     if form['action'] == 'Drop Selected Compounds':
@@ -53,7 +62,7 @@ def verify_pains():
           del bad_smiles[smile]
           good_smiles[smile] = all_smiles[smile]
 
-  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles)
+  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure)
 
 @app.route('/final_compounds', methods=['GET', 'POST'])
 def final_compounds():
