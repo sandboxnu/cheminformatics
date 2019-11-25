@@ -64,6 +64,39 @@ def verify_pains():
 
   return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure)
 
+@app.route('/verify_pains_by_error', methods=['GET', 'POST'])
+def verify_pains_by_error():
+  global good_smiles
+  global bad_smiles
+  global all_smiles
+  global reasons_for_failure
+  if request.method == 'POST':
+    form = request.form
+    if form['action'] == 'Drop Selected Errors':
+      for reason in form:
+        if(reason in reasons_for_failure):
+          reasons_for_failure.remove(reason)
+          smiles_to_remove = []
+          for (smile, smile_reason) in bad_smiles.items():
+            if(reason == smile_reason):
+              smiles_to_remove.append(smile)
+          for smile in smiles_to_remove:
+            del bad_smiles[smile]    
+         
+    elif form['action'] == 'Ignore Selected Errors':
+      for reason in form:
+        if(reason in reasons_for_failure):
+          reasons_for_failure.remove(reason)
+          smiles_to_remove = []
+          for (smile, smile_reason) in bad_smiles.items():
+            if(reason == smile_reason):
+              smiles_to_remove.append(smile)
+          for smile in smiles_to_remove:
+            del bad_smiles[smile]    
+            good_smiles[smile] = all_smiles[smile]
+      
+  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure)  
+
 @app.route('/final_compounds', methods=['GET', 'POST'])
 def final_compounds():
   global good_smiles
