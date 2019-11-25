@@ -7,9 +7,30 @@
   <div class="text-center"> 
     <h1> {{ title }}</h1>
     <h3>Verify Pains Filter</h3> 
-    
+
+    <form action="\verify_pains_by_error" method=POST enctype=multipart/form-data>
+      <table border=1 width="90%">
+          <tr>
+              <th>Reason for Failure</th> 
+              <th>Action</th>
+            </tr>
+      {% for reason in reasons_for_failure%}
+      <tr id={reason}>
+      <td>
+        {{reason}}
+      </td>
+      <td width="20">
+         <input type="checkbox" name='{{reason}}' value='{{reason}}'/>
+      </td>
+        </tr>
+      {% endfor %}
+    </table>
+    <input type="submit" name='action' value="Drop Selected Errors">
+    <input type="submit" name='action' value="Ignore Selected Errors">
+    </form>
+    <br/>
     <form action="\verify_pains" method=POST enctype=multipart/form-data>
-    <table border=1>
+    <table border=1 width="90%"> 
         <tr>
             <th>Smile</th>
             <th>Reason</th> 
@@ -20,7 +41,7 @@
       <td>
         {{smile}}
       </td>
-    <td>
+    <td width="20">
       {{reason}}
     </td>
     <td>
