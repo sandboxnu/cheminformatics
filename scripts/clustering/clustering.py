@@ -60,3 +60,13 @@ def in_same_cluster(s1, s2, clusters):
         
     return False            
 
+def get_tanimoto_coeffient_by_cluster(smiles, clusters):
+    for clust in clusters:
+        for smile in clust:
+            similarities = {}
+            for othersmile in clust:
+                if smile != othersmile:
+                    similarity = compare_two_smiles(smiles[smile]['murcko'], smiles[othersmile]['murcko'])
+                    similarities[othersmile] = similarity
+            smiles[smile]['similarities'] = similarities
+    return smiles        
