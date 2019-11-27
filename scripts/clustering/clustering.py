@@ -5,17 +5,6 @@ from rdkit.Chem.Fingerprints import FingerprintMols
 from app.data.smiles import  convert
 from rdkit.ML.Cluster import Butina
 
-#add a key with the tanimoto coefficient
-def add_tanimoto_coefficients(smiles):
-    for smile in smiles:
-        smileInfo = smiles[smile]
-        similarities = {}
-        for othersmile in smiles:
-            othersmileInfo = smiles[othersmile]
-            similarities[othersmile] = compare_two_smiles(smileInfo['murcko'], othersmileInfo['murcko'])
-        smileInfo['similarities'] = similarities
-    return smiles
-
 def compare_two_smiles(smile1, smile2):
     smile1Ms = Chem.MolFromSmiles(smile1)
     smile2Ms = Chem.MolFromSmiles(smile2)
@@ -60,3 +49,13 @@ def in_same_cluster(s1, s2, clusters):
         
     return False            
 
+def get_tanimoto_coeffient_by_cluster(smiles, clusters):
+    for clust in clusters:
+        for smile in clust:
+            similarities = {}
+            for othersmile in clust:
+                if smile != othersmile:
+                    similarity = compare_two_smiles(smiles[smile]['murcko'], smiles[othersmile]['murcko'])
+                    similarities[othersmile] = similarity
+            smiles[smile]['similarities'] = similarities
+    return smiles        

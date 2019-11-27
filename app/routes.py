@@ -109,7 +109,6 @@ def final_compounds():
     except:
       return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, errors=["Please input a valid tanimoto coefficient"])
   
-  tanimoto_smiles = clustering.add_tanimoto_coefficients(good_smiles)
   #TODO: Allow user to input these colors
   #TODO: Add legend for colors in the front end(It is very difficult)
   color1 = '#135476'
@@ -119,6 +118,7 @@ def final_compounds():
 
 
   cluster = clustering.cluster(list(good_smiles.keys()), 1 - float(tanimoto))
+  tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(good_smiles, cluster)
 
   get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, color1_array, color2_array)
 

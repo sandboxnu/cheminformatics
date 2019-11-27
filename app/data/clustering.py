@@ -20,7 +20,7 @@ def get_smiles_json(smiles, cutoff, clusters, mpo_color1=[255,0,0], mpo_color2=[
     nodes.append(smile_node)
     for sim, similarity_coefficient in smile_data['similarities'].items():
 
-      if similarity_coefficient >= cutoff and similarity_coefficient != 1 and clustering.in_same_cluster(sim, smile_name, clusters):
+      if similarity_coefficient >= cutoff and similarity_coefficient != 1 :
         new_edge = {}
         new_edge['data'] = {}
         new_edge['data']['source'] = smile_name
