@@ -109,10 +109,10 @@ def final_compounds():
     except:
       return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, errors=["Please input a valid tanimoto coefficient"])
   
-  #TODO: Allow user to input these colors
+  #TODO: Allow user to input these colors. always two colors. one for 0. one for 1.
   #TODO: Add legend for colors in the front end(It is very difficult)
-  color1 = '#135476'
-  color2 = '#ff0000'
+  color1 = request.form['mpo0Color'] 
+  color2 = request.form['mpo6Color'] 
   color1_array = color_hex_to_array(color1)
   color2_array = color_hex_to_array(color2)
 
