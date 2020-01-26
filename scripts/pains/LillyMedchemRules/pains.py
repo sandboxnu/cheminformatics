@@ -11,11 +11,14 @@ def run_pains_filter(inputs):
   filtered_files = ['bad0.smi', 'bad1.smi', 'bad2.smi', 'bad3.smi']
   os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
-  os.remove("okmedchem.smi")
-  os.remove("input.smi")
+  if os.path.exists("okmedchem.smi"):
+    os.remove("okmedchem.smi")
+  if os.path.exists("input.smi"):
+    os.remove("input.smi")
 
   for filtered_file in filtered_files:
-    os.remove(filtered_file)
+    if os.path.exists(filtered_file):
+      os.remove(filtered_file)
 
   with open('input.smi', "w") as file:
       for input_smile in inputs:
