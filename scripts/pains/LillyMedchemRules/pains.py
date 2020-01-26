@@ -17,7 +17,8 @@ def run_pains_filter(inputs):
     os.remove("input.smi")
 
   for filtered_file in filtered_files:
-    os.remove(filtered_file)
+    if os.path.exists(filtered_file):
+      os.remove(filtered_file)
 
   with open('input.smi', "w") as file:
       for input_smile in inputs:
