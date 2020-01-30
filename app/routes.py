@@ -90,7 +90,7 @@ def verify_pains_by_error():
               smiles_to_remove.append(smile)
           for smile in smiles_to_remove:
             del bad_smiles[smile]
-            del session['bad_smiles'][smile]
+            session['bad_smiles'] = bad_smiles
             session.changed = True    
          
     elif form['action'] == 'Ignore Selected Errors':
