@@ -37,7 +37,6 @@ def upload():
           if i not in reasons_for_failure:
             reasons_for_failure.append(i) 
         session['reasons_for_failure'] = reasons_for_failure
-        print(reasons_for_failure)
         
     return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure)
 
@@ -47,7 +46,6 @@ def verify_pains():
   bad_smiles = session.get('bad_smiles')
   all_smiles = session.get('all_smiles')
   reasons_for_failure = session.get('reasons_for_failure')
-  print(reasons_for_failure)
   #TODO: check if reasons are still even the list? Does it matter?
   if request.method == 'POST':
     form = request.form
@@ -76,7 +74,7 @@ def verify_pains_by_error():
   bad_smiles = session.get('bad_smiles')
   all_smiles = session.get('all_smiles')
   reasons_for_failure = session.get('reasons_for_failure')
-  print(reasons_for_failure)
+
   if request.method == 'POST':
     form = request.form
     if form['action'] == 'Drop Selected Errors':
@@ -134,6 +132,7 @@ def final_compounds():
   tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(good_smiles, cluster)
 
   get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, color1_array, color2_array)
+  session.clear()
 
   return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2)
 
