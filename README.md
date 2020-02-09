@@ -5,10 +5,11 @@
 Initial Setup:
 
 - clone this repo
-- create a conda environment: `conda create -n chem`
-- add rdkit `conda install -c conda-forge rdkit`
-- install flask: `conda install -c conda-forge flask`
-- install flask-excel `conda install -c conda-forge flask-excel`
+- create a conda environment: `conda create -c rdkit -n chem rdkit`
+- activate your environment with `conda activate chem`
+- install flask: `pip install flask`
+- install flask-excel `pip install Flask_Excel`
+- install flask-session `pip install Flask_Session`
 - `export FLASK_APP=cheminformatics.py`
 
 
