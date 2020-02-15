@@ -102,6 +102,17 @@ fetch('js/data.json', {mode: 'no-cors'})
 
   var png64 = cy.png(img_options);
 
+  /*
+  var mol = data.nodes[0].data.id;
+  let smilesDrawer = new SmilesDrawer.Drawer(options);
+  SmilesDrawer.parse(mol, function(tree) {
+    // Draw to the canvas
+    smilesDrawer.draw(tree, "drawing", "light", false);
+    // Alternatively, draw to SVG:
+    // svgDrawer.draw(tree, 'output-svg', 'dark', false);
+  });
+  */
+
   $('<div class=\'text-center\'><a id="png" download>Download Image!</a></div>').insertBefore('#cy');
     $('#png').attr('href', png64);
 });
