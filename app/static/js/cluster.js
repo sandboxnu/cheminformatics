@@ -72,7 +72,6 @@ fetch('js/data.json', {mode: 'no-cors'})
             return rgbColor;
           },
           'shape' : function(ele) {
-            console.log(ele.data('centroid'));
             if(ele.data('centroid')){
               return 'star';
             }
