@@ -28,7 +28,7 @@
     <h3>Filter and cluster compounds</h3> 
 
     <div class="text-left"> 
-  Mpo Score 0 ({{color1}}) 6 ({{color2}}) </div>
+  Mpo Score 0 <span id="square1" class="display:inline-block"></span> 6 <span id="square2" class="display:inline-block"></span> </div>
   </div>
   <canvas id="drawing"></div>
 <div id="cy"></div>
@@ -38,4 +38,6 @@
 
 <script src="{{url_for('static', filename='js/cluster.js')}}">
 </script>
+
+<script src="{{url_for('static', filename='js/squares.js')}}"></script>
 {% endblock %}
