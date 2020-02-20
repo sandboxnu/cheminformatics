@@ -108,7 +108,11 @@ fetch('js/data.json', {mode: 'no-cors'})
 
   cy.ready(function() {
     cy.elements().forEach(function(ele) {
-      makePopper(ele);
+      console.log(ele.data('type'));
+      if(ele.data('type')== 'node') {
+
+        makePopper(ele);
+      }
     });
   });
 
