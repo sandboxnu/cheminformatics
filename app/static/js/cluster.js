@@ -108,7 +108,8 @@ fetch('js/data.json', {mode: 'no-cors'})
 
         return content;
       },
-      trigger: "manual" // probably want manual mode
+      trigger: "manual", 
+      placement: "bottom"
     });
   }
 
