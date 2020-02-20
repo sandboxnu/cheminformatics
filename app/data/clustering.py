@@ -15,7 +15,7 @@ def get_smiles_json(smiles, cutoff, clusters, mpo_color1=[255,0,0], mpo_color2=[
   
     smile_node['data'] = {}
     smile_node['data'] = {'id': smile_name, 'label': smile_data['label'] + '\nmpo: ' + str(smile_data['mpo']),
-      'mpo': smile_data['mpo'], 'centroid': smile_data['isCentroid']}
+      'mpo': smile_data['mpo'], 'centroid': smile_data['isCentroid'] , 'type': 'node'}
   
     nodes.append(smile_node)
     for sim, similarity_coefficient in smile_data['similarities'].items():
@@ -27,6 +27,7 @@ def get_smiles_json(smiles, cutoff, clusters, mpo_color1=[255,0,0], mpo_color2=[
         new_edge['data']['target'] = sim 
         new_edge['data']['weight'] = similarity_coefficient
         new_edge['data']['type'] = "controls-state-change-of"
+        
         smile_edges.append(new_edge)
     
     edges+= smile_edges 

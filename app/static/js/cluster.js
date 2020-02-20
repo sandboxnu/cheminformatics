@@ -95,6 +95,40 @@ fetch('js/data.json', {mode: 'no-cors'})
     elements: data
   });
 
+
+  function makePopper(ele) {
+    let ref = ele.popperRef(); // used only for positioning
+
+    ele.tippy = tippy(ref, {
+      // tippy options:
+      content: () => {
+        let content = document.createElement("div");
+
+        content.innerHTML = ele.id();
+
+        return content;
+      },
+      trigger: "manual", 
+      placement: "bottom"
+    });
+  }
+
+  cy.ready(function() {
+    cy.elements().forEach(function(ele) {
+      console.log(ele.data('type'));
+      if(ele.data('type')== 'node') {
+
+        makePopper(ele);
+      }
+    });
+  });
+
+  cy.elements().unbind("mouseover");
+  cy.elements().bind("mouseover", event => event.target.tippy.show());
+
+  cy.elements().unbind("mouseout");
+  cy.elements().bind("mouseout", event => event.target.tippy.hide());
+
   var layout = cy.layout( options );
 
   layout.run();
