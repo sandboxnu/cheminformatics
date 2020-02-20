@@ -70,6 +70,12 @@ fetch('js/data.json', {mode: 'no-cors'})
             let colors = getPoint(ele.data('mpo')/6, rgb1, rgb2);
             let rgbColor = '#' + fullColorHex(colors[0], colors[1], colors[2]);
             return rgbColor;
+          },
+          'shape' : function(ele) {
+            if(ele.data('centroid')){
+              return 'star';
+            }
+            return 'ellipse';
           }
         }
       },
