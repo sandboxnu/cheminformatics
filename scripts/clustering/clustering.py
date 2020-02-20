@@ -51,6 +51,7 @@ def in_same_cluster(s1, s2, clusters):
 
 def get_tanimoto_coeffient_by_cluster(smiles, clusters):
     for clust in clusters:
+        index = 0
         for smile in clust:
             similarities = {}
             for othersmile in clust:
@@ -58,4 +59,6 @@ def get_tanimoto_coeffient_by_cluster(smiles, clusters):
                     similarity = compare_two_smiles(smiles[smile]['murcko'], smiles[othersmile]['murcko'])
                     similarities[othersmile] = similarity
             smiles[smile]['similarities'] = similarities
+            smiles[smile]['isCentroid'] = True if index == 0 else False
+            index += 1
     return smiles        

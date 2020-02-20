@@ -15,6 +15,9 @@
 <script src="https://cdn.jsdelivr.net/npm/cytoscape-popper@1.0.4/cytoscape-popper.min.js"></script>
 <script src="https://unpkg.com/tippy.js@4.0.1/umd/index.all.min.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/tippy.js@4.0.1/index.css" />
+
+<script src="https://unpkg.com/smiles-drawer@1.0.10/dist/smiles-drawer.min.js"></script>
+
 {{super()}}
 
 {% endblock %}
@@ -29,8 +32,9 @@
     <h3>Filter and cluster compounds</h3> 
 
     <div class="text-left"> 
-  Mpo Score 0 ({{color1}}) 6 ({{color2}}) </div>
+  Mpo Score 0 <span id="square1" class="display:inline-block"></span> 6 <span id="square2" class="display:inline-block"></span> </div>
   </div>
+  <canvas id="drawing"></div>
 <div id="cy"></div>
 {% endblock %}
 {% block scripts %}
@@ -38,4 +42,6 @@
 
 <script src="{{url_for('static', filename='js/cluster.js')}}">
 </script>
+
+<script src="{{url_for('static', filename='js/squares.js')}}"></script>
 {% endblock %}
