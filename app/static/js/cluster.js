@@ -102,9 +102,22 @@ fetch('js/data.json', {mode: 'no-cors'})
     ele.tippy = tippy(ref, {
       // tippy options:
       content: () => {
-        let content = document.createElement("div");
+        let content = document.createElement("canvas");
+        let options = {};
+        //content.innerHTML = ele.id();
+        content.setAttribute('id', ele.id());
+        var mol = data.nodes[0].data.id;
+        let smilesDrawer = new SmilesDrawer.Drawer(options);
+        SmilesDrawer.parse(mol, function(tree) {
+          // Draw to the canvas
+          smilesDrawer.draw(tree, "drawing", "dark", false);
+          // Alternatively, draw to SVG:
+          // svgDrawer.draw(tree, 'output-svg', 'dark', false);
+        });
 
-        content.innerHTML = ele.id();
+
+
+
 
         return content;
       },
@@ -116,6 +129,9 @@ fetch('js/data.json', {mode: 'no-cors'})
   cy.ready(function() {
     cy.elements().forEach(function(ele) {
       console.log(ele.data('type'));
+      // TODO: add to a drawing to the data of an ele. 
+      // Have the drawing pre-drawn, keep it in ele.data
+      // All makePopper should do is place the canvas in a div 
       if(ele.data('type')== 'node') {
 
         makePopper(ele);
@@ -126,8 +142,8 @@ fetch('js/data.json', {mode: 'no-cors'})
   cy.elements().unbind("mouseover");
   cy.elements().bind("mouseover", event => event.target.tippy.show());
 
-  cy.elements().unbind("mouseout");
-  cy.elements().bind("mouseout", event => event.target.tippy.hide());
+  // cy.elements().unbind("mouseout");
+  // cy.elements().bind("mouseout", event => event.target.tippy.hide());
 
   var layout = cy.layout( options );
 
