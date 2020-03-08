@@ -3,7 +3,6 @@ fetch('js/data.json', {mode: 'no-cors'})
     return res.json()
   })
   .then(function(data){
-    console.log(data);
     let rgb1 = data['color1']   // red
     let rgb2 = data['color2']  // yellow'
 
@@ -25,12 +24,10 @@ fetch('js/data.json', {mode: 'no-cors'})
     const color1 = '#' + fullColorHex(rgb1[0], rgb1[1], rgb1[2]);
     const color2 = '#' + fullColorHex(rgb2[0], rgb2[1], rgb2[2]);
 
-    const sq1 = '<svg width="20" height="20"> <rect width="20" height="20" style="fill:' + color1 +';stroke-width:3;stroke:rgb(0,0,0)" /> </svg>'
+    const sq1 = '<svg width="20" height="20"> <rect width="20" height="20" style="fill:' + color1 +';stroke-width:3;stroke:rgb(0,0,0)" /> </svg>';
 
-    const sq2 = '<svg width="20" height="20"> <rect width="20" height="20" style="fill:' + color2 +';stroke-width:3;stroke:rgb(0,0,0)" /> </svg>'
-    console.log(color1);
+    const sq2 = '<svg width="20" height="20"> <rect width="20" height="20" style="fill:' + color2 +';stroke-width:3;stroke:rgb(0,0,0)" /> </svg>';
 
     document.getElementById('square1').innerHTML = sq1;
-    console.log(document.getElementById('square1'));
     document.getElementById('square2').innerHTML = sq2;
   });

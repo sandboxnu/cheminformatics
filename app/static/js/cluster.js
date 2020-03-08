@@ -49,8 +49,8 @@ fetch('js/data.json', {mode: 'no-cors'})
 		var green = rgbToHex(g);
 		var blue = rgbToHex(b);
 		return red+green+blue;
-	};
-
+  };
+  
   var cy = window.cy = cytoscape({
     container: document.getElementById('cy'),
 
@@ -98,24 +98,10 @@ fetch('js/data.json', {mode: 'no-cors'})
 
   function makePopper(ele) {
     let ref = ele.popperRef(); // used only for positioning
-
-    ele.tippy = tippy(ref, {
-      // tippy options:
-      content: () => {
-        let content = document.createElement("div");
-
-        content.innerHTML = ele.id();
-
-        return content;
-      },
-      trigger: "manual", 
-      placement: "bottom"
-    });
   }
 
   cy.ready(function() {
     cy.elements().forEach(function(ele) {
-      console.log(ele.data('type'));
       if(ele.data('type')== 'node') {
 
         makePopper(ele);
@@ -124,10 +110,21 @@ fetch('js/data.json', {mode: 'no-cors'})
   });
 
   cy.elements().unbind("mouseover");
-  cy.elements().bind("mouseover", event => event.target.tippy.show());
+  cy.elements().bind("mouseover", event => {
+    const smile = event.target.id()
+    let smilesDrawer = new SmilesDrawer.Drawer(options);
+    SmilesDrawer.parse(smile, function(tree) {
+      // Draw to the canvas
+      smilesDrawer.draw(tree, "drawing", "light", false);
+      // Alternatively, draw to SVG:
+      // svgDrawer.draw(tree, 'output-svg', 'dark', false);
+    });
+  });
 
   cy.elements().unbind("mouseout");
-  cy.elements().bind("mouseout", event => event.target.tippy.hide());
+  cy.elements().bind("mouseout", event => {
+    //event.target.tippy.hide()
+  });
 
   var layout = cy.layout( options );
 
@@ -141,18 +138,8 @@ fetch('js/data.json', {mode: 'no-cors'})
   };
 
   var png64 = cy.png(img_options);
-
-  /*
-  var mol = data.nodes[0].data.id;
-  let smilesDrawer = new SmilesDrawer.Drawer(options);
-  SmilesDrawer.parse(mol, function(tree) {
-    // Draw to the canvas
-    smilesDrawer.draw(tree, "drawing", "light", false);
-    // Alternatively, draw to SVG:
-    // svgDrawer.draw(tree, 'output-svg', 'dark', false);
-  });
-  */
-
+  
+  
   $('<div class=\'text-center\'><a id="png" download>Download Image!</a></div>').insertBefore('#cy');
     $('#png').attr('href', png64);
 });
