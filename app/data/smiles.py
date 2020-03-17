@@ -11,16 +11,23 @@ smiles_with_murcko = {'COc1cc(OC)cc(C(=O)NS(=O)(=O)c2ccc(CN3CCN(c4ccccc4)CC3)cc2
 
 
 def construct_smiles(csv):
-  if (csv[0] == ['snile', 'label', 'mpo']):
+  if (csv[0] != ['smile', 'label', 'mpo'] and csv[0] != ['smile', 'label']
+  and csv[0] != ['\ufeffsmile', 'label', 'mpo'] and csv[0] != ['\ufeffsmile', 'label']):
+    print(csv[0])
     raise Exception("Malformed file input")
 
+  print("good input")
   csv = csv[1:]
   for row in csv:
     smile_string = row[0] 
     smiles[smile_string] = {}
     smiles[smile_string]['murcko'] = convert(smile_string)
     smiles[smile_string]['label'] = row[1]
-    smiles[smile_string]['mpo'] = row[2]
+    if(len(row) == 3):
+      smiles[smile_string]['mpo'] = row[2]
+    else:
+      smiles[smile_string]['mpo'] = 0
+
 
 def filter_smiles(good_smiles):
   return {smi: data for (smi, data) in smiles.items() if smi in good_smiles}

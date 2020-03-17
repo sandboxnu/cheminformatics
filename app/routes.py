@@ -22,6 +22,7 @@ def upload():
             return render_template('index.html', title='Cheminformatic Analysis', errors=["Please input a valid file format"])
         session.clear()
         inputs = smiles.keys()
+
         #global all_smiles 
         session['all_smiles'] = convert_to_smiles(smiles.copy())
         #global good_smiles
