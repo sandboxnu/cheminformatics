@@ -2,16 +2,21 @@ import rdkit
 from rdkit import Chem
 from rdkit import DataStructs
 from rdkit.Chem.Fingerprints import FingerprintMols
+from rdkit.Chem import AllChem
 from app.data.smiles import  convert
 from rdkit.ML.Cluster import Butina
 
 def compare_two_smiles(smile1, smile2):
     smile1Ms = Chem.MolFromSmiles(smile1)
     smile2Ms = Chem.MolFromSmiles(smile2)
-    fps1 = FingerprintMols.FingerprintMol(smile1Ms)
-    fps2 = FingerprintMols.FingerprintMol(smile2Ms)
 
-    return DataStructs.FingerprintSimilarity(fps1, fps2)
+    #fps1 = FingerprintMols.FingerprintMol(smile1Ms)
+    #fps2 = FingerprintMols.FingerprintMol(smile2Ms)
+    fps1 = AllChem.GetMorganFingerprint(smile1Ms, 2)
+    fps2 = AllChem.GetMorganFIngerprint(smile1Ms, 2)
+    
+    #return DataStructs.FingerprintSimilarity(fps1, fps2)
+    return DataStructs.DiceSimilarity(fps1, fps2)
     
 #return cluster of smile_keys
 def cluster(smile_keys, cutoff=0.15):
