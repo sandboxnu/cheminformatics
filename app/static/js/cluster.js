@@ -112,7 +112,7 @@ fetch('js/data.json', {mode: 'no-cors'})
   cy.elements().unbind("mouseover");
   cy.elements().bind("mouseover", event => {
     const smile = event.target.id()
-    let smilesDrawer = new SmilesDrawer.Drawer(options);
+    let smilesDrawer = new SmilesDrawer.Drawer({width: 400, height:400});
     SmilesDrawer.parse(smile, function(tree) {
       // Draw to the canvas
       smilesDrawer.draw(tree, "drawing", "light", false);
