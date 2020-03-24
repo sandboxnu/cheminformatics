@@ -1,7 +1,7 @@
 from app import app
 from flask import render_template, request, session
 import scripts.pains.LillyMedchemRules.pains as pains
-from app.data.smiles import smiles, construct_smiles, filter_smiles, convert, convert_to_smiles
+from app.data.smiles import smiles, construct_smiles, filter_smiles, convert, convert_to_smiles,include_mpo
 import scripts.clustering.clustering as clustering
 from app.data.clustering import get_smiles_json
 from app.data.color_functions import color_hex_to_array
@@ -30,7 +30,8 @@ def upload():
         #global bad_smiles
         bad_smiles = convert_to_smiles(pains.get_bad_smiles(inputs))
         session['bad_smiles'] = bad_smiles
-        
+        #global include_mpo
+        session['include_mpo'] = include_mpo
 
         #global reasons_for_failure
         reasons_for_failure = []   
