@@ -27,8 +27,8 @@ def cluster(smile_keys, cutoff=0.15):
     data = [None] * nfps
     for i in range(0, nfps):
         murcko = convert(smile_keys[i])
-        mols = Chem.MolFromSmiles(murcko)
-        fps = AllChem.GetMorganFingerprintAsBitVect(mols, 2, nBits=1024)
+        mol = Chem.MolFromSmiles(murcko)
+        fps = AllChem.GetMorganFingerprintAsBitVect(mol, 2, nBits=1024)
         data[i] = fps
     
 
