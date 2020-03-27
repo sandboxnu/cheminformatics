@@ -12,11 +12,11 @@ def compare_two_smiles(smile1, smile2):
 
     #fps1 = FingerprintMols.FingerprintMol(smile1Ms)
     #fps2 = FingerprintMols.FingerprintMol(smile2Ms)
-    fps1 = AllChem.GetMorganFingerprint(smile1Ms, 2)
-    fps2 = AllChem.GetMorganFingerprint(smile1Ms, 2)
+    fps1 = AllChem.GetMorganFingerprintAsBitVect(smile1Ms, 2, nBits=1024)
+    fps2 = AllChem.GetMorganFingerprintAsBitVect(smile2Ms, 2, nBits=1024)
     
     #return DataStructs.FingerprintSimilarity(fps1, fps2)
-    return DataStructs.DiceSimilarity(fps1, fps2)
+    return DataStructs.TanimotoSimilarity(fps1, fps2)
     
 #return cluster of smile_keys
 def cluster(smile_keys, cutoff=0.15):
@@ -28,7 +28,7 @@ def cluster(smile_keys, cutoff=0.15):
     for i in range(0, nfps):
         murcko = convert(smile_keys[i])
         mols = Chem.MolFromSmiles(murcko)
-        fps = AllChem.GetMorganFingerprint(mols, 2)
+        fps = AllChem.GetMorganFingerprintAsBitVect(mols, 2, nBits=1024)
         data[i] = fps
     
 
