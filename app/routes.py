@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, request, session
+from flask import render_template, request, session, flash
 import scripts.pains.LillyMedchemRules.pains as pains
 from app.data.smiles import smiles, construct_smiles, filter_smiles, convert, convert_to_smiles
 import scripts.clustering.clustering as clustering
@@ -112,6 +112,7 @@ def verify_pains_by_error():
 def final_compounds():
   good_smiles = session.get('good_smiles')
   bad_smiles = session.get('bad_smiles')
+  low_tanimoto_warning = False
   if request.method == 'POST':
     try:
       tanimoto = request.form['tanimoto']
@@ -120,7 +121,10 @@ def final_compounds():
         return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, errors=["Please input a valid tanimoto coefficient"])
     except:
       return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, errors=["Please input a valid tanimoto coefficient"])
-  
+
+    if (float(tanimoto) < .6):
+      low_tanimoto_warning = True
+
   #TODO: Allow user to input these colors. always two colors. one for 0. one for 1.
   #TODO: Add legend for colors in the front end(It is very difficult)
   color1 = request.form['mpo0Color'] 
@@ -135,7 +139,7 @@ def final_compounds():
   get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, color1_array, color2_array)
   session.clear()
 
-  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2)
+  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, low_tanimoto_warning=low_tanimoto_warning)
 
 
 @app.after_request
