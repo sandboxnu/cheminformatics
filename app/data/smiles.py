@@ -4,8 +4,8 @@ from rdkit.Chem import PandasTools
 
 smiles = {}
 
-include_mpo = True
-
+include_mpo = {}
+include_mpo['include_mpo'] = True
 #smiles with murcko smiles example:
 smiles_with_murcko = {'COc1cc(OC)cc(C(=O)NS(=O)(=O)c2ccc(CN3CCN(c4ccccc4)CC3)cc2)c1': {'murcko': 'O=C(NS(=O)(=O)c1ccc(CN2CCN(c3ccccc3)CC2)cc1)c1ccccc1'},
 'O=C(NS(=O)(=O)c1ccc(CN2CCN(c3ccccc3)CC2)cc1)c1ccc(CCc2ccccn2)cc1': {'murcko': 'O=C(NS(=O)(=O)c1ccc(CN2CCN(c3ccccc3)CC2)cc1)c1ccc(CCc2ccccn2)cc1'},
@@ -18,19 +18,24 @@ def construct_smiles(csv):
     
     raise Exception("Malformed file input")
 
-  print("good input")
+  if(len(csv[0]) != 3):
+    include_mpo['include_mpo'] = False
+  
+  
   csv = csv[1:]
+
+  print('in construct smiles')
+  print(include_mpo)
+  
   for row in csv:
     smile_string = row[0] 
     smiles[smile_string] = {}
     smiles[smile_string]['murcko'] = convert(smile_string)
     smiles[smile_string]['label'] = row[1]
-    if(len(row) == 3):
+    if(include_mpo['include_mpo']):
       smiles[smile_string]['mpo'] = row[2]
     else:
       smiles[smile_string]['mpo'] = 0
-      include_mpo = False
-
 
 def filter_smiles(good_smiles):
   return {smi: data for (smi, data) in smiles.items() if smi in good_smiles}
@@ -54,5 +59,11 @@ def convert_to_smiles(bad_smiles):
     result[smile] = reason
 
   return result
+
+
+def include_mpo_score():
+  print('in smiles.py')
+  print(include_mpo)
+  return include_mpo
 
 

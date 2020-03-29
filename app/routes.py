@@ -1,7 +1,7 @@
 from app import app
 from flask import render_template, request, session
 import scripts.pains.LillyMedchemRules.pains as pains
-from app.data.smiles import smiles, construct_smiles, filter_smiles, convert, convert_to_smiles,include_mpo
+from app.data.smiles import smiles, construct_smiles, filter_smiles, convert, convert_to_smiles, include_mpo
 import scripts.clustering.clustering as clustering
 from app.data.clustering import get_smiles_json
 from app.data.color_functions import color_hex_to_array
@@ -14,14 +14,20 @@ def index():
 
 @app.route("/cluster", methods=['GET', 'POST'])
 def upload():
+    session.clear()
     if request.method == 'POST':
         try:
             data = request.get_array(field_name='file')
             construct_smiles(data)
-        except: 
+            print(include_mpo['include_mpo'])
+
+        except Exception as e: 
+            print(str(e))
             return render_template('index.html', title='Cheminformatic Analysis', errors=["Please input a valid file format"])
-        session.clear()
+        
+
         inputs = smiles.keys()
+
 
         #global all_smiles 
         session['all_smiles'] = convert_to_smiles(smiles.copy())
@@ -31,7 +37,9 @@ def upload():
         bad_smiles = convert_to_smiles(pains.get_bad_smiles(inputs))
         session['bad_smiles'] = bad_smiles
         #global include_mpo
-        session['include_mpo'] = include_mpo
+        session['include_mpo'] = include_mpo['include_mpo']
+
+        
 
         #global reasons_for_failure
         reasons_for_failure = []   
@@ -39,7 +47,8 @@ def upload():
           if i not in reasons_for_failure:
             reasons_for_failure.append(i) 
         session['reasons_for_failure'] = reasons_for_failure
-        
+        session.changed = True
+    
     return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure)
 
 @app.route('/verify_pains', methods=['GET', 'POST'])
@@ -67,8 +76,7 @@ def verify_pains():
           good_smiles[smile] = all_smiles[smile]
           session['good_smiles'][smile] = all_smiles[smile]
           session.changed = True
-    
-  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure)
+  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, include_mpo=session['include_mpo'])
 
 @app.route('/verify_pains_by_error', methods=['GET', 'POST'])
 def verify_pains_by_error():
@@ -108,7 +116,7 @@ def verify_pains_by_error():
             session['good_smiles'][smile] = all_smiles[smile]
             session.changed = True
             
-  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure)  
+  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, include_mpo=session['include_mpo'])  
 
 @app.route('/final_compounds', methods=['GET', 'POST'])
 def final_compounds():
@@ -118,16 +126,22 @@ def final_compounds():
       tanimoto = request.form['tanimoto']
       
       if (float(tanimoto) < 0 or float(tanimoto) > 1):
-        return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, errors=["Please input a valid tanimoto coefficient"])
+        return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, errors=["Please input a valid tanimoto coefficient"], include_mpo=session['include_mpo'])
     except:
-      return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, errors=["Please input a valid tanimoto coefficient"])
+      return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, errors=["Please input a valid tanimoto coefficient"], include_mpo=session['include_mpo'])
   
   #TODO: Allow user to input these colors. always two colors. one for 0. one for 1.
   #TODO: Add legend for colors in the front end(It is very difficult)
-  color1 = request.form['mpo0Color'] 
-  color2 = request.form['mpo6Color'] 
-  color1_array = color_hex_to_array(color1)
-  color2_array = color_hex_to_array(color2)
+  if(session['include_mpo']):
+      color1 = request.form['mpo0Color'] 
+      color2 = request.form['mpo6Color'] 
+      color1_array = color_hex_to_array(color1)
+      color2_array = color_hex_to_array(color2)
+  else:
+    color1 = request.form['mpo0Color'] 
+    color1_array = color_hex_to_array(color1)
+    color2 = color1.copy() 
+    color2_array = color_hex_to_array(color2)  
 
 
   cluster = clustering.cluster(list(good_smiles.keys()), 1 - float(tanimoto))
@@ -136,7 +150,7 @@ def final_compounds():
   get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, color1_array, color2_array)
   session.clear()
 
-  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2)
+  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, )
 
 
 @app.after_request
