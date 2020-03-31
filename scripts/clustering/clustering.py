@@ -50,6 +50,7 @@ def in_same_cluster(s1, s2, clusters):
     return False            
 
 def get_tanimoto_coeffient_by_cluster(smiles, clusters):
+    print(clusters)
     for clust in clusters:
         index = 0
         for smile in clust:
@@ -60,5 +61,61 @@ def get_tanimoto_coeffient_by_cluster(smiles, clusters):
                     similarities[othersmile] = similarity
             smiles[smile]['similarities'] = similarities
             smiles[smile]['isCentroid'] = True if index == 0 else False
+            
+            if not 'isReclustered' in smiles[smile]:
+                smiles[smile]['isReclustered'] =  False # to apply to every smile
             index += 1
+
     return smiles        
+
+def recluster_singletons(smiles, clusters, recluster_coefficient):
+    singletons = []
+    realClusters = []
+    realSingletons = []
+
+    for clust in clusters: 
+        if(len(clust) == 1):
+            singletons.append(clust[0])
+        else:
+            realClusters.append(clust)
+    
+    for singleton in singletons:
+        centroid_similarities = []
+        for cluster in realClusters:
+            centroid = cluster[0] 
+            similarity = compare_two_smiles(singleton, centroid)
+            centroid_similarities.append(similarity)
+        
+        max_sim_index = max(centroid_similarities)
+        if max_sim_index < 0:
+            continue
+        max_sim = centroid_similarities[max_sim_index]
+        if(max_sim >= recluster_coefficient):
+            smiles[singleton]['isReclustered'] = True
+            smiles[singleton]['isCentroid'] = False
+            realClusters[max_sim_index].append(singleton)
+        else:
+            print(singleton)
+            realSingletons.append(singleton)
+    
+    for singleton in realSingletons:
+        realClusters.append([singleton])
+            
+    return [smiles, realClusters]
+
+def max(array):
+    currMax = -1
+    index = -1
+    for x in array:
+        index = index + 1
+        if x > currMax:
+            currMax = x
+    return index        
+
+def get_row_of_similarities(smile, row, smiles):
+    similarities = {}
+    for r in row:
+        similarities[r] = compare_two_smiles(smiles[smile]['murcko'], smiles[r]['murcko'])
+    return similarities
+    
+

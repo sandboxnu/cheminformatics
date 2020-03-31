@@ -129,9 +129,13 @@ def final_compounds():
 
 
   cluster = clustering.cluster(list(good_smiles.keys()), 1 - float(tanimoto))
-  tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(good_smiles, cluster)
+  recluster_data = clustering.recluster_singletons(good_smiles, cluster, .5)
+  recluster_smiles = recluster_data[0]
+  recluster_clusters = recluster_data[1]
+  tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(recluster_smiles, recluster_clusters)
+  print(tanimoto_smiles)
 
-  get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, color1_array, color2_array)
+  get_smiles_json(tanimoto_smiles, float(tanimoto), recluster_clusters, color1_array, color2_array)
   session.clear()
 
   return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2)
