@@ -48,8 +48,9 @@ def upload():
             reasons_for_failure.append(i) 
         session['reasons_for_failure'] = reasons_for_failure
         session.changed = True
-    
-    return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure)
+    print('new print')  
+    print(session['include_mpo'])
+    return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, include_mpo=session['include_mpo'])
 
 @app.route('/verify_pains', methods=['GET', 'POST'])
 def verify_pains():
@@ -140,7 +141,7 @@ def final_compounds():
   else:
     color1 = request.form['mpo0Color'] 
     color1_array = color_hex_to_array(color1)
-    color2 = color1.copy() 
+    color2 = color1
     color2_array = color_hex_to_array(color2)  
 
 

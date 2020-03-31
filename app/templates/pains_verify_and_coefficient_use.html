@@ -56,14 +56,15 @@
   <br>
     <div class="text-left">
       <form action="\final_compounds" method=POST enctype=multipart/form-data>
-  <script>
-    console.log(data);
-    if(include_mpo) {
-      document.write('Mpo Score 0 Color: <input type="color" name="mpo0Color"/><br>Mpo Score 6 Color: <input type="color" name="mpo6Color"/><br>');
-    } else {
-     document.write('Display Color: <input type="color" name="mpo0Color"/><br>');
-    }
-  </script>
+        <script id='include_mpo_script' include_mpo={{include_mpo}}>
+          include_mpo = document.getElementById('include_mpo_script').getAttribute('include_mpo');
+          console.log(include_mpo);
+          if (include_mpo === true) {
+            document.write('Mpo Score 0 Color: <input type="color" name="mpo0Color"/><br>Mpo Score 6 Color: <input type="color" name="mpo6Color"/><br>');
+          } else {
+            document.write('Display Color: <input type="color" name="mpo0Color"/><br>');
+          }
+        </script>
       Tanimoto Coefficient: 
         <input type="number" name="tanimoto" step=".01" max=100 min=0/> 
         <input type="submit" value="Cluster Compounds" >
