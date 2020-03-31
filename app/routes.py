@@ -130,16 +130,15 @@ def final_compounds():
   
   #TODO: Allow user to input these colors. always two colors. one for 0. one for 1.
   #TODO: Add legend for colors in the front end(It is very difficult)
-  if(session['include_mpo']):
-      color1 = request.form['mpo0Color'] 
-      color2 = request.form['mpo6Color'] 
-      color1_array = color_hex_to_array(color1)
-      color2_array = color_hex_to_array(color2)
-  else:
     color1 = request.form['mpo0Color'] 
     color1_array = color_hex_to_array(color1)
-    color2 = color1
-    color2_array = color_hex_to_array(color2)  
+
+    if(session['include_mpo']):
+      color2 = request.form['mpo6Color'] 
+      color2_array = color_hex_to_array(color2)
+    else:
+      color2 = color1
+      color2_array = color1_array
 
 
   cluster = clustering.cluster(list(good_smiles.keys()), 1 - float(tanimoto))

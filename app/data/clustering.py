@@ -9,10 +9,10 @@ def get_smiles_json(smiles, cutoff, clusters, include_mpo, mpo_color1=[255,0,0],
 
   for smile_name, smile_data in smiles.items():
 
-    label = smile_data['label']
-    
     if include_mpo:
       label = smile_data['label'] + '\nmpo: ' + str(smile_data['mpo'])
+    else:
+      label = smile_data['label']
 
     smile_edges = []
     smile_node = {}
