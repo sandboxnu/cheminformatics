@@ -23,9 +23,6 @@ def construct_smiles(csv):
   
   
   csv = csv[1:]
-
-  print('in construct smiles')
-  print(include_mpo)
   
   for row in csv:
     smile_string = row[0] 
@@ -60,10 +57,5 @@ def convert_to_smiles(bad_smiles):
 
   return result
 
-
-def include_mpo_score():
-  print('in smiles.py')
-  print(include_mpo)
-  return include_mpo
 
 

@@ -19,7 +19,6 @@ def upload():
         try:
             data = request.get_array(field_name='file')
             construct_smiles(data)
-            print(include_mpo['include_mpo'])
 
         except Exception as e: 
             print(str(e))
@@ -48,8 +47,6 @@ def upload():
             reasons_for_failure.append(i) 
         session['reasons_for_failure'] = reasons_for_failure
         session.changed = True
-    print('new print')  
-    print(session['include_mpo'])
     return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, include_mpo=session['include_mpo'])
 
 @app.route('/verify_pains', methods=['GET', 'POST'])
@@ -148,10 +145,11 @@ def final_compounds():
   cluster = clustering.cluster(list(good_smiles.keys()), 1 - float(tanimoto))
   tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(good_smiles, cluster)
 
-  get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, color1_array, color2_array)
+  get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, session['include_mpo'], color1_array, color2_array)
+  include_mpo = session['include_mpo']
   session.clear()
 
-  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, )
+  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, include_mpo=include_mpo)
 
 
 @app.after_request
