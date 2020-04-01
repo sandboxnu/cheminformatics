@@ -122,9 +122,6 @@ def final_compounds():
     except:
       return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, errors=["Please input a valid tanimoto coefficient"])
 
-    if (float(tanimoto) < .6):
-      low_tanimoto_warning = True
-
   #TODO: Allow user to input these colors. always two colors. one for 0. one for 1.
   #TODO: Add legend for colors in the front end(It is very difficult)
   color1 = request.form['mpo0Color'] 
@@ -139,7 +136,7 @@ def final_compounds():
   get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, color1_array, color2_array)
   session.clear()
 
-  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, low_tanimoto_warning=low_tanimoto_warning)
+  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2)
 
 
 @app.after_request
