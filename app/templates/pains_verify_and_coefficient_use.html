@@ -66,7 +66,7 @@
             const tanimoto = document.getElementById("tanimoto").value;
             console.log(tanimoto);
             if (tanimoto < .6 && tanimoto > 0) {
-              alert("Low coefficient provided. Clustering may take a long time.");
+              confirm("Low coefficient provided. Clustering may take a long time.");
             }
           }
         </script>
