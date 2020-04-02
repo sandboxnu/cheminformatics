@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, request, session, flash
+from flask import render_template, request, session
 import scripts.pains.LillyMedchemRules.pains as pains
 from app.data.smiles import smiles, construct_smiles, filter_smiles, convert, convert_to_smiles
 import scripts.clustering.clustering as clustering
@@ -112,7 +112,6 @@ def verify_pains_by_error():
 def final_compounds():
   good_smiles = session.get('good_smiles')
   bad_smiles = session.get('bad_smiles')
-  low_tanimoto_warning = False
   if request.method == 'POST':
     try:
       tanimoto = request.form['tanimoto']
