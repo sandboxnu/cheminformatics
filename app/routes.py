@@ -33,13 +33,13 @@ def upload():
         #global good_smiles
         session['good_smiles'] = convert_to_smiles(filter_smiles(pains.get_smiles(inputs)))
         #global bad_smiles
-        bad_smiles = convert_to_smiles(pains.get_bad_smiles(inputs))
+        bs = convert_to_smiles(pains.get_bad_smiles(inputs)) 
+        bad_smiles = bs if isinstance(bs, dict) else {}
         session['bad_smiles'] = bad_smiles
         #global include_mpo
         session['include_mpo'] = include_mpo['include_mpo']
 
         
-
         #global reasons_for_failure
         reasons_for_failure = []   
         for i in bad_smiles.values():
@@ -119,6 +119,7 @@ def verify_pains_by_error():
 @app.route('/final_compounds', methods=['GET', 'POST'])
 def final_compounds():
   good_smiles = session.get('good_smiles')
+  bad_smiles = session.get('bad_smiles')
   if request.method == 'POST':
     try:
       tanimoto = request.form['tanimoto']
@@ -127,7 +128,7 @@ def final_compounds():
         return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, errors=["Please input a valid tanimoto coefficient"], include_mpo=session['include_mpo'])
     except:
       return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, errors=["Please input a valid tanimoto coefficient"], include_mpo=session['include_mpo'])
-  
+
   #TODO: Allow user to input these colors. always two colors. one for 0. one for 1.
   #TODO: Add legend for colors in the front end(It is very difficult)
     color1 = request.form['mpo0Color'] 

@@ -65,8 +65,17 @@
           }
         </script>
       Tanimoto Coefficient: 
-        <input type="number" name="tanimoto" step=".01" max=100 min=0/> 
-        <input type="submit" value="Cluster Compounds" >
+
+        <input type="number" id="tanimoto" name="tanimoto" step=".01" max=100 min=0/> 
+        <script>
+          function warnLow() {
+            const tanimoto = document.getElementById("tanimoto").value;
+            if (tanimoto < .6 && tanimoto > 0) {
+              confirm("Low coefficient provided. Clustering may take a long time.");
+            }
+          }
+        </script>
+        <input type="submit" value="Cluster Compounds" onclick="warnLow()">
     </form>
       {% for error in errors %}
         <p class="error text-danger">{{ error }} </p> 
