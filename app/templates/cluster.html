@@ -30,11 +30,15 @@
   <div class="text-center"> 
     <h1> {{ title }}</h1>
     <h3>Filter and cluster compounds</h3> 
-    <div class="text-left"> 
-  Mpo Score 0 <span id="square1" class="display:inline-block"></span> 6 <span id="square2" class="display:inline-block"></span>
-    </div>
-  </div>
-<canvas id="drawing" class="drawing"></canvas>
+    
+    <script id='include_mpo_script' include_mpo={{include_mpo}}>
+      include_mpo = document.getElementById('include_mpo_script').getAttribute('include_mpo');
+      if (include_mpo == "True") {
+        document.write('<div class="text-left"> Mpo Score 0 <span id="square1" class="display:inline-block"></span> 6 <span id="square2" class="display:inline-block"></span> </div></div>');
+      } 
+    </script>
+    
+  <canvas id="drawing"></div>
 <div id="cy"></div>
 </div>
 {% endblock %}
