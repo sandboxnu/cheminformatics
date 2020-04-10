@@ -5,18 +5,20 @@ from rdkit.Chem.Fingerprints import FingerprintMols
 from rdkit.Chem import AllChem
 from app.data.smiles import  convert
 from rdkit.ML.Cluster import Butina
+from rdkit.Chem.AtomPairs import Pairs
 
 radius = 4
 def compare_two_smiles(smile1, smile2, fp_type):
     smile1Ms = Chem.MolFromSmiles(smile1)
     smile2Ms = Chem.MolFromSmiles(smile2)
 
-    #fps1 = FingerprintMols.FingerprintMol(smile1Ms)
-    #fps2 = FingerprintMols.FingerprintMol(smile2Ms)
-    fps1 = AllChem.GetMorganFingerprintAsBitVect(smile1Ms, radius, nBits=1024)
-    fps2 = AllChem.GetMorganFingerprintAsBitVect(smile2Ms, radius, nBits=1024)
-    
-    #return DataStructs.FingerprintSimilarity(fps1, fps2)
+    if fp_type == "atom-pair":
+        fps1 = Pairs.GetAtomPairFingerprintAsBitVect(smile1Ms)
+        fps2 = Pairs.GetAtomPairFingerprintAsBitVect(smile2Ms)
+    else:
+        fps1 = AllChem.GetMorganFingerprintAsBitVect(smile1Ms, radius, nBits=1024)
+        fps2 = AllChem.GetMorganFingerprintAsBitVect(smile2Ms, radius, nBits=1024)
+
     return DataStructs.TanimotoSimilarity(fps1, fps2)
     
 #return cluster of smile_keys
@@ -29,7 +31,10 @@ def cluster(smile_keys, fp_type, cutoff=0.15):
     for i in range(0, nfps):
         murcko = convert(smile_keys[i])
         mol = Chem.MolFromSmiles(murcko)
-        fps = AllChem.GetMorganFingerprintAsBitVect(mol, radius, nBits=1024)
+        if fp_type == "atom-pair":
+            fps = Pairs.GetAtomPairFingerprintAsBitVect(mol)
+        else:
+            fps = AllChem.GetMorganFingerprintAsBitVect(mol, radius, nBits=1024)
         data[i] = fps
     
 
