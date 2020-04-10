@@ -64,7 +64,13 @@
             document.write('Display Color: <input type="color" name="mpo0Color"/><br>');
           }
         </script>
-      Tanimoto Coefficient: 
+        Fingerprint Type: 
+        <select id="fp_type" name="fp_type">
+          <option value="morgan" selected="selected">Morgan</option>
+          <option value="atom-pair">Atom Pair</option>
+          <option value="topological-torsions">Topological Torsions</option>
+        </select><br/>
+        Tanimoto Coefficient: 
 
         <input type="number" id="tanimoto" name="tanimoto" step=".01" max=100 min=0/> 
         <script>

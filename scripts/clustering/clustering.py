@@ -7,7 +7,7 @@ from app.data.smiles import  convert
 from rdkit.ML.Cluster import Butina
 
 radius = 4
-def compare_two_smiles(smile1, smile2):
+def compare_two_smiles(smile1, smile2, fp_type):
     smile1Ms = Chem.MolFromSmiles(smile1)
     smile2Ms = Chem.MolFromSmiles(smile2)
 
@@ -20,7 +20,7 @@ def compare_two_smiles(smile1, smile2):
     return DataStructs.TanimotoSimilarity(fps1, fps2)
     
 #return cluster of smile_keys
-def cluster(smile_keys, cutoff=0.15):
+def cluster(smile_keys, fp_type, cutoff=0.15):
     #note: it seems cutoff is one - similarity coefficient, it's euclidean distance I think??
     nfps = len(smile_keys)
     dists = []
@@ -55,14 +55,14 @@ def in_same_cluster(s1, s2, clusters):
         
     return False            
 
-def get_tanimoto_coeffient_by_cluster(smiles, clusters):
+def get_tanimoto_coeffient_by_cluster(smiles, clusters, fp_type):
     for clust in clusters:
         index = 0
         for smile in clust:
             similarities = {}
             for othersmile in clust:
                 if smile != othersmile:
-                    similarity = compare_two_smiles(smiles[smile]['murcko'], smiles[othersmile]['murcko'])
+                    similarity = compare_two_smiles(smiles[smile]['murcko'], smiles[othersmile]['murcko'], fp_type)
                     similarities[othersmile] = similarity
             smiles[smile]['similarities'] = similarities
             smiles[smile]['isCentroid'] = True if index == 0 else False

@@ -141,9 +141,9 @@ def final_compounds():
       color2 = color1
       color2_array = color1_array
 
-
-  cluster = clustering.cluster(list(good_smiles.keys()), 1 - float(tanimoto))
-  tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(good_smiles, cluster)
+  fp_type = str(request.form.get('fp_select'))
+  cluster = clustering.cluster(list(good_smiles.keys()), fp_type, 1 - float(tanimoto))
+  tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(good_smiles, cluster, fp_type)
 
   get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, session['include_mpo'], color1_array, color2_array)
   include_mpo = session['include_mpo']
