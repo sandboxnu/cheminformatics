@@ -56,7 +56,6 @@ def in_same_cluster(s1, s2, clusters):
     return False            
 
 def get_tanimoto_coeffient_by_cluster(smiles, clusters):
-    print(clusters)
     for clust in clusters:
         index = 0
         for smile in clust:
@@ -67,7 +66,6 @@ def get_tanimoto_coeffient_by_cluster(smiles, clusters):
                     similarities[othersmile] = similarity
             smiles[smile]['similarities'] = similarities
             smiles[smile]['isCentroid'] = True if index == 0 else False
-            
             if not 'isReclustered' in smiles[smile]:
                 smiles[smile]['isReclustered'] =  False # to apply to every smile
             index += 1
@@ -77,13 +75,15 @@ def recluster_singletons(smiles, clusters, recluster_coefficient):
     singletons = []
     realClusters = []
     realSingletons = []
-
     for clust in clusters: 
         if(len(clust) == 1):
             singletons.append(clust[0])
         else:
             realClusters.append(clust)
-    
+
+    if len(singletons) == len(clusters):
+        return [smiles, clusters]
+
     for singleton in singletons:
         centroid_similarities = []
         for cluster in realClusters:
@@ -100,7 +100,6 @@ def recluster_singletons(smiles, clusters, recluster_coefficient):
             smiles[singleton]['isCentroid'] = False
             realClusters[max_sim_index].append(singleton)
         else:
-            print(singleton)
             realSingletons.append(singleton)
     
     for singleton in realSingletons:

@@ -120,36 +120,41 @@ def verify_pains_by_error():
 def final_compounds():
   good_smiles = session.get('good_smiles')
   bad_smiles = session.get('bad_smiles')
+  reasons_for_failure = session.get('reasons_for_failure')
   if request.method == 'POST':
     try:
       tanimoto = request.form['tanimoto']
+      reclusterCoefficient = request.form['reclusterCoefficientValue']
       
       if (float(tanimoto) < 0 or float(tanimoto) > 1):
-        return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, errors=["Please input a valid tanimoto coefficient"], include_mpo=session['include_mpo'])
+        return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, errors=["Please input a valid tanimoto coefficient"], include_mpo=session['include_mpo'])
+      elif ((reclusterCoefficient != '') and (float(tanimoto) < 0 or float(tanimoto) > 1)):
+        return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, errors=["Please input a valid recluster coefficient"], include_mpo=session['include_mpo'])
     except:
-      return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, errors=["Please input a valid tanimoto coefficient"], include_mpo=session['include_mpo'])
+      return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, errors=["Please input a valid tanimoto coefficient"], include_mpo=session['include_mpo'])
 
-  #TODO: Allow user to input these colors. always two colors. one for 0. one for 1.
-  #TODO: Add legend for colors in the front end(It is very difficult)
-    color1 = request.form['mpo0Color'] 
-    color1_array = color_hex_to_array(color1)
+  color1 = request.form['mpo0Color'] 
+  color1_array = color_hex_to_array(color1)
 
-    if(session['include_mpo']):
-      color2 = request.form['mpo6Color'] 
-      color2_array = color_hex_to_array(color2)
-    else:
-      color2 = color1
-      color2_array = color1_array
+  if(session['include_mpo']):
+    color2 = request.form['mpo6Color'] 
+    color2_array = color_hex_to_array(color2)
+  else:
+    color2 = color1
+    color2_array = color1_array
 
-
+  shouldRecluster = reclusterCoefficient != ''
   cluster = clustering.cluster(list(good_smiles.keys()), 1 - float(tanimoto))
-  recluster_data = clustering.recluster_singletons(good_smiles, cluster, .5)
-  recluster_smiles = recluster_data[0]
-  recluster_clusters = recluster_data[1]
-  tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(recluster_smiles, recluster_clusters)
-  print(tanimoto_smiles)
+  if shouldRecluster : 
+    recluster_data = clustering.recluster_singletons(good_smiles, cluster, float(reclusterCoefficient))
+    recluster_smiles = recluster_data[0]
+    recluster_clusters = recluster_data[1]
+    tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(recluster_smiles, recluster_clusters)
+    get_smiles_json(tanimoto_smiles, float(tanimoto), recluster_clusters, session['include_mpo'], color1_array, color2_array, shouldRecluster)
+  else :
+    tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(good_smiles, cluster)
+    get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, session['include_mpo'], color1_array, color2_array, shouldRecluster)
 
-  get_smiles_json(tanimoto_smiles, float(tanimoto), recluster_clusters, session['include_mpo'], color1_array, color2_array)
   include_mpo = session['include_mpo']
   session.clear()
 
