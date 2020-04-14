@@ -75,6 +75,9 @@ fetch('js/data.json', {mode: 'no-cors'})
             if(ele.data('centroid')){
               return 'star';
             }
+            if(ele.data('reclustered')){
+              return 'triangle'
+            }
             return 'ellipse';
           }
         }

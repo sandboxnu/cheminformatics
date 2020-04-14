@@ -64,6 +64,29 @@
             document.write('Display Color: <input type="color" name="mpo0Color"/><br>');
           }
         </script>
+
+        <script>
+          function onReclusterSingletonsCheck() {
+            const checkbox = document.getElementById('reclusterCoefficientCheck');
+            console.log(checkbox)
+            if(checkbox.checked) {
+              document.getElementById('reclusterCoefficient').classList.remove('hidden') 
+              document.getElementById('reclusterCoefficient').style.visibility = "visible";
+              console.log(document.getElementById('reclusterCoefficient'));
+            } else {
+              document.getElementById('reclusterCoefficient').classList.remove('hidden') 
+              document.getElementById('reclusterCoefficient').style.visibility = "hidden";
+            }
+          }
+        </script>
+        <div>
+          Should we attempt to recluster singletons? 
+          <input type="checkbox" id="reclusterCoefficientCheck"  name="reclusterCoefficientCheck" onChange="onReclusterSingletonsCheck()"/>
+          <div id="reclusterCoefficient" class="hidden">
+            Recluster Coefficient:
+            <input type="number" id="reclusterCoefficientValue" name="reclusterCoefficientValue" step=".01" max=100 min=0/> 
+          </div>
+        </div>
       Tanimoto Coefficient: 
 
         <input type="number" id="tanimoto" name="tanimoto" step=".01" max=100 min=0/> 
@@ -75,6 +98,7 @@
             }
           }
         </script>
+        
         <input type="submit" value="Cluster Compounds" onclick="warnLow()">
     </form>
       {% for error in errors %}
