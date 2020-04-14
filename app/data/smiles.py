@@ -14,7 +14,6 @@ def construct_smiles(csv):
   and csv[0] != ['\ufeffsmile', 'label', 'mpo'] and csv[0] != ['\ufeffsmile', 'label']):
     
     raise Exception("Malformed file input")
-  print("enter smiles.py")
   smiles = {}
   
   if(len(csv[0]) == 3):
@@ -33,7 +32,6 @@ def construct_smiles(csv):
       smiles[smile_string]['mpo'] = row[2]
     else:
       smiles[smile_string]['mpo'] = 0
-  print("return smiles.py")
   return smiles, include_mpo
 
 def filter_smiles(good_smiles, smiles):
