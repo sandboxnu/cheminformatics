@@ -19,10 +19,8 @@ def upload():
         try:
             data = request.get_array(field_name='file')
             smiles, include_mpo = construct_smiles(data)
-            print("got smiles data")
 
         except Exception as e: 
-            print(str(e))
             return render_template('index.html', title='Cheminformatic Analysis', errors=["Please input a valid file format"])
         
         inputs = smiles.keys()
