@@ -141,7 +141,7 @@ def final_compounds():
       color2 = color1
       color2_array = color1_array
 
-  fp_type = str(request.form.get('fp_select'))
+  fp_type = request.form['fp_radio'] 
   cluster = clustering.cluster(list(good_smiles.keys()), fp_type, 1 - float(tanimoto))
   tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(good_smiles, cluster, fp_type)
 
