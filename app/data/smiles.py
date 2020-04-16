@@ -2,10 +2,6 @@ from rdkit import Chem
 from rdkit.Chem.Scaffolds import MurckoScaffold
 from rdkit.Chem import PandasTools
 
-smiles = {}
-
-include_mpo = {}
-include_mpo['include_mpo'] = True
 #smiles with murcko smiles example:
 smiles_with_murcko = {'COc1cc(OC)cc(C(=O)NS(=O)(=O)c2ccc(CN3CCN(c4ccccc4)CC3)cc2)c1': {'murcko': 'O=C(NS(=O)(=O)c1ccc(CN2CCN(c3ccccc3)CC2)cc1)c1ccccc1'},
 'O=C(NS(=O)(=O)c1ccc(CN2CCN(c3ccccc3)CC2)cc1)c1ccc(CCc2ccccn2)cc1': {'murcko': 'O=C(NS(=O)(=O)c1ccc(CN2CCN(c3ccccc3)CC2)cc1)c1ccc(CCc2ccccn2)cc1'},
@@ -13,14 +9,17 @@ smiles_with_murcko = {'COc1cc(OC)cc(C(=O)NS(=O)(=O)c2ccc(CN3CCN(c4ccccc4)CC3)cc2
 
 
 def construct_smiles(csv):
+  
   if (csv[0] != ['smile', 'label', 'mpo'] and csv[0] != ['smile', 'label']
   and csv[0] != ['\ufeffsmile', 'label', 'mpo'] and csv[0] != ['\ufeffsmile', 'label']):
     
     raise Exception("Malformed file input")
-
-  if(len(csv[0]) != 3):
-    include_mpo['include_mpo'] = False
+  smiles = {}
   
+  if(len(csv[0]) == 3):
+    include_mpo = True
+  else:
+    include_mpo = False
   
   csv = csv[1:]
   
@@ -29,12 +28,13 @@ def construct_smiles(csv):
     smiles[smile_string] = {}
     smiles[smile_string]['murcko'] = convert(smile_string)
     smiles[smile_string]['label'] = row[1]
-    if(include_mpo['include_mpo']):
+    if(include_mpo):
       smiles[smile_string]['mpo'] = row[2]
     else:
       smiles[smile_string]['mpo'] = 0
+  return smiles, include_mpo
 
-def filter_smiles(good_smiles):
+def filter_smiles(good_smiles, smiles):
   return {smi: data for (smi, data) in smiles.items() if smi in good_smiles}
 
 def convert(mol_smile):

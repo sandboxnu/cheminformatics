@@ -64,13 +64,8 @@
             document.write('Display Color: <input type="color" name="mpo0Color"/><br>');
           }
         </script>
-        Fingerprint Type:<br/>
 
-        <!-- <select id="fp_select" name="fp_select" size="3">
-          <option value="morgan" selected="selected">Morgan</option>
-          <option value="atom-pair">Atom Pair</option>
-          <option value="fpm">Fingerprint Mol</option>
-        </select><br/> -->
+        Fingerprint Type:<br/>
         <input type="radio" name="fp_radio" id="morgan" value="morgan">
           <a target="_blank" href="https://www.rdkit.org/docs/GettingStartedInPython.html#morgan-fingerprints-circular-fingerprints">Morgan</a>
         </input><br/>
@@ -78,11 +73,32 @@
           <a target="_blank" href="https://www.rdkit.org/docs/GettingStartedInPython.html#atom-pairs-and-topological-torsions">Atom Pair</a>
         </input><br/>
         <input type="radio" name="fp_radio" id="fpm" value="fpm">
-          <a target="_blank" href="https://www.rdkit.org/docs/source/rdkit.Chem.Fingerprints.FingerprintMols.html#rdkit.Chem.Fingerprints.FingerprintMols.FingerprintMol">Info about Fingerprint Mol</a>
+          <a target="_blank" href="https://www.rdkit.org/docs/source/rdkit.Chem.Fingerprints.FingerprintMols.html#rdkit.Chem.Fingerprints.FingerprintMols.FingerprintMol">Fingerprint Mol</a>
         </input><br>
 
-        Tanimoto Coefficient: 
-
+        <script>
+          function onReclusterSingletonsCheck() {
+            const checkbox = document.getElementById('reclusterCoefficientCheck');
+            console.log(checkbox)
+            if(checkbox.checked) {
+              document.getElementById('reclusterCoefficient').classList.remove('hidden') 
+              document.getElementById('reclusterCoefficient').style.visibility = "visible";
+              console.log(document.getElementById('reclusterCoefficient'));
+            } else {
+              document.getElementById('reclusterCoefficient').classList.remove('hidden') 
+              document.getElementById('reclusterCoefficient').style.visibility = "hidden";
+            }
+          }
+        </script>
+        <div>
+          Should we attempt to recluster singletons? 
+          <input type="checkbox" id="reclusterCoefficientCheck"  name="reclusterCoefficientCheck" onChange="onReclusterSingletonsCheck()"/>
+          <div id="reclusterCoefficient" class="hidden">
+            Recluster Coefficient:
+            <input type="number" id="reclusterCoefficientValue" name="reclusterCoefficientValue" step=".01" max=100 min=0/> 
+          </div>
+        </div>
+      Tanimoto Coefficient: 
         <input type="number" id="tanimoto" name="tanimoto" step=".01" max=100 min=0/> 
         <script>
           function warnLow() {
@@ -92,6 +108,7 @@
             }
           }
         </script>
+        
         <input type="submit" value="Cluster Compounds" onclick="warnLow()">
     </form>
       {% for error in errors %}
