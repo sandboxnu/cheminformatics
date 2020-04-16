@@ -125,11 +125,5 @@ def max(array):
         if x > currMax:
             currMax = x
     return index        
-
-def get_row_of_similarities(smile, row, smiles, fp_type):
-    similarities = {}
-    for r in row:
-        similarities[r] = compare_two_smiles(smiles[smile]['murcko'], smiles[r]['murcko'], fp_type)
-    return similarities
     
 
