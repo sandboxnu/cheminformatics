@@ -145,7 +145,7 @@ def final_compounds():
   shouldRecluster = reclusterCoefficient != ''
   cluster = clustering.cluster(list(good_smiles.keys()), fp_type, 1 - float(tanimoto))
   if shouldRecluster : 
-    recluster_data = clustering.recluster_singletons(good_smiles, cluster, float(reclusterCoefficient))
+    recluster_data = clustering.recluster_singletons(good_smiles, cluster, float(reclusterCoefficient), fp_type)
     recluster_smiles = recluster_data[0]
     recluster_clusters = recluster_data[1]
     tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(recluster_smiles, recluster_clusters, fp_type)

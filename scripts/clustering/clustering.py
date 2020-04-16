@@ -81,7 +81,7 @@ def get_tanimoto_coeffient_by_cluster(smiles, clusters, fp_type):
             index += 1
     return smiles        
 
-def recluster_singletons(smiles, clusters, recluster_coefficient):
+def recluster_singletons(smiles, clusters, recluster_coefficient, fp_type):
     singletons = []
     realClusters = []
     realSingletons = []
@@ -98,7 +98,7 @@ def recluster_singletons(smiles, clusters, recluster_coefficient):
         centroid_similarities = []
         for cluster in realClusters:
             centroid = cluster[0] 
-            similarity = compare_two_smiles(singleton, centroid)
+            similarity = compare_two_smiles(singleton, centroid, fp_type)
             centroid_similarities.append(similarity)
         
         max_sim_index = max(centroid_similarities)
@@ -126,10 +126,10 @@ def max(array):
             currMax = x
     return index        
 
-def get_row_of_similarities(smile, row, smiles):
+def get_row_of_similarities(smile, row, smiles, fp_type):
     similarities = {}
     for r in row:
-        similarities[r] = compare_two_smiles(smiles[smile]['murcko'], smiles[r]['murcko'])
+        similarities[r] = compare_two_smiles(smiles[smile]['murcko'], smiles[r]['murcko'], fp_type)
     return similarities
     
 
