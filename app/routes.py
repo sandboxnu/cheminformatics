@@ -133,6 +133,8 @@ def final_compounds():
   color1 = request.form['mpo0Color'] 
   color1_array = color_hex_to_array(color1)
 
+  fp_type = request.form['fp_radio'] 
+
   if(session['include_mpo']):
     color2 = request.form['mpo6Color'] 
     color2_array = color_hex_to_array(color2)
@@ -141,15 +143,15 @@ def final_compounds():
     color2_array = color1_array
 
   shouldRecluster = reclusterCoefficient != ''
-  cluster = clustering.cluster(list(good_smiles.keys()), 1 - float(tanimoto))
+  cluster = clustering.cluster(list(good_smiles.keys()), fp_type, 1 - float(tanimoto))
   if shouldRecluster : 
-    recluster_data = clustering.recluster_singletons(good_smiles, cluster, float(reclusterCoefficient))
+    recluster_data = clustering.recluster_singletons(good_smiles, cluster, float(reclusterCoefficient), fp_type)
     recluster_smiles = recluster_data[0]
     recluster_clusters = recluster_data[1]
-    tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(recluster_smiles, recluster_clusters)
+    tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(recluster_smiles, recluster_clusters, fp_type)
     get_smiles_json(tanimoto_smiles, float(tanimoto), recluster_clusters, session['include_mpo'], color1_array, color2_array, shouldRecluster)
   else :
-    tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(good_smiles, cluster)
+    tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(good_smiles, cluster, fp_type)
     get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, session['include_mpo'], color1_array, color2_array, shouldRecluster)
 
   include_mpo = session['include_mpo']

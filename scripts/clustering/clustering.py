@@ -5,22 +5,27 @@ from rdkit.Chem.Fingerprints import FingerprintMols
 from rdkit.Chem import AllChem
 from app.data.smiles import  convert
 from rdkit.ML.Cluster import Butina
+from rdkit.Chem.AtomPairs import Pairs
 
 radius = 4
-def compare_two_smiles(smile1, smile2):
+def compare_two_smiles(smile1, smile2, fp_type):
     smile1Ms = Chem.MolFromSmiles(smile1)
     smile2Ms = Chem.MolFromSmiles(smile2)
 
-    #fps1 = FingerprintMols.FingerprintMol(smile1Ms)
-    #fps2 = FingerprintMols.FingerprintMol(smile2Ms)
-    fps1 = AllChem.GetMorganFingerprintAsBitVect(smile1Ms, radius, nBits=1024)
-    fps2 = AllChem.GetMorganFingerprintAsBitVect(smile2Ms, radius, nBits=1024)
-    
-    #return DataStructs.FingerprintSimilarity(fps1, fps2)
+    if fp_type == "atom-pair":
+        fps1 = Pairs.GetAtomPairFingerprintAsBitVect(smile1Ms)
+        fps2 = Pairs.GetAtomPairFingerprintAsBitVect(smile2Ms)
+    elif fp_type == "fpm":
+        fps1 = FingerprintMols.FingerprintMol(smile1Ms)
+        fps2 = FingerprintMols.FingerprintMol(smile2Ms)
+    else:
+        fps1 = AllChem.GetMorganFingerprintAsBitVect(smile1Ms, radius, nBits=1024)
+        fps2 = AllChem.GetMorganFingerprintAsBitVect(smile2Ms, radius, nBits=1024)
+
     return DataStructs.TanimotoSimilarity(fps1, fps2)
     
 #return cluster of smile_keys
-def cluster(smile_keys, cutoff=0.15):
+def cluster(smile_keys, fp_type, cutoff=0.15):
     #note: it seems cutoff is one - similarity coefficient, it's euclidean distance I think??
     nfps = len(smile_keys)
     dists = []
@@ -29,7 +34,12 @@ def cluster(smile_keys, cutoff=0.15):
     for i in range(0, nfps):
         murcko = convert(smile_keys[i])
         mol = Chem.MolFromSmiles(murcko)
-        fps = AllChem.GetMorganFingerprintAsBitVect(mol, radius, nBits=1024)
+        if fp_type == "atom-pair":
+            fps = Pairs.GetAtomPairFingerprintAsBitVect(mol)
+        elif fp_type == "fpm":
+            fps = FingerprintMols.FingerprintMol(mol)
+        else:
+            fps = AllChem.GetMorganFingerprintAsBitVect(mol, radius, nBits=1024)
         data[i] = fps
     
 
@@ -55,14 +65,14 @@ def in_same_cluster(s1, s2, clusters):
         
     return False            
 
-def get_tanimoto_coeffient_by_cluster(smiles, clusters):
+def get_tanimoto_coeffient_by_cluster(smiles, clusters, fp_type):
     for clust in clusters:
         index = 0
         for smile in clust:
             similarities = {}
             for othersmile in clust:
                 if smile != othersmile:
-                    similarity = compare_two_smiles(smiles[smile]['murcko'], smiles[othersmile]['murcko'])
+                    similarity = compare_two_smiles(smiles[smile]['murcko'], smiles[othersmile]['murcko'], fp_type)
                     similarities[othersmile] = similarity
             smiles[smile]['similarities'] = similarities
             smiles[smile]['isCentroid'] = True if index == 0 else False
@@ -71,7 +81,7 @@ def get_tanimoto_coeffient_by_cluster(smiles, clusters):
             index += 1
     return smiles        
 
-def recluster_singletons(smiles, clusters, recluster_coefficient):
+def recluster_singletons(smiles, clusters, recluster_coefficient, fp_type):
     singletons = []
     realClusters = []
     realSingletons = []
@@ -88,7 +98,7 @@ def recluster_singletons(smiles, clusters, recluster_coefficient):
         centroid_similarities = []
         for cluster in realClusters:
             centroid = cluster[0] 
-            similarity = compare_two_smiles(singleton, centroid)
+            similarity = compare_two_smiles(singleton, centroid, fp_type)
             centroid_similarities.append(similarity)
         
         max_sim_index = max(centroid_similarities)
@@ -115,11 +125,5 @@ def max(array):
         if x > currMax:
             currMax = x
     return index        
-
-def get_row_of_similarities(smile, row, smiles):
-    similarities = {}
-    for r in row:
-        similarities[r] = compare_two_smiles(smiles[smile]['murcko'], smiles[r]['murcko'])
-    return similarities
     
 

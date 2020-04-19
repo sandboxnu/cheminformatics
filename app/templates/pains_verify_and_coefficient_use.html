@@ -65,6 +65,17 @@
           }
         </script>
 
+        Fingerprint Type:<br/>
+        <input type="radio" name="fp_radio" id="morgan" value="morgan">
+          <a target="_blank" href="https://www.rdkit.org/docs/GettingStartedInPython.html#morgan-fingerprints-circular-fingerprints">Morgan</a>
+        </input><br/>
+        <input type="radio" name="fp_radio" id="atom-pair" value="atom-pair">
+          <a target="_blank" href="https://www.rdkit.org/docs/GettingStartedInPython.html#atom-pairs-and-topological-torsions">Atom Pair</a>
+        </input><br/>
+        <input type="radio" name="fp_radio" id="fpm" value="fpm">
+          <a target="_blank" href="https://www.rdkit.org/docs/source/rdkit.Chem.Fingerprints.FingerprintMols.html#rdkit.Chem.Fingerprints.FingerprintMols.FingerprintMol">Fingerprint Mol</a>
+        </input><br>
+
         <script>
           function onReclusterSingletonsCheck() {
             const checkbox = document.getElementById('reclusterCoefficientCheck');
@@ -88,7 +99,6 @@
           </div>
         </div>
       Tanimoto Coefficient: 
-
         <input type="number" id="tanimoto" name="tanimoto" step=".01" max=100 min=0/> 
         <script>
           function warnLow() {
