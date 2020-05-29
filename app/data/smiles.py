@@ -10,8 +10,13 @@ smiles_with_murcko = {'COc1cc(OC)cc(C(=O)NS(=O)(=O)c2ccc(CN3CCN(c4ccccc4)CC3)cc2
 
 def construct_smiles(csv):
   
-  if (csv[0] != ['smile', 'label', 'mpo'] and csv[0] != ['smile', 'label']
-  and csv[0] != ['\ufeffsmile', 'label', 'mpo'] and csv[0] != ['\ufeffsmile', 'label']):
+  formattedTitleRow = []
+
+  for title in csv[0]:
+    formattedTitleRow.append(title.lower())
+
+  if (formattedTitleRow != ['smile', 'label', 'mpo'] and formattedTitleRow != ['smile', 'label']
+  and formattedTitleRow != ['\ufeffsmile', 'label', 'mpo'] and formattedTitleRow != ['\ufeffsmile', 'label']):
     
     raise Exception("Malformed file input")
   smiles = {}
