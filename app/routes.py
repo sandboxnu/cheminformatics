@@ -28,7 +28,8 @@ def upload():
         #global all_smiles 
         session['all_smiles'] = convert_to_smiles(smiles.copy())
         #global good_smiles
-        session['good_smiles'] = convert_to_smiles(filter_smiles(pains.get_smiles(inputs), smiles))
+        good_smiles = convert_to_smiles(filter_smiles(pains.get_smiles(inputs), smiles))
+        session['good_smiles'] = good_smiles
         #global bad_smiles
         bs = convert_to_smiles(pains.get_bad_smiles(inputs)) 
         bad_smiles = bs if isinstance(bs, dict) else {}
@@ -36,7 +37,6 @@ def upload():
         #global include_mpo
         session['include_mpo'] = include_mpo
 
-        
         #global reasons_for_failure
         reasons_for_failure = []   
         for i in bad_smiles.values():
@@ -63,14 +63,16 @@ def verify_pains():
           session.changed = True
 
     elif form['action'] == 'Ignore Errors':
-      
       for smile in form:
         if(smile != 'action'):
-          del bad_smiles[smile]
-          session['bad_smiles'] = bad_smiles
-          good_smiles[smile] = all_smiles[smile]
-          session['good_smiles'][smile] = all_smiles[smile]
-          session.changed = True
+          try: 
+            del bad_smiles[smile]
+            session['bad_smiles'] = bad_smiles
+            good_smiles[smile] = all_smiles[smile]
+            session['good_smiles'][smile] = all_smiles[smile]
+            session.changed = True
+          except Exception as e:
+            print('Could not cluster {smile}')
   return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, include_mpo=session['include_mpo'])
 
 @app.route('/verify_pains_by_error', methods=['GET', 'POST'])
@@ -106,10 +108,13 @@ def verify_pains_by_error():
             if(reason == smile_reason):
               smiles_to_remove.append(smile)
           for smile in smiles_to_remove:
-            del bad_smiles[smile]    
-            good_smiles[smile] = all_smiles[smile]
-            session['good_smiles'][smile] = all_smiles[smile]
-            session.changed = True
+            try: 
+              del bad_smiles[smile]    
+              good_smiles[smile] = all_smiles[smile]
+              session['good_smiles'][smile] = all_smiles[smile]
+              session.changed = True
+            except Exception as e:
+              print('Could not cluster {smile}'.format(smile=smile))
             
   return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, include_mpo=session['include_mpo'])  
 
