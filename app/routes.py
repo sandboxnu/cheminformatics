@@ -38,10 +38,10 @@ def upload():
         session['include_mpo'] = include_mpo
 
         #global reasons_for_failure
-        reasons_for_failure = []   
-        for i in bad_smiles.values():
-          if i not in reasons_for_failure:
-            reasons_for_failure.append(i) 
+        reasons_for_failure = dict.fromkeys(set(bad_smiles.values()), 0)
+        for smile in bad_smiles.values():
+          reasons_for_failure[smile] += 1
+
         session['reasons_for_failure'] = reasons_for_failure
         session.changed = True
     return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, include_mpo=session['include_mpo'])
@@ -86,8 +86,8 @@ def verify_pains_by_error():
     form = request.form
     if form['action'] == 'Drop Selected Errors':
       for reason in form:
-        if(reason in reasons_for_failure):
-          reasons_for_failure.remove(reason)
+        if(reason in reasons_for_failure.keys()):
+          del reasons_for_failure[reason]
           session['reasons_for_failure'] = reasons_for_failure
           smiles_to_remove = []
           for (smile, smile_reason) in bad_smiles.items():
@@ -100,8 +100,8 @@ def verify_pains_by_error():
          
     elif form['action'] == 'Ignore Selected Errors':
       for reason in form:
-        if(reason in reasons_for_failure):
-          reasons_for_failure.remove(reason)
+        if(reason in reasons_for_failure.keys()):
+          del reasons_for_failure[reason]
           session['reasons_for_failure'] = reasons_for_failure
           smiles_to_remove = []
           for (smile, smile_reason) in bad_smiles.items():
