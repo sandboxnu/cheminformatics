@@ -1,143 +1,154 @@
-
-
 {% extends 'bootstrap/base.html' %}
 {% block title %}
 {{ title }}
 {% endblock %}
 {% block content %}
 <div class="container">
-<div class="text-center">
-   <h1> {{ title }}</h1>
-   <h3>Verify Pains Filter</h3>
-   <form action="\verify_pains_by_error" method=POST enctype=multipart/form-data>
+  <div class="text-center"> 
+    <h1> {{ title }}</h1>
+    <h3>Verify Pains Filter</h3> 
+
+    <form action="\verify_pains_by_error" method=POST enctype=multipart/form-data>
       <table border=1 width="90%">
-         <tr>
-            <th>Reason for Failure</th>
-            <th>Action</th>
-         </tr>
-         {% for reason in reasons_for_failure%}
-         <tr id={reason}>
-            <td>
-               {{reason}}
-            </td>
-            <td width="20">
-               <input type="checkbox" name='{{reason}}' value='{{reason}}'/>
-            </td>
-         </tr>
-         {% endfor %}
-      </table>
-      <input type="submit" name='action' value="Drop Selected Errors">
-      <input type="submit" name='action' value="Ignore Selected Errors">
-   </form>
-   <br/>
-   <form action="\verify_pains" method=POST enctype=multipart/form-data>
-      <table border=1 width="90%">
-         <tr>
+          <tr>
+              <th>Reason for Failure</th> 
+              <th>Action</th>
+            </tr>
+      {% for reason in reasons_for_failure%}
+      <tr id={reason}>
+      <td>
+        {{reason}}
+      </td>
+      <td width="20">
+         <input type="checkbox" name='{{reason}}' value='{{reason}}'/>
+      </td>
+        </tr>
+      {% endfor %}
+    </table>
+    <input type="submit" name='action' value="Drop Selected Errors">
+    <input type="submit" name='action' value="Ignore Selected Errors">
+    </form>
+    <br/>
+    <form action="\verify_pains" method=POST enctype=multipart/form-data>
+    <table border=1 width="90%"> 
+        <tr>
             <th>Smile</th>
-            <th>Reason</th>
+            <th>Reason</th> 
             <th>Action</th>
-         </tr>
-         {% for smile, reason in bad_smiles.items() %}
-         <tr id={smile}>
-            <td>
-               {{smile}}
-            </td>
-            <td width="20">
-               {{reason}}
-            </td>
-            <td>
-               <input type="checkbox" name={{smile}} value={{smile}}/>
-            </td>
-         </tr>
-         {% endfor %}
-      </table>
-      <input type="submit" name='action' value="Drop Selected Compounds">
-      <input type="submit" name='action' value="Ignore Errors">
-   </form>
-   <br>
-   <div class="text-left">
+          </tr>
+    {% for smile, reason in bad_smiles.items() %}
+    <tr id={smile}>
+      <td>
+        {{smile}}
+      </td>
+    <td width="20">
+      {{reason}}
+    </td>
+    <td>
+       <input type="checkbox" name={{smile}} value={{smile}}/>
+    </td>
+      </tr>
+    {% endfor %}
+  </table>
+  <input type="submit" name='action' value="Drop Selected Compounds">
+  <input type="submit" name='action' value="Ignore Errors">
+  </form>
+  <br>
+    <div class="text-left">
       <form action="\final_compounds" method=POST enctype=multipart/form-data>
-         <style> 
-            .gradient { 
+        <style> 
+          .gradient { 
             font: "Roboto"; 
             text-align: center; 
+            min-width: 700px;
             background: linear-gradient(to right, 
             #0000ff, #add8e6); 
-            } 
-         </style>
-         <b>Current Color for mpo0:</b> 
-         <input class="color1" type="color" name="mpo0color" value="#0000ff" /> 
-         <br>
-         <b>Current Color for mpo6:</b> 
-         <input class="color2" type="color" name="mpo6color" value="#add8e6" /> 
-         <div class="gradient">
-            <b>Color Gradient</b>
+          } 
+          .parent {
+            display: flex;
+          }
+        </style>
+        <div class="parent">
+          <div style="margin-right:30px">
+            <b>Current Color for mpo0:</b> 
+            <input class="color1" type="color" name="mpo0color" value="#0000ff" /> 
+            <br>
+            <b>Current Color for mpo6:</b> 
+            <input class="color2" type="color" name="mpo6color" value="#add8e6" /> 
+          </div>
+          <div class="gradient" style="display: flex; justify-content: center; align-items: center;">
+            <div>Color Gradient</div>
             <script> 
-               var color1 = document.querySelector(".color1"); 
-               var color2 = document.querySelector(".color2"); 
-               var body = document.querySelector(".gradient"); 
-               
-               // Changing color for the gradient 
-               function changeGradient() { 
-                 body.style.background = 
-                       "linear-gradient(to right, "  
-                           + color1.value + ", "  
-                           + color2.value + ")"; 
-               } 
-               
-               color1.addEventListener("input", changeGradient); 
-               color2.addEventListener("input", changeGradient); 
-            </script> 
-         </div>
-         Fingerprint Type:<br/>
-         <input type="radio" name="fp_radio" id="morgan" value="morgan">
-         <a target="_blank" href="https://www.rdkit.org/docs/GettingStartedInPython.html#morgan-fingerprints-circular-fingerprints">Morgan</a>
-         </input><br/>
-         <input type="radio" name="fp_radio" id="atom-pair" value="atom-pair">
-         <a target="_blank" href="https://www.rdkit.org/docs/GettingStartedInPython.html#atom-pairs-and-topological-torsions">Atom Pair</a>
-         </input><br/>
-         <input type="radio" name="fp_radio" id="fpm" value="fpm">
-         <a target="_blank" href="https://www.rdkit.org/docs/source/rdkit.Chem.Fingerprints.FingerprintMols.html#rdkit.Chem.Fingerprints.FingerprintMols.FingerprintMol">Fingerprint Mol</a>
-         </input><br>
-         <script>
-            function onReclusterSingletonsCheck() {
-              const checkbox = document.getElementById('reclusterCoefficientCheck');
-              console.log(checkbox)
-              if(checkbox.checked) {
-                document.getElementById('reclusterCoefficient').classList.remove('hidden') 
-                document.getElementById('reclusterCoefficient').style.visibility = "visible";
-                console.log(document.getElementById('reclusterCoefficient'));
-              } else {
-                document.getElementById('reclusterCoefficient').classList.remove('hidden') 
-                document.getElementById('reclusterCoefficient').style.visibility = "hidden";
-              }
+              var color1 = document.querySelector(".color1"); 
+              var color2 = document.querySelector(".color2"); 
+              var body = document.querySelector(".gradient"); 
+              
+              // Changing color for the gradient 
+              function changeGradient() { 
+                body.style.background = 
+                      "linear-gradient(to right, "  
+                          + color1.value + ", "  
+                          + color2.value + ")"; 
+              } 
+              
+              color1.addEventListener("input", changeGradient); 
+              color2.addEventListener("input", changeGradient); 
+            </script>
+          </div>
+        </div> 
+
+        <br>
+
+        Fingerprint Type:<br/>
+        <input type="radio" name="fp_radio" id="morgan" value="morgan">
+          <a target="_blank" href="https://www.rdkit.org/docs/GettingStartedInPython.html#morgan-fingerprints-circular-fingerprints">Morgan</a>
+        </input><br/>
+        <input type="radio" name="fp_radio" id="atom-pair" value="atom-pair">
+          <a target="_blank" href="https://www.rdkit.org/docs/GettingStartedInPython.html#atom-pairs-and-topological-torsions">Atom Pair</a>
+        </input><br/>
+        <input type="radio" name="fp_radio" id="fpm" value="fpm">
+          <a target="_blank" href="https://www.rdkit.org/docs/source/rdkit.Chem.Fingerprints.FingerprintMols.html#rdkit.Chem.Fingerprints.FingerprintMols.FingerprintMol">Fingerprint Mol</a>
+        </input><br>
+
+        <script>
+          function onReclusterSingletonsCheck() {
+            const checkbox = document.getElementById('reclusterCoefficientCheck');
+            console.log(checkbox)
+            if(checkbox.checked) {
+              document.getElementById('reclusterCoefficient').classList.remove('hidden') 
+              document.getElementById('reclusterCoefficient').style.visibility = "visible";
+              console.log(document.getElementById('reclusterCoefficient'));
+            } else {
+              document.getElementById('reclusterCoefficient').classList.remove('hidden') 
+              document.getElementById('reclusterCoefficient').style.visibility = "hidden";
             }
-         </script>
-         <div>
-            Should we attempt to recluster singletons? 
-            <input type="checkbox" id="reclusterCoefficientCheck"  name="reclusterCoefficientCheck" onChange="onReclusterSingletonsCheck()"/>
-            <div id="reclusterCoefficient" class="hidden">
-               Recluster Coefficient:
-               <input type="number" id="reclusterCoefficientValue" name="reclusterCoefficientValue" step=".01" max=100 min=0/> 
-            </div>
-         </div>
-         Tanimoto Coefficient: 
-         <input type="number" id="tanimoto" name="tanimoto" step=".01" max=100 min=0/> 
-         <script>
-            function warnLow() {
-              const tanimoto = document.getElementById("tanimoto").value;
-              if (tanimoto < .6 && tanimoto > 0) {
-                confirm("Low coefficient provided. Clustering may take a long time.");
-              }
+          }
+        </script>
+        <div>
+          Should we attempt to recluster singletons? 
+          <input type="checkbox" id="reclusterCoefficientCheck"  name="reclusterCoefficientCheck" onChange="onReclusterSingletonsCheck()"/>
+          <div id="reclusterCoefficient" class="hidden">
+            Recluster Coefficient:
+            <input type="number" id="reclusterCoefficientValue" name="reclusterCoefficientValue" step=".01" max=100 min=0/> 
+          </div>
+        </div>
+      Tanimoto Coefficient: 
+        <input type="number" id="tanimoto" name="tanimoto" step=".01" max=100 min=0/> 
+        <script>
+          function warnLow() {
+            const tanimoto = document.getElementById("tanimoto").value;
+            if (tanimoto < .6 && tanimoto > 0) {
+              confirm("Low coefficient provided. Clustering may take a long time.");
             }
-         </script>
-         <input type="submit" value="Cluster Compounds" onclick="warnLow()">
-      </form>
+          }
+        </script>
+        
+        <input type="submit" value="Cluster Compounds" onclick="warnLow()">
+    </form>
       {% for error in errors %}
-      <p class="error text-danger">{{ error }} </p>
+        <p class="error text-danger">{{ error }} </p> 
       {% endfor %}
-   </div>
-   </br>
+  </div>
+</br>
 </div>
 {% endblock %}
-
