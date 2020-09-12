@@ -56,46 +56,51 @@
   <br>
     <div class="text-left">
       <form action="\final_compounds" method=POST enctype=multipart/form-data>
-        <style> 
-          .gradient { 
-            font: "Roboto"; 
-            text-align: center; 
-            min-width: 350;
-            background: linear-gradient(to right, 
-            #0000ff, #add8e6); 
-          } 
-          .parent {
-            display: flex;
-          }
-        </style>
-        <div class="parent">
-          <div style="margin-right:30px">
-            <b>Current Color for mpo0:</b> 
-            <input class="color1" type="color" name="mpo0color" value="#0000ff" /> 
-            <br>
-            <b>Current Color for mpo6:</b> 
-            <input class="color2" type="color" name="mpo6color" value="#add8e6" /> 
-          </div>
-          <div class="gradient" style="display: flex; justify-content: center; align-items: center;">
-            <div>Color Gradient</div>
-            <script> 
-              var color1 = document.querySelector(".color1"); 
-              var color2 = document.querySelector(".color2"); 
-              var body = document.querySelector(".gradient"); 
-              
-              // Changing color for the gradient 
-              function changeGradient() { 
-                body.style.background = 
-                      "linear-gradient(to right, "  
-                          + color1.value + ", "  
-                          + color2.value + ")"; 
-              } 
-              
-              color1.addEventListener("input", changeGradient); 
-              color2.addEventListener("input", changeGradient); 
-            </script>
-          </div>
-        </div> 
+        {% if include_mpo %}
+          <style> 
+            .gradient { 
+              font: "Roboto"; 
+              text-align: center; 
+              min-width: 350;
+              background: linear-gradient(to right, 
+              #0000ff, #add8e6); 
+            } 
+            .parent {
+              display: flex;
+            }
+          </style>
+          <div class="parent">
+            <div style="margin-right:30px">
+              <b>Current Color for mpo0:</b> 
+              <input class="color1" type="color" name="mpo0color" value="#0000ff" /> 
+              <br>
+              <b>Current Color for mpo6:</b> 
+              <input class="color2" type="color" name="mpo6color" value="#add8e6" /> 
+            </div>
+            <div class="gradient" style="display: flex; justify-content: center; align-items: center;">
+              <div>Color Gradient</div>
+              <script> 
+                var color1 = document.querySelector(".color1"); 
+                var color2 = document.querySelector(".color2"); 
+                var body = document.querySelector(".gradient"); 
+                
+                // Changing color for the gradient 
+                function changeGradient() { 
+                  body.style.background = 
+                        "linear-gradient(to right, "  
+                            + color1.value + ", "  
+                            + color2.value + ")"; 
+                } 
+                
+                color1.addEventListener("input", changeGradient); 
+                color2.addEventListener("input", changeGradient); 
+              </script>
+            </div>
+          </div> 
+        {% else %}
+          <b>Display Color</b>
+          <input type="color" name="mpo0Color"/>
+        {% endif %}
 
         <br>
 
