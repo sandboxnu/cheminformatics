@@ -6,13 +6,13 @@
 <div class="container">
   <div class="text-center"> 
     <h1> {{ title }}</h1>
-    <h3>Verify Pains Filter</h3> 
+    <h3>Verify PAINS Filter</h3> 
 
     <form action="\verify_pains_by_error" method=POST enctype=multipart/form-data>
       <table border=1 width="90%">
           <tr>
               <th>Reason for Failure</th> 
-              <th>Action</th>
+              <th>Select</th>
             </tr>
       {% for reason in reasons_for_failure%}
       <tr id={reason}>
@@ -25,16 +25,16 @@
         </tr>
       {% endfor %}
     </table>
-    <input type="submit" name='action' value="Drop Selected Errors">
-    <input type="submit" name='action' value="Ignore Selected Errors">
+    <input type="submit" name='action' value="Remove Selected Errors">
+    <input type="submit" name='action' value="Keep Selected Errors">
     </form>
     <br/>
     <form action="\verify_pains" method=POST enctype=multipart/form-data>
     <table border=1 width="90%"> 
         <tr>
-            <th>Smile</th>
+            <th>SMILES</th>
             <th>Reason</th> 
-            <th>Action</th>
+            <th>Select</th>
           </tr>
     {% for smile, reason in bad_smiles.items() %}
     <tr id={smile}>
@@ -50,8 +50,8 @@
       </tr>
     {% endfor %}
   </table>
-  <input type="submit" name='action' value="Drop Selected Compounds">
-  <input type="submit" name='action' value="Ignore Errors">
+  <input type="submit" name='action' value="Remove Selected Compounds">
+  <input type="submit" name='action' value="Keep Errors">
   </form>
   <br>
     <div class="text-left">
