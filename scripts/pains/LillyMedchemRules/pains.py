@@ -2,14 +2,12 @@
 
 import os, sys
 
-
 smiles = []
 bad_smiles_and_reasons = {}
 
 def run_pains_filter(inputs):
 
   filtered_files = ['bad0.smi', 'bad1.smi', 'bad2.smi', 'bad3.smi']
-  os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
   if os.path.exists("okmedchem.smi"):
     os.remove("okmedchem.smi")
@@ -25,8 +23,11 @@ def run_pains_filter(inputs):
           file.write(input_smile)
           file.write("\n")
 
-  pains = os.system('ruby Lilly_Medchem_Rules.rb input.smi > okmedchem.smi')
-
+  os.chdir(os.path.abspath(os.path.dirname(__file__)))
+  
+  dir_name = os.getcwd()
+  command = f"docker run --rm --mount type=bind,source={dir_name},destination=/mutable/outside/world --entrypoint \"bash\" ianwatson/lilly_medchem_rules:v1.2 -c \". /etc/profile && rvm use 2.7.1 > /dev/null && cd /mutable/outside/world && /Lilly-Medchem-Rules/Lilly_Medchem_Rules.rb input.smi > okmedchem.smi\""
+  pains = os.system(command)
   bad_files = list(filter(os.path.isfile, filtered_files))
 
   for bad_file in bad_files:
