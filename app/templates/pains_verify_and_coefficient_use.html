@@ -11,15 +11,15 @@
     <form action="\verify_pains_by_error" method=POST enctype=multipart/form-data>
       <table border=1 width="90%">
           <tr>
-              <th>Reason for Failure</th> 
-              <th>Select</th>
+              <th style="text-align:center">Reason for Failure</th> 
+              <th style="text-align:center">Select</th>
             </tr>
       {% for reason in reasons_for_failure%}
       <tr id={reason}>
-      <td>
+      <td style="text-align:center">
         {{reason}}
       </td>
-      <td width="20">
+      <td style="text-align:center" width="20">
          <input type="checkbox" name='{{reason}}' value='{{reason}}'/>
       </td>
         </tr>
@@ -32,19 +32,19 @@
     <form action="\verify_pains" method=POST enctype=multipart/form-data>
     <table border=1 width="90%"> 
         <tr>
-            <th>SMILES</th>
-            <th>Reason</th> 
-            <th>Select</th>
+            <th style="text-align:center">SMILES</th>
+            <th style="text-align:center">Reason</th> 
+            <th style="text-align:center">Select</th>
           </tr>
     {% for smile, reason in bad_smiles.items() %}
     <tr id={smile}>
-      <td>
+      <td style="text-align:center">
         {{smile}}
       </td>
-    <td width="20">
+    <td style="text-align:center" width="20">
       {{reason}}
     </td>
-    <td>
+    <td style="text-align:center">
        <input type="checkbox" name={{smile}} value={{smile}}/>
     </td>
       </tr>
