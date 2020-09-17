@@ -16,8 +16,8 @@ Initial Setup:
 Add PAINs script
 - `git clone https://github.com/IanAWatson/Lilly-Medchem-Rules`
 - move the contents of the folder to LillyMedchemRules and delete empty folder 'Lilly-Medchem-Rules'
-- install docker 
-- pull the image: `docker pull ianwatson/lilly-medchem-rules:v1.2`
+- install docker and ensure that it is running
+- pull the pains image: `docker pull ianwatson/lilly_medchem_rules:v1.2`
 
 And to run the site locally:
 - `flask run`
