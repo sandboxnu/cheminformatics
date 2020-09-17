@@ -7,7 +7,10 @@
   <div class="text-center"> 
     <h1> {{ title }}</h1>
     <h3>Verify PAINS Filter</h3> 
+    <br>
+    <br>
 
+    <h3>Step 1: Remove all compounds matching select rules</h3>
     <form action="\verify_pains_by_error" method=POST enctype=multipart/form-data>
       <table border=1 width="90%">
           <tr>
@@ -24,11 +27,14 @@
       </td>
         </tr>
       {% endfor %}
-    </table>
+      </table>
     <input type="submit" name='action' value="Remove Selected Errors">
     <input type="submit" name='action' value="Keep Selected Errors">
     </form>
     <br/>
+    <br>
+
+    <h3>Step 2: Remove individual compounds matching select rules</h3>
     <form action="\verify_pains" method=POST enctype=multipart/form-data>
     <table border=1 width="90%"> 
         <tr>
@@ -49,7 +55,7 @@
     </td>
       </tr>
     {% endfor %}
-  </table>
+    </table>
   <input type="submit" name='action' value="Remove Selected Compounds">
   <input type="submit" name='action' value="Keep Errors">
   </form>
