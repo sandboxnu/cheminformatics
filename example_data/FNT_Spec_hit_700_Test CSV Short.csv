@@ -1,4 +1,4 @@
-smile,label,mpo
+SMILES,Label,mpo
 Cc1cc(C)cc(c12)NC(=O)[C@H]2Cc3[nH]nc(n3)Cc4ccccc4,ZINC65530052,4.582
 c1cc(Cl)ccc1C(=O)[C@@H](C)[C@]2(O)C(=O)Nc(c23)cccc3,ZINC00408315,4.548
 c1ccccc1/C=C\C(=O)C[C@]2(O)C(=O)Nc(c23)cccc3,ZINC13425522,4.386
