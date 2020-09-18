@@ -15,8 +15,8 @@ def construct_smiles(csv):
   for title in csv[0]:
     formattedTitleRow.append(title.lower())
 
-  if (formattedTitleRow != ['smile', 'label', 'mpo'] and formattedTitleRow != ['smile', 'label']
-  and formattedTitleRow != ['\ufeffsmile', 'label', 'mpo'] and formattedTitleRow != ['\ufeffsmile', 'label']):
+  if (formattedTitleRow != ['SMILES', 'Label', 'mpo'] and formattedTitleRow != ['SMILES', 'Label']
+  and formattedTitleRow != ['\ufeffSMILES', 'Label', 'mpo'] and formattedTitleRow != ['\ufeffSMILES', 'Label']):
     
     raise Exception("Malformed file input")
   smiles = {}
@@ -32,7 +32,7 @@ def construct_smiles(csv):
     smile_string = row[0] 
     smiles[smile_string] = {}
     smiles[smile_string]['murcko'] = convert(smile_string)
-    smiles[smile_string]['label'] = row[1]
+    smiles[smile_string]['Label'] = row[1]
     if(include_mpo):
       smiles[smile_string]['mpo'] = row[2]
     else:
