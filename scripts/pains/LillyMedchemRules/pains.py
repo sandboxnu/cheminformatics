@@ -8,6 +8,7 @@ bad_smiles_and_reasons = {}
 def run_pains_filter(inputs):
 
   filtered_files = ['bad0.smi', 'bad1.smi', 'bad2.smi', 'bad3.smi']
+  os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
   if os.path.exists("okmedchem.smi"):
     os.remove("okmedchem.smi")
