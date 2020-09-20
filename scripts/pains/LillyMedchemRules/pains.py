@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import os, sys
+import os, subprocess, sys, time
 
 smiles = []
 bad_smiles_and_reasons = {}
@@ -26,8 +26,8 @@ def run_pains_filter(inputs):
   os.chdir(os.path.abspath(os.path.dirname(__file__)))
   
   dir_name = os.getcwd()
-  command = f"docker run --rm --mount type=bind,source={dir_name},destination=/mutable/outside/world --entrypoint \"bash\" ianwatson/lilly_medchem_rules:v1.2 -c \". /etc/profile && rvm use 2.7.1 > /dev/null && cd /mutable/outside/world && /Lilly-Medchem-Rules/Lilly_Medchem_Rules.rb input.smi > okmedchem.smi\""
-  pains = os.system(command)
+  command = " ".join(["docker", "run", "--rm", "--mount", f"type=bind,destination=/mutable/outside/world,source=\"{dir_name}\"", "--entrypoint", "bash", "ianwatson/lilly_medchem_rules:v1.2", "-c", "\". /etc/profile && rvm use 2.7.1 > /dev/null && cd /mutable/outside/world && /Lilly-Medchem-Rules/Lilly_Medchem_Rules.rb input.smi > okmedchem.smi\""])
+  os.system(command)
   bad_files = list(filter(os.path.isfile, filtered_files))
 
   for bad_file in bad_files:
