@@ -5,7 +5,7 @@
 Initial Setup:
 
 - clone this repo
-- create a conda environment: `conda create -c rdkit -n chem rdkit`
+- create a conda environment: `conda create -c rdkit -n chem rdkit` (on Windows, this will all be in the Anaconda Prompt)
 - activate your environment with `conda activate chem`
 - install flask: `pip install flask`
 - install flask-excel `pip install Flask_Excel`
