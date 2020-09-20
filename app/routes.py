@@ -55,14 +55,14 @@ def verify_pains():
   #TODO: check if reasons are still even the list? Does it matter?
   if request.method == 'POST':
     form = request.form
-    if form['action'] == 'Drop Selected Compounds':
+    if form['action'] == 'Remove Selected Compounds':
       for smile in form:
         if(smile != 'action'):
           del bad_smiles[smile]
           session['bad_smiles'] = bad_smiles
           session.changed = True
 
-    elif form['action'] == 'Ignore Errors':
+    elif form['action'] == 'Keep Errors':
       for smile in form:
         if(smile != 'action'):
           try: 
@@ -84,7 +84,7 @@ def verify_pains_by_error():
 
   if request.method == 'POST':
     form = request.form
-    if form['action'] == 'Drop Selected Errors':
+    if form['action'] == 'Remove Selected Errors':
       for reason in form:
         if(reason in reasons_for_failure.keys()):
           del reasons_for_failure[reason]
@@ -98,7 +98,7 @@ def verify_pains_by_error():
             session['bad_smiles'] = bad_smiles
             session.changed = True    
          
-    elif form['action'] == 'Ignore Selected Errors':
+    elif form['action'] == 'Keep Selected Errors':
       for reason in form:
         if(reason in reasons_for_failure.keys()):
           del reasons_for_failure[reason]
