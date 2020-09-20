@@ -4,8 +4,45 @@
 {% endblock %}
 {% block content %}
 <div class='container'>
-  <div class="text-center"> 
-    <h1>&#128104;&#8205;&#128300; &#129514; {{ title }} &#129514; &#128105;&#8205;&#128300;</h1>
-    <a href='/index'> Begin clustering</a>
+    <div class="text-center"> 
+        <h1>&#128104;&#8205;&#128300; &#129514; {{ title }} &#129514; &#128105;&#8205;&#128300;</h1>
+    </div>
+    <br>
+    <style>
+        .about-section {
+            padding: 50px;
+            text-align: left;
+        }
+        li {
+            font-size:20px;
+            margin:0 0 10px 0;
+        }
+        a.button {
+            -webkit-appearance: button;
+            -moz-appearance: button;
+            appearance: button;
+
+            border: 2px solid black;
+            background-color: white;
+            color: black;
+            padding: 28px 56px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+    <div class="about-section">
+        <h1>About Page</h1>
+        <p>Some text about what this app is and what it does.</p>
+    </div>
+    <div class="about-section">
+        <h1>How to use this app</h1>
+        <h2>
+            <li>Hit the 'Begin clustering' button to upload a CSV file with column names 'SMILES', 'Inputs', and optional 'mpo'</li>
+            <li>Perform Pains filter to see results</li>
+        </h2>
+    </div>
+    <div class='text-center'>
+        <h1><a href='/index' class="button"> Begin clustering</a></h1>
+    </div>    
 </div>
 {% endblock %}
