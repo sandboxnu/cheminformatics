@@ -26,8 +26,8 @@ def run_pains_filter(inputs):
   os.chdir(os.path.abspath(os.path.dirname(__file__)))
   
   dir_name = os.getcwd()
-
   dir_name = dir_name.replace("C:", "/c")
+  dir_name = dir_name.replace("\\", "/")
 
   command = " ".join(["docker", "run", "--rm", "--mount", f"type=bind,destination=/mutable/outside/world,source=\"{dir_name}\"", "--entrypoint", "bash", "ianwatson/lilly_medchem_rules:v1.2", "-c", "\". /etc/profile && rvm use 2.7.1 > /dev/null && cd /mutable/outside/world && /Lilly-Medchem-Rules/Lilly_Medchem_Rules.rb input.smi > okmedchem.smi\""])
   os.system(command)
