@@ -7,6 +7,11 @@ from app.data.clustering import get_smiles_json
 from app.data.color_functions import color_hex_to_array
 
 @app.route('/')
+@app.route('/welcome')
+def welcome():
+  return render_template('welcome.html', title='Welcome to Cheminformatics Analysis')
+
+
 @app.route('/index')
 def index():     
   return render_template('index.html', title='Cheminformatic Analysis')
