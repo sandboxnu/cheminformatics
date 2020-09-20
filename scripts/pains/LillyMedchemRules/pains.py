@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import os, subprocess, sys, time
+import os, subprocess
 
 smiles = []
 bad_smiles_and_reasons = {}
