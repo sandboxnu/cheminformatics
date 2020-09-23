@@ -8,6 +8,7 @@
     <h1> {{ title }}</h1>
     <h3>Verify Pains Filter</h3> 
 
+    <p> Compounds remaining: {{ num_remaining }}, compounds removed: {{ num_removed }} </p>
     <form action="\verify_pains_by_error" method=POST enctype=multipart/form-data>
       <table border=1 width="90%">
           <tr>

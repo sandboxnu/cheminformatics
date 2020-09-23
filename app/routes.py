@@ -37,6 +37,10 @@ def upload():
         #global include_mpo
         session['include_mpo'] = include_mpo
 
+        #global number of compounds
+        session["num_remaining"] = len(good_smiles)
+        session["num_removed"] = 0
+
         #global reasons_for_failure
         reasons_for_failure = dict.fromkeys(set(bad_smiles.values()), 0)
         for smile in bad_smiles.values():
@@ -44,7 +48,8 @@ def upload():
 
         session['reasons_for_failure'] = reasons_for_failure
         session.changed = True
-    return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, include_mpo=session['include_mpo'])
+    
+    return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, include_mpo=session['include_mpo'])
 
 @app.route('/verify_pains', methods=['GET', 'POST'])
 def verify_pains():
@@ -60,6 +65,8 @@ def verify_pains():
         if(smile != 'action'):
           del bad_smiles[smile]
           session['bad_smiles'] = bad_smiles
+          session['num_remaining']-= 1
+          session["num_removed"]+=1
           session.changed = True
 
     elif form['action'] == 'Ignore Errors':
@@ -70,10 +77,12 @@ def verify_pains():
             session['bad_smiles'] = bad_smiles
             good_smiles[smile] = all_smiles[smile]
             session['good_smiles'][smile] = all_smiles[smile]
+            session['num_remaining']+= 1
             session.changed = True
           except Exception as e:
             print('Could not cluster {smile}')
-  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, include_mpo=session['include_mpo'])
+
+  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, include_mpo=session['include_mpo'])
 
 @app.route('/verify_pains_by_error', methods=['GET', 'POST'])
 def verify_pains_by_error():
@@ -95,6 +104,8 @@ def verify_pains_by_error():
               smiles_to_remove.append(smile)
           for smile in smiles_to_remove:
             del bad_smiles[smile]
+            session['num_remaining']-= 1
+            session["num_removed"]+=1
             session['bad_smiles'] = bad_smiles
             session.changed = True    
          
@@ -112,11 +123,12 @@ def verify_pains_by_error():
               del bad_smiles[smile]    
               good_smiles[smile] = all_smiles[smile]
               session['good_smiles'][smile] = all_smiles[smile]
+              session['num_remaining']+= 1
               session.changed = True
             except Exception as e:
               print('Could not cluster {smile}'.format(smile=smile))
             
-  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, include_mpo=session['include_mpo'])  
+  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, include_mpo=session['include_mpo'])  
 
 @app.route('/final_compounds', methods=['GET', 'POST'])
 def final_compounds():
