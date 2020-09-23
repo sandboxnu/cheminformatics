@@ -65,7 +65,6 @@ def verify_pains():
         if(smile != 'action'):
           del bad_smiles[smile]
           session['bad_smiles'] = bad_smiles
-          session['num_remaining']-= 1
           session["num_removed"]+=1
           session.changed = True
 
@@ -104,7 +103,6 @@ def verify_pains_by_error():
               smiles_to_remove.append(smile)
           for smile in smiles_to_remove:
             del bad_smiles[smile]
-            session['num_remaining']-= 1
             session["num_removed"]+=1
             session['bad_smiles'] = bad_smiles
             session.changed = True    
