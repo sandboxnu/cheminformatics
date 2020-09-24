@@ -6,56 +6,61 @@
 <div class="container">
   <div class="text-center"> 
     <h1> {{ title }}</h1>
-    <h3>Verify Pains Filter</h3> 
+    <h3>Verify PAINS Filter</h3> 
+    <br>
+    <br>
 
+    <h3>Step 1: Remove all compounds matching select rules</h3>
     <form action="\verify_pains_by_error" method=POST enctype=multipart/form-data>
       <table border=1 width="90%">
           <tr>
-              <th> Reason for Failure</th>
-              <th> Number of Smiles with Failure</th>
-              <th> Action</th>
+              <th style="text-align:center">Reason for Failure</th> 
+              <th style="text-align:center">Select</th>
             </tr>
       {% for reason, num in reasons_for_failure.items() %}
       <tr id={reason}>
-      <td>
+      <td style="text-align:center">
         {{reason}}
       </td>
-      <td>
+      <td style="text-align:center">
         {{num}}
       </td>
-      <td width="20">
+      <td style="text-align:center" width="20">
          <input type="checkbox" name='{{reason}}' value='{{reason}}'/>
       </td>
         </tr>
       {% endfor %}
-    </table>
-    <input type="submit" name='action' value="Drop Selected Errors">
-    <input type="submit" name='action' value="Ignore Selected Errors">
+      </table>
+    <input type="submit" name='action' value="Remove Selected Errors">
+    <input type="submit" name='action' value="Keep Selected Errors">
     </form>
     <br/>
+    <br>
+
+    <h3>Step 2: Remove individual compounds matching select rules</h3>
     <form action="\verify_pains" method=POST enctype=multipart/form-data>
     <table border=1 width="90%"> 
         <tr>
-            <th>Smile</th>
-            <th>Reason</th> 
-            <th>Action</th>
+            <th style="text-align:center">SMILES</th>
+            <th style="text-align:center">Reason</th> 
+            <th style="text-align:center">Select</th>
           </tr>
     {% for smile, reason in bad_smiles.items() %}
     <tr id={smile}>
-      <td>
+      <td style="text-align:center">
         {{smile}}
       </td>
-    <td width="20">
+    <td style="text-align:center" width="20">
       {{reason}}
     </td>
-    <td>
+    <td style="text-align:center">
        <input type="checkbox" name={{smile}} value={{smile}}/>
     </td>
       </tr>
     {% endfor %}
-  </table>
-  <input type="submit" name='action' value="Drop Selected Compounds">
-  <input type="submit" name='action' value="Ignore Errors">
+    </table>
+  <input type="submit" name='action' value="Remove Selected Compounds">
+  <input type="submit" name='action' value="Keep Errors">
   </form>
   <br>
     <div class="text-left">

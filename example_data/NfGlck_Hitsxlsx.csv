@@ -1,4 +1,4 @@
-﻿smile,label,mpo
+﻿SMILES,Label,mpo
 COc1cc(OC)cc(C(=O)NS(=O)(=O)c2ccc(CN3CCN(c4ccccc4)CC3)cc2)c1,SZ1TA5,4.425254
 O=C(NS(=O)(=O)c1ccc(CN2CCN(c3ccccc3)CC2)cc1)c1ccc(CCc2ccccn2)cc1,SZ1TA17,3.314221
 O=C(NS(=O)(=O)c1ccc(CN2CCN(c3ccccc3)CC2)cc1)c1ccc2oc(-c3ccccc3)cc2c1,SZ1TA41,2.979668
