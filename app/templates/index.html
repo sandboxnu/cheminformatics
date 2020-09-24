@@ -26,8 +26,20 @@
         th, td {
           padding: 15px;
         }
+        a.button {
+            -webkit-appearance: button;
+            -moz-appearance: button;
+            appearance: button;
+
+            border: 2px solid black;
+            background-color: lightblue;
+            color: black;
+            padding: 28px 56px;
+            font-size: 20px;
+            cursor: pointer;
+        }
       </style>
-      {% if num_compounds and include_mpo %}
+      {% if num_compounds %}
         <table align="center">
           <tr>
             <th># of Compounds</th>
@@ -38,14 +50,21 @@
             <td>{{ include_mpo }}</td>
           </tr>
         </table>
+
+        <br>
+      
+        <div class='text-center'>
+          <h1><a href='/cluster' class="button"> Confirm Upload to Begin Clustering</a></h1>
+        </div> 
       {% endif %}
 
       <br>
-    
+      <br>
+      
       {% if unique_compounds %}
-        <table align="center">
+        <div align="center">
           {{unique_compounds | safe}}
-        </table>
+        </div>
       {% endif %}
     </div>
   </div>

@@ -17,7 +17,6 @@ def index():
       smiles, include_mpo = construct_smiles(data)
 
       unique_compounds = pd.DataFrame(dict((k, [v['murcko'], v['label']]) for k, v in smiles.items()), index=['murcko', 'label']).T
-      unique_compounds = unique_compounds.rename_axis('PREVIEW')
       return render_template('index.html', title='Cheminformatic Analysis', 
         unique_compounds=unique_compounds.to_html(), num_compounds=len(unique_compounds), include_mpo=include_mpo)
 
