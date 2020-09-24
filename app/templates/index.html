@@ -28,7 +28,7 @@
         }
       </style>
       {% if num_compounds and include_mpo %}
-        <table>
+        <table align="center">
           <tr>
             <th># of Compounds</th>
             <th>Include MPO?</th> 
@@ -43,7 +43,9 @@
       <br>
     
       {% if unique_compounds %}
-        {{unique_compounds | safe}}
+        <table align="center">
+          {{unique_compounds | safe}}
+        </table>
       {% endif %}
     </div>
   </div>
