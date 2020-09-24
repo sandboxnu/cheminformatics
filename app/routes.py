@@ -5,10 +5,26 @@ from app.data.smiles import construct_smiles, filter_smiles, convert, convert_to
 import scripts.clustering.clustering as clustering
 from app.data.clustering import get_smiles_json
 from app.data.color_functions import color_hex_to_array
+import pandas as pd
 
 @app.route('/')
-@app.route('/index')
+@app.route('/index', methods=['GET', 'POST'])
 def index():     
+  session.clear()
+  if request.method == 'POST':
+    try:
+      data = request.get_array(field_name='file')
+      smiles, include_mpo = construct_smiles(data)
+
+      unique_compounds = pd.DataFrame(dict((k, [v['murcko'], v['label']]) for k, v in smiles.items()), index=['murcko', 'label']).T
+      unique_compounds = unique_compounds.rename_axis('PREVIEW')
+      return render_template('index.html', title='Cheminformatic Analysis', 
+        unique_compounds=unique_compounds.to_html(), num_compounds=len(unique_compounds), include_mpo=include_mpo)
+
+    except Exception as e: 
+      print(e.__str__())
+      return render_template('index.html', title='Cheminformatic Analysis', errors=["Please input a valid file format"])
+    
   return render_template('index.html', title='Cheminformatic Analysis')
 
 
