@@ -3,13 +3,13 @@ import os
 import scripts.clustering.clustering as clustering
 
 
-def get_smiles_json(smiles, cutoff, clusters, include_mpo, mpo_color1=[255,0,0], mpo_color2=[0, 255, 0], shouldRecluster=False):
+def get_smiles_json(smiles, cutoff, clusters, include_property, mpo_color1=[255,0,0], mpo_color2=[0, 255, 0], shouldRecluster=False):
   nodes = []
   edges = []
 
   for smile_name, smile_data in smiles.items():
 
-    if include_mpo:
+    if include_property:
       label = smile_data['label'] + '\nmpo: ' + str(smile_data['mpo'])
     else:
       label = smile_data['label']

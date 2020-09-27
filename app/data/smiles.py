@@ -22,9 +22,9 @@ def construct_smiles(csv):
   smiles = {}
   
   if(len(csv[0]) == 3):
-    include_mpo = True
+    include_property = True
   else:
-    include_mpo = False
+    include_property = False
   
   csv = csv[1:]
   
@@ -33,11 +33,11 @@ def construct_smiles(csv):
     smiles[smile_string] = {}
     smiles[smile_string]['murcko'] = convert(smile_string)
     smiles[smile_string]['label'] = row[1]
-    if(include_mpo):
-      smiles[smile_string]['mpo'] = row[2]
+    if(include_property):
+      smiles[smile_string]['property'] = row[2]
     else:
-      smiles[smile_string]['mpo'] = 0
-  return smiles, include_mpo
+      smiles[smile_string]['property'] = 0
+  return smiles, include_property
 
 def filter_smiles(good_smiles, smiles):
   return {smi: data for (smi, data) in smiles.items() if smi in good_smiles}
