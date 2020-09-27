@@ -65,7 +65,36 @@
   </form>
   <br>
     <div class="text-left">
-      <form action="\final_compounds" method=POST enctype=multipart/form-data>
+      <script>
+        function confirmation(form) {
+          if (!confirm("WARNING: Any chemical above not explicitely resolved above will be automatically ignored")) {
+            return false;
+          }
+          const tanimoto = document.getElementById("tanimoto").value;
+          if (tanimoto < .6 && tanimoto > 0) {
+            if (!confirm("Low coefficient provided. Clustering may take a long time.")) {
+              return false;
+            }
+          }
+          return true;
+        }
+
+        var color1 = document.querySelector(".color1"); 
+        var color2 = document.querySelector(".color2"); 
+        var body = document.querySelector(".gradient"); 
+                
+        // Changing color for the gradient 
+        function changeGradient() { 
+          body.style.background = 
+                "linear-gradient(to right, "  
+                    + color1.value + ", "  
+                    + color2.value + ")"; 
+        } 
+                
+        color1.addEventListener("input", changeGradient); 
+        color2.addEventListener("input", changeGradient); 
+      </script>
+      <form action="\final_compounds" method=POST enctype=multipart/form-data onsubmit="return confirmation();">
         {% if include_mpo %}
           <style> 
             .gradient { 
@@ -89,22 +118,6 @@
             </div>
             <div class="gradient" style="display: flex; justify-content: center; align-items: center;">
               <div>Color Gradient</div>
-              <script> 
-                var color1 = document.querySelector(".color1"); 
-                var color2 = document.querySelector(".color2"); 
-                var body = document.querySelector(".gradient"); 
-                
-                // Changing color for the gradient 
-                function changeGradient() { 
-                  body.style.background = 
-                        "linear-gradient(to right, "  
-                            + color1.value + ", "  
-                            + color2.value + ")"; 
-                } 
-                
-                color1.addEventListener("input", changeGradient); 
-                color2.addEventListener("input", changeGradient); 
-              </script>
             </div>
           </div> 
         {% else %}
@@ -148,18 +161,8 @@
           </div>
         </div>
       Tanimoto Coefficient: 
-        <input type="number" id="tanimoto" name="tanimoto" step=".01" max=100 min=0/> 
-        <script>
-          function confirmation() {
-            confirm("WARNING: Any chemical above not explicitely resolved above will be automatically ignored")
-            const tanimoto = document.getElementById("tanimoto").value;
-            if (tanimoto < .6 && tanimoto > 0) {
-              confirm("Low coefficient provided. Clustering may take a long time.");
-            }
-          }
-        </script>
-        
-        <input type="submit" value="Cluster Compounds" onclick="confirmation()">
+        <input type="number" id="tanimoto" name="tanimoto" step=".01" max=100 min=0/>      
+        <input type="submit" value="Cluster Compounds">
     </form>
       {% for error in errors %}
         <p class="error text-danger">{{ error }} </p> 
