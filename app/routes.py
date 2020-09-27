@@ -8,7 +8,7 @@ from app.data.color_functions import color_hex_to_array
 
 @app.route('/')
 @app.route('/index')
-def index():
+def index():     
   return render_template('index.html', title='Cheminformatic Analysis')
 
 
