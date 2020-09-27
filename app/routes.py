@@ -15,51 +15,46 @@ def index():
     try:
       data = request.get_array(field_name='file')
       smiles, include_mpo = construct_smiles(data)
+      session['smiles'] = smiles
+      session['include_mpo'] = include_mpo
 
-      unique_compounds = pd.DataFrame(dict((k, [v['murcko'], v['label']]) for k, v in smiles.items()), index=['murcko', 'label']).T
+      unique_compounds = pd.DataFrame(dict((k, [v.get('mpo', ''), v['label']]) for k, v in smiles.items()), index=['mpo', 'label']).T
       return render_template('index.html', title='Cheminformatic Analysis', 
-        unique_compounds=unique_compounds.to_html(), num_compounds=len(unique_compounds), include_mpo=include_mpo)
+        unique_compounds=unique_compounds.to_html(), num_compounds=len(unique_compounds), smiles=smiles, include_mpo=include_mpo)
 
     except Exception as e: 
-      print(e.__str__())
       return render_template('index.html', title='Cheminformatic Analysis', errors=["Please input a valid file format"])
     
   return render_template('index.html', title='Cheminformatic Analysis')
 
 
-@app.route("/cluster", methods=['GET', 'POST'])
+@app.route("/cluster", methods=['GET'])
 def upload():
-    session.clear()
-    if request.method == 'POST':
-        try:
-            data = request.get_array(field_name='file')
-            smiles, include_mpo = construct_smiles(data)
-
-        except Exception as e: 
-            return render_template('index.html', title='Cheminformatic Analysis', errors=["Please input a valid file format"])
+  smiles = session['smiles']
+  include_mpo = session['include_mpo']
         
-        inputs = smiles.keys()
+  inputs = smiles.keys()
 
-        #global all_smiles 
-        session['all_smiles'] = convert_to_smiles(smiles.copy())
-        #global good_smiles
-        good_smiles = convert_to_smiles(filter_smiles(pains.get_smiles(inputs), smiles))
-        session['good_smiles'] = good_smiles
-        #global bad_smiles
-        bs = convert_to_smiles(pains.get_bad_smiles(inputs)) 
-        bad_smiles = bs if isinstance(bs, dict) else {}
-        session['bad_smiles'] = bad_smiles
-        #global include_mpo
-        session['include_mpo'] = include_mpo
+  #global all_smiles 
+  session['all_smiles'] = convert_to_smiles(smiles.copy())
+  #global good_smiles 
+  good_smiles = convert_to_smiles(filter_smiles(pains.get_smiles(inputs), smiles))
+  session['good_smiles'] = good_smiles
+  #global bad_smiles
+  bs = convert_to_smiles(pains.get_bad_smiles(inputs)) 
+  bad_smiles = bs if isinstance(bs, dict) else {}
+  session['bad_smiles'] = bad_smiles
+  #global include_mpo
+  session['include_mpo'] = include_mpo
 
-        #global reasons_for_failure
-        reasons_for_failure = dict.fromkeys(set(bad_smiles.values()), 0)
-        for smile in bad_smiles.values():
-          reasons_for_failure[smile] += 1
+  #global reasons_for_failure
+  reasons_for_failure = dict.fromkeys(set(bad_smiles.values()), 0)
+  for smile in bad_smiles.values():
+    reasons_for_failure[smile] += 1
 
-        session['reasons_for_failure'] = reasons_for_failure
-        session.changed = True
-    return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, include_mpo=session['include_mpo'])
+  session['reasons_for_failure'] = reasons_for_failure
+  session.changed = True
+  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, include_mpo=session['include_mpo'])
 
 @app.route('/verify_pains', methods=['GET', 'POST'])
 def verify_pains():
