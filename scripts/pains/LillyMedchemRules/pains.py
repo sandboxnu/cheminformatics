@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import app
 import os
 
 smiles = []
@@ -26,7 +25,9 @@ def run_pains_filter(inputs):
 
   os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
-  if app.config["production"]:
+  is_prod = os.getenv('FLASK_PRODUCTION', default=False)
+
+  if is_prod:
     os.system('ruby Lilly_Medchem_Rules.rb input.smi > okmedchem.smi')
   else:
     # running in a development environment
