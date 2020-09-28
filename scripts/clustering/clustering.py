@@ -15,9 +15,6 @@ def compare_two_smiles(smile1, smile2, fp_type):
     if fp_type == "atom-pair":
         fps1 = Pairs.GetAtomPairFingerprintAsBitVect(smile1Ms)
         fps2 = Pairs.GetAtomPairFingerprintAsBitVect(smile2Ms)
-    elif fp_type == "fpm":
-        fps1 = FingerprintMols.FingerprintMol(smile1Ms)
-        fps2 = FingerprintMols.FingerprintMol(smile2Ms)
     else:
         fps1 = AllChem.GetMorganFingerprintAsBitVect(smile1Ms, radius, nBits=1024)
         fps2 = AllChem.GetMorganFingerprintAsBitVect(smile2Ms, radius, nBits=1024)
