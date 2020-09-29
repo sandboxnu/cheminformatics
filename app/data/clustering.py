@@ -11,7 +11,7 @@ def get_smiles_json(smiles, cutoff, clusters, include_property, prop_color1=[255
     prop_name = smile_data.get('property_name', "")
     prop_val = smile_data['property']
     if include_property:
-      label = smile_data['label'] + "\n" + prop_name + str(prop_val)
+      label = smile_data['label'] + "\n" + prop_name + ' ' + str(prop_val)
     else:
       label = smile_data['label']
 
@@ -22,10 +22,10 @@ def get_smiles_json(smiles, cutoff, clusters, include_property, prop_color1=[255
     
     if shouldRecluster:
       smile_node['data'] = {'id': smile_name, 'label': label,
-        prop_name: prop_val, 'reclustered': smile_data['isReclustered'],'centroid': smile_data['isCentroid'] , 'type': 'node'}
+        'mpo': prop_val, 'reclustered': smile_data['isReclustered'],'centroid': smile_data['isCentroid'] , 'type': 'node'}
     else:
       smile_node['data'] = {'id': smile_name, 'label': label,
-        prop_name: prop_val,'centroid': smile_data['isCentroid'] , 'type': 'node'}
+        'mpo': prop_val,'centroid': smile_data['isCentroid'] , 'type': 'node'}
   
     nodes.append(smile_node)
     for sim, similarity_coefficient in smile_data['similarities'].items():
