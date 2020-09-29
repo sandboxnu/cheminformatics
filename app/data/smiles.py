@@ -2,14 +2,13 @@ from rdkit import Chem
 from rdkit.Chem.Scaffolds import MurckoScaffold
 from rdkit.Chem import PandasTools
 
-#smiles with murcko smiles example:
-smiles_with_murcko = {'COc1cc(OC)cc(C(=O)NS(=O)(=O)c2ccc(CN3CCN(c4ccccc4)CC3)cc2)c1': {'murcko': 'O=C(NS(=O)(=O)c1ccc(CN2CCN(c3ccccc3)CC2)cc1)c1ccccc1'},
-'O=C(NS(=O)(=O)c1ccc(CN2CCN(c3ccccc3)CC2)cc1)c1ccc(CCc2ccccn2)cc1': {'murcko': 'O=C(NS(=O)(=O)c1ccc(CN2CCN(c3ccccc3)CC2)cc1)c1ccc(CCc2ccccn2)cc1'},
-'CC(=O)Nc1ccc(S(=O)(=O)NC(=O)c2cn(C)c3ccc(-c4cncnc4)cc23)cc1': {'murcko': 'O=C(NS(=O)(=O)c1ccccc1)c1c[nH]c2ccc(-c3cncnc3)cc12'}}
-
-
 def construct_smiles(csv):
   
+  if(len(csv[0]) == 3):
+    include_property = csv[0][2]
+  else:
+    include_property = None
+
   formattedTitleRow = []
 
   for title in csv[0]:
@@ -19,12 +18,8 @@ def construct_smiles(csv):
   and formattedTitleRow != ['\ufeffsmiles', 'label', 'mpo'] and formattedTitleRow != ['\ufeffsmiles', 'label']):
     
     raise Exception("Malformed file input")
-  smiles = {}
   
-  if(len(csv[0]) == 3):
-    include_property = True
-  else:
-    include_property = False
+  smiles = {}
   
   csv = csv[1:]
   
@@ -33,11 +28,12 @@ def construct_smiles(csv):
     smiles[smile_string] = {}
     smiles[smile_string]['murcko'] = convert(smile_string)
     smiles[smile_string]['label'] = row[1]
-    if(include_property):
+    if include_property is not None:
       smiles[smile_string]['property'] = row[2]
+      smiles[smile_string]['property']['name'] = include_property
     else:
       smiles[smile_string]['property'] = 0
-  return smiles, include_property
+  return smiles, include_property != None
 
 def filter_smiles(good_smiles, smiles):
   return {smi: data for (smi, data) in smiles.items() if smi in good_smiles}
