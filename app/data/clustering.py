@@ -3,14 +3,15 @@ import os
 import scripts.clustering.clustering as clustering
 
 
-def get_smiles_json(smiles, cutoff, clusters, include_property, mpo_color1=[255,0,0], mpo_color2=[0, 255, 0], shouldRecluster=False):
+def get_smiles_json(smiles, cutoff, clusters, include_property, prop_color1=[255,0,0], prop_color2=[0, 255, 0], shouldRecluster=False):
   nodes = []
   edges = []
 
   for smile_name, smile_data in smiles.items():
-
+    prop_name = smile_data.get('property_name', "")
+    prop_val = smile_data['property']
     if include_property:
-      label = smile_data['label'] + '\nmpo: ' + str(smile_data['mpo'])
+      label = smile_data['label'] + "\n" + prop_name + str(prop_val)
     else:
       label = smile_data['label']
 
@@ -21,10 +22,10 @@ def get_smiles_json(smiles, cutoff, clusters, include_property, mpo_color1=[255,
     
     if shouldRecluster:
       smile_node['data'] = {'id': smile_name, 'label': label,
-        'mpo': smile_data['mpo'], 'reclustered': smile_data['isReclustered'],'centroid': smile_data['isCentroid'] , 'type': 'node'}
+        prop_name: prop_val, 'reclustered': smile_data['isReclustered'],'centroid': smile_data['isCentroid'] , 'type': 'node'}
     else:
       smile_node['data'] = {'id': smile_name, 'label': label,
-        'mpo': smile_data['mpo'],'centroid': smile_data['isCentroid'] , 'type': 'node'}     
+        prop_name: prop_val,'centroid': smile_data['isCentroid'] , 'type': 'node'}
   
     nodes.append(smile_node)
     for sim, similarity_coefficient in smile_data['similarities'].items():
@@ -41,7 +42,7 @@ def get_smiles_json(smiles, cutoff, clusters, include_property, mpo_color1=[255,
     
     edges+= smile_edges 
 
-  result = {'nodes': nodes, 'edges': edges, 'clusterInfo': clusters, 'color1': mpo_color1, 'color2': mpo_color2}
+  result = {'nodes': nodes, 'edges': edges, 'clusterInfo': clusters, 'color1': prop_color1, 'color2': prop_color2}
 
   os.chdir(os.path.abspath(os.path.dirname(__file__)))
   
