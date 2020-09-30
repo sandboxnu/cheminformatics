@@ -35,14 +35,79 @@
         <p>Some text about what this app is and what it does.</p>
     </div>
     <div class="about-section">
-        <h1>How to use this app</h1>
+        <h1>Fingerprints</h1>
         <h2>
-            <li>Hit the 'Begin clustering' button to upload a CSV file with column names 'SMILES', 'Inputs', and optional 'mpo'</li>
-            <li>Perform Pains filter to see results</li>
+            <li>
+                <p>
+                    <b>Morgan</b> 
+                    – a circular fingerprint where the maximum size of the fingerprint set is pre-defined by a specified radius. Fingerprints are generated from all 
+                    possible paths in a molecule up to the specified radius.
+                </p>
+                <br>
+                <p>further details on circular fingerprints please refer to Rogers, D.; Hahn, M. “Extended-Connectivity Fingerprints.” J. Chem. Inf. Model. <b>2010</b>, 50, 742–754.</p> 
+            </li>
+            <br>
+            <li>
+                <p>
+                    <b>Atom-pair</b> 
+                    – a path-based fingerprint in which the set of fragments from a compound is generated from all possible pairs of non-hydrogen atoms separated by an interatomic distance. The fingerprint description also includes the 
+                    nearest neighbors of the two atoms and specifies the presence of π electrons where applicable. 
+                </p>
+                <br>
+                <p>Carhart, R.E.; Smith, D.H.; Venkataraghavan, R. “Atom Pairs as Molecular Features in Structure-Activity Studies: Definition and Applications.” J. Chem. Info. Comput. Sci. <b>1985</b>, 25, 64-73.</p> 
+            </li>
+        </h2>
+    </div>
+    <div class="about-section">
+        <h1>Clustering algorithm</h1>
+        <h2>
+            <li>
+                <p>
+                    <b>Butina Exclusion Sphere</b> 
+                    – the algorithm begins by a Tanimoto similarity (described below) input by the user. Each compound is then assigned a certain number of neighbors where each neighbor shares at least the inputted similarity level. 
+                    All compounds are then ranked by decreasing number of neighbors with the compound having the most neighbors designated as the centroid of the first cluster. All compounds belonging to this first cluster are excluded from being apart of all other clusters. 
+                    This process is repeated down the list until the remaining compounds have no neighbors and are thus designated as singletons
+                </p>
+                <br>
+                <p>Butina, D. “Unsupervised Data Base Clustering Based on Daylight’s Fingerprint and Tanimoto Similarity: A Fast and Automated Way To Cluster Small and Large Data Sets.” J. Chem. Inf. Comput. Sci. <b>1998</b>. 39, 747 – 750. </p> 
+            </li>
+            <br>
+            <li>
+                <p>
+                    <b>Tanimoto similarity</b> 
+                    – a mathematical measure of similarity between two data sets defined as the number of common features divided by the number of total features within the data sets. Consider two data sets A and B, the Tanimoto similarity can 
+                    be calculated using the equation below and lies in the range of 0-1.  
+                </p>
+                <br>
+                <p align="center" >
+                    <img src="http://latex.codecogs.com/svg.latex?T(A, B) = \dfrac{\vert A \cap B \vert}{\vert A \vert + \vert B \vert - \vert A \cap B \vert}" border="0"/>
+                </p>
+                <br>
+                <p>In cheminformatics, the Tanimoto similarity is the most popular similarity measure and is frequently used to compare compounds based on a defined property – such as 2D fingerprints. Our website uses the Tanimoto similarity in conjunction with the 
+                    Butina Exclusion Sphere algorithm to cluster compounds based on their 2D fingerprints.</p> 
+                <br>
+                <p>Rogers, D.J; Tanimoto, T.T. A Computer Program for Classifying Plants. Science. <b>1960</b>. 132(3434), 1115-1118.</p>
+            </li>
+        </h2>
+    </div>
+    <div class="about-section">
+        <h1>Pan Assay Interference Compounds (PAINS)</h1>
+        <h2>
+            <li>
+                <p>Compounds possessing chemical functionality which have demonstrated to cause issues in lead discovery - such as interaction with biomolecules in undesirable ways, interference with assay readouts, or production of misleading screening results. 
+                    Eli Lily developed a set of rules divided into 17 classes for the identification of troublesome compounds. 
+                </p> 
+                <br>
+                <p>The full report and description of the Eli Lily rules can be found in Bruns, R.F.; Watson, I.A. “Rules for Identifying Potentially Reactive or Promiscuous Compounds.” J. Med. Chem. 2012, 55, 9763 – 9722.</p>
+            </li>
         </h2>
     </div>
     <div class='text-center'>
         <h1><a href='/index' class="button"> Begin clustering</a></h1>
-    </div>    
+    </div>   
+    <br> 
+    <br> 
+    <br> 
+    <br> 
 </div>
 {% endblock %}
