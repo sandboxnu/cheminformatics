@@ -28,11 +28,20 @@
         {{num}}
       </td>
       <td style="text-align:center" width="20">
-         <input type="checkbox" name='{{reason}}' value='{{reason}}'/>
+         <input type="checkbox" name='check' value='{{reason}}'/>
       </td>
         </tr>
       {% endfor %}
       </table>
+      <script language="JavaScript">
+        function toggle(source) {
+          checkboxes = document.getElementsByName('check');
+          for(var i=0, n=checkboxes.length;i<n;i++) {
+            checkboxes[i].checked = source.checked;
+          }
+        }
+      </script>
+    <input type="checkbox" onClick="toggle(this)"/>Select All<br/>
     <input type="submit" name='action' value="Remove Selected Errors">
     <input type="submit" name='action' value="Keep Selected Errors">
     </form>
@@ -56,11 +65,20 @@
       {{reason}}
     </td>
     <td style="text-align:center">
-       <input type="checkbox" name={{smile}} value={{smile}}/>
+       <input type="checkbox" name='check2' value={{smile}}/>
     </td>
       </tr>
     {% endfor %}
     </table>
+    <script language="JavaScript">
+      function toggle2(source) {
+        checkboxes = document.getElementsByName('check2');
+        for(var i=0, n=checkboxes.length;i<n;i++) {
+          checkboxes[i].checked = source.checked;
+        }
+      }
+    </script>
+  <input type="checkbox" onClick="toggle2(this)"/>Select All<br/>
   <input type="submit" name='action' value="Remove Selected Compounds">
   <input type="submit" name='action' value="Keep Errors">
   </form>
