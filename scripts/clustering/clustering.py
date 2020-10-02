@@ -3,7 +3,7 @@ from rdkit import Chem
 from rdkit import DataStructs
 from rdkit.Chem.Fingerprints import FingerprintMols
 from rdkit.Chem import AllChem
-from app.data.smiles import  convert
+from app.data.smiles import  get_murcko_smile
 from rdkit.ML.Cluster import Butina
 from rdkit.Chem.AtomPairs import Pairs
 
@@ -29,7 +29,7 @@ def cluster(smile_keys, fp_type, cutoff=0.15):
 
     data = [None] * nfps
     for i in range(0, nfps):
-        murcko = convert(smile_keys[i])
+        murcko = get_murcko_smile(smile_keys[i])
         mol = Chem.MolFromSmiles(murcko)
         if fp_type == "atom-pair":
             fps = Pairs.GetAtomPairFingerprintAsBitVect(mol)
