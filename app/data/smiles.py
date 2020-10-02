@@ -9,7 +9,6 @@ def construct_smiles(csv):
   for title in csv[0]:
     formattedTitleRow.append(title.lower())
 
-  print(formattedTitleRow)
   if (formattedTitleRow != ['smiles', 'label', 'mpo'] and formattedTitleRow != ['smiles', 'label']
   and formattedTitleRow != ['\ufeffsmiles', 'label', 'mpo'] and formattedTitleRow != ['\ufeffsmiles', 'label']):
     raise Exception("Malformed file input")
