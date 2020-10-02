@@ -31,8 +31,8 @@ def construct_smiles(csv):
   for row in csv:
     smile_string = row[0]
     smiles[smile_string] = {}
-    smiles[smile_string]['murcko'] = convert(smile_string)
-    smiles[smile_string]['smart'] = convertToSmart(smile_string)
+    smiles[smile_string]['murcko'] = get_murcko_smile(smile_string)
+    smiles[smile_string]['smart'] = convert_from_smart(smile_string)
     smiles[smile_string]['label'] = row[1]
     if(include_mpo):
       smiles[smile_string]['mpo'] = row[2]
@@ -43,14 +43,10 @@ def construct_smiles(csv):
 def filter_smiles(good_smiles, smiles):
   return {smi: data for (smi, data) in smiles.items() if data['smart'] in convert_array_of_smarts_to_smiles(good_smiles)}
 
-def convert(mol_smile):
+def get_murcko_smile(mol_smile):
     m = Chem.MolFromSmiles(mol_smile)
     core = MurckoScaffold.GetScaffoldForMol(m)
     return Chem.MolToSmiles(core)
-
-def convertToSmart(chemical):
-  mol = Chem.MolFromSmiles(chemical)
-  return Chem.MolToSmiles(mol)
 
 def convert_from_smart(smart):
   conv = Chem.MolFromSmiles(smart)
@@ -58,13 +54,7 @@ def convert_from_smart(smart):
   return back
 
 def convert_array_of_smarts_to_smiles(smarts):
-  result = []
-
-  for smart in smarts:
-    smile = convert_from_smart(smart)
-    result.append(smile)
-
-  return result
+  return [convert_from_smart(smart) for smart in smarts]
 
 def convert_to_smiles(bad_smiles):
   result = {}
