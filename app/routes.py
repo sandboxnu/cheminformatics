@@ -18,7 +18,10 @@ def index():
       session['smiles'] = smiles
       session['include_mpo'] = include_mpo
 
-      unique_compounds = pd.DataFrame(dict((k, [v.get('mpo', ''), v['label']]) for k, v in smiles.items()), index=['mpo', 'label']).T
+      if include_mpo:
+        unique_compounds = pd.DataFrame(dict((k, [v.get('mpo', ''), v['label']]) for k, v in smiles.items()), index=['mpo', 'label']).T
+      else:
+        unique_compounds = pd.DataFrame(dict((k, [v['label']]) for k, v in smiles.items()), index=['label']).T
       return render_template('index.html', title='Cheminformatic Analysis', 
         unique_compounds=unique_compounds.to_html(), num_compounds=len(unique_compounds), smiles=smiles, include_mpo=include_mpo)
 
