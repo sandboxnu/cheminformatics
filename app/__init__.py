@@ -4,6 +4,7 @@ import flask_excel as excel
 from flask_session import Session
 
 app = Flask(__name__, static_url_path='', static_folder='static')
+app.config['PRODUCTION'] = False
 
 bootstrap = Bootstrap()
 bootstrap.init_app(app)
