@@ -4,9 +4,9 @@
 {% endblock %}
 {% block content %}
 <div class="container">
-  <div class="text-center"> 
+  <div class="text-center">
     <h1> {{ title }}</h1>
-    <h3>Verify PAINS Filter</h3> 
+    <h3>Verify PAINS Filter</h3>
     <br>
     <br>
 
@@ -15,7 +15,8 @@
     <form action="\verify_pains_by_error" method=POST enctype=multipart/form-data>
       <table border=1 width="90%">
           <tr>
-              <th style="text-align:center">Reason for Failure</th> 
+              <th style="text-align:center">Reason for Failure</th>
+              <th style="text-align:center">Number of Smiles with Failure</th>
               <th style="text-align:center">Select</th>
             </tr>
       {% for reason, num in reasons_for_failure.items() %}
@@ -40,10 +41,10 @@
 
     <h3>Step 2: Remove individual compounds matching select rules</h3>
     <form action="\verify_pains" method=POST enctype=multipart/form-data>
-    <table border=1 width="90%"> 
+    <table border=1 width="90%">
         <tr>
             <th style="text-align:center">SMILES</th>
-            <th style="text-align:center">Reason</th> 
+            <th style="text-align:center">Reason</th>
             <th style="text-align:center">Select</th>
           </tr>
     {% for smile, reason in bad_smiles.items() %}
@@ -93,33 +94,47 @@
                 
         color1.addEventListener("input", changeGradient); 
         color2.addEventListener("input", changeGradient); 
+
+        
+        function onReclusterSingletonsCheck() {
+            const checkbox = document.getElementById('reclusterCoefficientCheck');
+            console.log(checkbox)
+            if(checkbox.checked) {
+              document.getElementById('reclusterCoefficient').classList.remove('hidden')
+              document.getElementById('reclusterCoefficient').style.visibility = "visible";
+              console.log(document.getElementById('reclusterCoefficient'));
+            } else {
+              document.getElementById('reclusterCoefficient').classList.remove('hidden')
+              document.getElementById('reclusterCoefficient').style.visibility = "hidden";
+            }
+        }
       </script>
       <form action="\final_compounds" method=POST enctype=multipart/form-data onsubmit="return confirmation();">
-        {% if include_mpo %}
+        {% if include_property %}
           <style> 
             .gradient { 
               font: "Roboto"; 
               text-align: center; 
               min-width: 300px;
-              background: linear-gradient(to right, 
-              #0000ff, #add8e6); 
-            } 
+              background: linear-gradient(to right,
+              #0000ff, #add8e6);
+            }
             .parent {
               display: flex;
             }
           </style>
           <div class="parent">
             <div style="margin-right:30px">
-              <b>Current Color for mpo0:</b> 
-              <input class="color1" type="color" name="mpo0Color" value="#0000ff" /> 
+              <b>Current Color for mpo0:</b>
+              <input class="color1" type="color" name="mpo0Color" value="#0000ff" />
               <br>
-              <b>Current Color for mpo6:</b> 
-              <input class="color2" type="color" name="mpo6Color" value="#add8e6" /> 
+              <b>Current Color for mpo6:</b>
+              <input class="color2" type="color" name="mpo6Color" value="#add8e6" />
             </div>
             <div class="gradient" style="display: flex; justify-content: center; align-items: center;">
               <div>Color Gradient</div>
             </div>
-          </div> 
+          </div>
         {% else %}
           <b>Display Color</b>
           <input type="color" name="mpo0Color"/>
@@ -134,30 +149,12 @@
         <input type="radio" name="fp_radio" id="atom-pair" value="atom-pair">
           <a target="_blank" href="https://www.rdkit.org/docs/GettingStartedInPython.html#atom-pairs-and-topological-torsions">Atom Pair</a>
         </input><br/>
-        <input type="radio" name="fp_radio" id="fpm" value="fpm">
-          <a target="_blank" href="https://www.rdkit.org/docs/source/rdkit.Chem.Fingerprints.FingerprintMols.html#rdkit.Chem.Fingerprints.FingerprintMols.FingerprintMol">Fingerprint Mol</a>
-        </input><br>
-
-        <script>
-          function onReclusterSingletonsCheck() {
-            const checkbox = document.getElementById('reclusterCoefficientCheck');
-            console.log(checkbox)
-            if(checkbox.checked) {
-              document.getElementById('reclusterCoefficient').classList.remove('hidden') 
-              document.getElementById('reclusterCoefficient').style.visibility = "visible";
-              console.log(document.getElementById('reclusterCoefficient'));
-            } else {
-              document.getElementById('reclusterCoefficient').classList.remove('hidden') 
-              document.getElementById('reclusterCoefficient').style.visibility = "hidden";
-            }
-          }
-        </script>
         <div>
-          Should we attempt to recluster singletons? 
+          Should we attempt to recluster singletons?
           <input type="checkbox" id="reclusterCoefficientCheck"  name="reclusterCoefficientCheck" onChange="onReclusterSingletonsCheck()"/>
           <div id="reclusterCoefficient" class="hidden">
             Recluster Coefficient:
-            <input type="number" id="reclusterCoefficientValue" name="reclusterCoefficientValue" step=".01" max=100 min=0/> 
+            <input type="number" id="reclusterCoefficientValue" name="reclusterCoefficientValue" step=".01" max=100 min=0/>
           </div>
         </div>
       Tanimoto Coefficient: 
@@ -165,7 +162,7 @@
         <input type="submit" value="Cluster Compounds">
     </form>
       {% for error in errors %}
-        <p class="error text-danger">{{ error }} </p> 
+        <p class="error text-danger">{{ error }} </p>
       {% endfor %}
   </div>
 </br>
