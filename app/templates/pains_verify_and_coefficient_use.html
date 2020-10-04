@@ -28,14 +28,14 @@
         {{num}}
       </td>
       <td style="text-align:center" width="20">
-         <input type="checkbox" name='check' value='{{reason}}'/>
+         <input class='all_compounds' type="checkbox" name='{{reason}}' value='{{reason}}'/>
       </td>
         </tr>
       {% endfor %}
       </table>
       <script language="JavaScript">
         function toggle(source) {
-          checkboxes = document.getElementsByName('check');
+          checkboxes = document.getElementsByClassName('all_compounds');
           for(var i=0, n=checkboxes.length;i<n;i++) {
             checkboxes[i].checked = source.checked;
           }
@@ -65,14 +65,14 @@
       {{reason}}
     </td>
     <td style="text-align:center">
-       <input type="checkbox" name='check2' value={{smile}}/>
+       <input class='individual_compounds' type="checkbox" name={{smile}} value={{smile}}/>
     </td>
       </tr>
     {% endfor %}
     </table>
     <script language="JavaScript">
       function toggle2(source) {
-        checkboxes = document.getElementsByName('check2');
+        checkboxes = document.getElementsByClassName('individual_compounds');
         for(var i=0, n=checkboxes.length;i<n;i++) {
           checkboxes[i].checked = source.checked;
         }
