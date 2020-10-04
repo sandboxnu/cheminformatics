@@ -1,7 +1,7 @@
 from app import app
 from flask import render_template, request, session
 import scripts.pains.LillyMedchemRules.pains as pains
-from app.data.smiles import construct_smiles, filter_smiles, convert_to_smiles
+from app.data.smiles import construct_smiles, filter_smiles, convert_to_smiles, sanitize
 import scripts.clustering.clustering as clustering
 from app.data.clustering import get_smiles_json
 from app.data.color_functions import color_hex_to_array
@@ -48,7 +48,7 @@ def upload():
 
         session['reasons_for_failure'] = reasons_for_failure
         session.changed = True
-    
+
     return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'])
 
 
@@ -80,6 +80,13 @@ def verify_pains():
             session['num_remaining']+= 1
             session.changed = True
           except Exception as e:
+            # only search by conversion to smart in a bad case
+            for allsmile in all_smiles :
+              #additional three character bug
+              if (sanitize(allsmile[4:]) == sanitize(smile)) :
+                session['good_smiles'][allsmile] = all_smiles[allsmile]
+                session.changed = True
+              #reordering bug
             print('Could not cluster {smile}')
 
   return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'])
@@ -126,8 +133,8 @@ def verify_pains_by_error():
               session.changed = True
             except Exception as e:
               print('Could not cluster {smile}'.format(smile=smile))
-            
-  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'])  
+
+  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'])
 
 @app.route('/final_compounds', methods=['GET', 'POST'])
 def final_compounds():
@@ -152,7 +159,7 @@ def final_compounds():
   fp_type = request.form['fp_radio']
 
   if(session['include_property']):
-    color2 = request.form['mpo6Color'] 
+    color2 = request.form['mpo6Color']
 
     color2_array = color_hex_to_array(color2)
   else:
