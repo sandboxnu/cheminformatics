@@ -18,7 +18,7 @@ def upload():
     if request.method == 'POST':
         try:
             data = request.get_array(field_name='file')
-            smiles, include_property = construct_smiles(data)
+            smiles, include_property, highest_val, lowest_val = construct_smiles(data)
 
         except Exception as e:
             return render_template('index.html', title='Cheminformatic Analysis', errors=["Please input a valid file format"])
@@ -36,6 +36,9 @@ def upload():
         session['bad_smiles'] = bad_smiles
         #global include_property
         session['include_property'] = include_property
+        session['prop_name'] = include_property
+        session['highest_val'] = highest_val
+        session['lowest_val'] = lowest_val
 
         #global number of compounds
         session["num_remaining"] = len(good_smiles)
@@ -49,7 +52,7 @@ def upload():
         session['reasons_for_failure'] = reasons_for_failure
         session.changed = True
     
-    return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'])
+    return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], highest_val=session["highest_val"], lowest_val=session["lowest_val"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'])
 
 
 @app.route('/verify_pains', methods=['GET', 'POST'])
@@ -82,7 +85,7 @@ def verify_pains():
           except Exception as e:
             print('Could not cluster {smile}')
 
-  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'])
+  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], highest_val=session["highest_val"], lowest_val=session["lowest_val"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'])
 
 @app.route('/verify_pains_by_error', methods=['GET', 'POST'])
 def verify_pains_by_error():
@@ -127,11 +130,13 @@ def verify_pains_by_error():
             except Exception as e:
               print('Could not cluster {smile}'.format(smile=smile))
             
-  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'])  
+  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, highest_val=session["highest_val"], lowest_val=session["lowest_val"], include_property=session['include_property'])  
 
 @app.route('/final_compounds', methods=['GET', 'POST'])
 def final_compounds():
   good_smiles = session.get('good_smiles')
+  highest_val = session['highest_val']
+  lowest_val =  session['lowest_val']
   bad_smiles = session.get('bad_smiles')
   reasons_for_failure = session.get('reasons_for_failure')
   if request.method == 'POST':
@@ -140,19 +145,19 @@ def final_compounds():
       reclusterCoefficient = request.form['reclusterCoefficientValue']
 
       if (float(tanimoto) < 0 or float(tanimoto) > 1):
-        return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, errors=["Please input a valid tanimoto coefficient"], include_property=session['include_property'])
+        return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, errors=["Please input a valid tanimoto coefficient"], highest_val=highest_val, lowest_val=lowest_val, include_property=session['include_property'])
       elif ((reclusterCoefficient != '') and (float(tanimoto) < 0 or float(tanimoto) > 1)):
-        return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, errors=["Please input a valid recluster coefficient"], include_property=session['include_property'])
+        return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, errors=["Please input a valid recluster coefficient"], highest_val=highest_val, lowest_val=lowest_val, include_property=session['include_property'])
     except:
-      return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, errors=["Please input a valid tanimoto coefficient"], include_property=session['include_property'])
+      return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, errors=["Please input a valid tanimoto coefficient"], highest_val=highest_val, lowest_val=lowest_val, include_property=session['include_property'])
 
-  color1 = request.form['mpo0Color']
+  color1 = request.form['lowColor']
   color1_array = color_hex_to_array(color1)
 
   fp_type = request.form['fp_radio']
 
   if(session['include_property']):
-    color2 = request.form['mpo6Color'] 
+    color2 = request.form['highColor'] 
 
     color2_array = color_hex_to_array(color2)
   else:
@@ -166,15 +171,15 @@ def final_compounds():
     recluster_smiles = recluster_data[0]
     recluster_clusters = recluster_data[1]
     tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(recluster_smiles, recluster_clusters, fp_type)
-    get_smiles_json(tanimoto_smiles, float(tanimoto), recluster_clusters, session['include_property'], color1_array, color2_array, shouldRecluster)
+    get_smiles_json(tanimoto_smiles, float(tanimoto), recluster_clusters, session['include_property'], lowest_val, highest_val, color1_array, color2_array, shouldRecluster)
   else :
     tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(good_smiles, cluster, fp_type)
-    get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, session['include_property'], color1_array, color2_array, shouldRecluster)
+    get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, session['include_property'], lowest_val, highest_val, color1_array, color2_array, shouldRecluster)
 
   include_property = session['include_property']
   session.clear()
 
-  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, include_property=include_property)
+  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, highest_val=highest_val, lowest_val=lowest_val, include_property=include_property)
 
 
 @app.after_request

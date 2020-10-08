@@ -82,11 +82,11 @@
           </style>
           <div class="parent">
             <div style="margin-right:30px">
-              <b>Current Color for mpo0:</b>
-              <input class="color1" type="color" name="mpo0Color" value="#0000ff" />
+              <b>Current Color for {{ include_property }} {{ lowest_val }}:</b>
+              <input class="color1" type="color" name="lowColor" value="#0000ff" />
               <br>
-              <b>Current Color for mpo6:</b>
-              <input class="color2" type="color" name="mpo6Color" value="#add8e6" />
+              <b>Current Color for {{ include_property }} {{ highest_val }}:</b>
+              <input class="color2" type="color" name="highColor" value="#add8e6" />
             </div>
             <div class="gradient" style="display: flex; justify-content: center; align-items: center;">
               <div>Color Gradient</div>

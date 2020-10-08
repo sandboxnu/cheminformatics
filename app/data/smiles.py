@@ -9,8 +9,7 @@ def construct_smiles(csv):
   for title in csv[0]:
     formattedTitleRow.append(title.lower())
 
-  if (formattedTitleRow != ['smiles', 'label', 'mpo'] and formattedTitleRow != ['smiles', 'label']
-  and formattedTitleRow != ['\ufeffsmiles', 'label', 'mpo'] and formattedTitleRow != ['\ufeffsmiles', 'label']):
+  if (formattedTitleRow[:2] != ['\ufeffsmiles', 'label'] and formattedTitleRow[:2] != ['smiles', 'label']):
     raise Exception("Malformed file input")
   
   if(len(csv[0]) == 3):
@@ -19,8 +18,10 @@ def construct_smiles(csv):
     include_property = None
 
   smiles = {}
-
   csv = csv[1:]
+
+  highest_val = float('-inf')
+  lowest_val = float('inf')
 
   for row in csv:
     smile_string = row[0]
@@ -29,12 +30,16 @@ def construct_smiles(csv):
     smiles[smile_string]['smart'] = convert_from_smart(smile_string)
     smiles[smile_string]['label'] = row[1]
     if include_property is not None:
-      smiles[smile_string]['property'] = row[2]
+      prop_val = float(row[2])
+      highest_val = max(prop_val, highest_val)
+      lowest_val = min(prop_val, lowest_val)
+      smiles[smile_string]['property'] = prop_val
       smiles[smile_string]['property_name'] = include_property
     else:
       smiles[smile_string]['property'] = 0
-
-  return smiles, include_property is not None
+  
+  return smiles, include_property, highest_val, lowest_val
+ 
 
 def filter_smiles(good_smiles, smiles):
   return {smi: data for (smi, data) in smiles.items() if data['smart'] in convert_array_of_smarts_to_smiles(good_smiles)}
