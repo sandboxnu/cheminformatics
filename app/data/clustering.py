@@ -44,6 +44,10 @@ def get_smiles_json(smiles, cutoff, clusters, include_property, lowest_val, high
 
   result = {'nodes': nodes, 'edges': edges, 'clusterInfo': clusters, 'color1': prop_color1, 'color2': prop_color2, 'lowest_val': lowest_val, 'highest_val': highest_val}
 
+  if include_property is None:
+    result['lowest_val'] = 0
+    result['highest_val'] = 1
+
   os.chdir(os.path.abspath(os.path.dirname(__file__)))
   
   with open('../static/js/data.json', 'w+') as outfile:
