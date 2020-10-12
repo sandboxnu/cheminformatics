@@ -9,13 +9,64 @@
     <h3>Filter and cluster compounds</h3> 
     <p> Enter a .csv file with columns titled SMILES and Label.</p> 
     <div>
-      <form action="/cluster" method=POST enctype=multipart/form-data><p>
+      <form action="/index" method=POST enctype=multipart/form-data><p>
         <input class="form-control center" type=file name=file>
         <input class="form-group" type=submit value=Submit>
       </form>
       {% for error in errors %}
         <p class="error text-danger">{{ error }} </p> 
       {% endfor %}
+
+      <br>
+
+      <style>
+        table, th, td {
+          text-align: center;
+          border: 1px solid black;
+        }  
+        th, td {
+          padding: 15px;
+        }
+        a.button {
+            -webkit-appearance: button;
+            -moz-appearance: button;
+            appearance: button;
+
+            border: 2px solid black;
+            background-color: lightblue;
+            color: black;
+            padding: 28px 56px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+      </style>
+      {% if num_compounds %}
+        <table align="center">
+          <tr>
+            <th># of Compounds</th>
+            <th>Color by Property?</th> 
+          </tr>
+          <tr>
+            <td>{{ num_compounds }}</td>
+            <td>{% if include_property != None %} {{ include_property}} {% else %} No {% endif %}</td>
+          </tr>
+        </table>
+
+        <br>
+      
+        <div class='text-center'>
+          <h1><a href='/cluster' class="button"> Confirm Upload to Begin Clustering</a></h1>
+        </div> 
+      {% endif %}
+
+      <br>
+      <br>
+      
+      {% if unique_compounds %}
+        <div align="center">
+          {{unique_compounds | safe}}
+        </div>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
