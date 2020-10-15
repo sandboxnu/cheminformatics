@@ -14,6 +14,7 @@ def welcome():
 
 
 @app.route('/index')
+@app.route('/index', methods=['GET', 'POST'])
 def index():     
   session.clear()
   if request.method == 'POST':
@@ -27,6 +28,7 @@ def index():
         unique_compounds = pd.DataFrame(dict((k, [v.get('property', ''), v['label']]) for k, v in smiles.items()), index=['mpo', 'label']).T
       else:
         unique_compounds = pd.DataFrame(dict((k, [v['label']]) for k, v in smiles.items()), index=['label']).T
+      print('break')
       return render_template('index.html', title='Cheminformatic Analysis', 
         unique_compounds=unique_compounds.to_html(), num_compounds=len(unique_compounds), smiles=smiles, include_property=include_property)
 
