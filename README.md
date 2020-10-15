@@ -5,7 +5,7 @@
 Initial Setup:
 
 - clone this repo
-- create a conda environment: `conda create -c rdkit -n chem rdkit`
+- create a conda environment: `conda create -c rdkit -n chem rdkit` (on Windows, this will all be in the Anaconda Prompt)
 - activate your environment with `conda activate chem`
 - install flask: `pip install flask`
 - install flask-excel `pip install Flask_Excel`
@@ -16,8 +16,8 @@ Initial Setup:
 Add PAINs script
 - `git clone https://github.com/IanAWatson/Lilly-Medchem-Rules`
 - move the contents of the folder to LillyMedchemRules and delete empty folder 'Lilly-Medchem-Rules'
-- make sure ruby is installed on your machine
-- run `make` to build the project
+- install docker and ensure that it is running
+- pull the pains image: `docker pull ianwatson/lilly_medchem_rules:v1.2`
 
 And to run the site locally:
 - `flask run`

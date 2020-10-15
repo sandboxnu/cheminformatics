@@ -1,4 +1,4 @@
-smile,label
+SMILES,Label
 COc1cc(OC)cc(C(=O)NS(=O)(=O)c2ccc(CN3CCN(c4ccccc4)CC3)cc2)c1,SZ1TA5
 O=C(NS(=O)(=O)c1ccc(CN2CCN(c3ccccc3)CC2)cc1)c1ccc(CCc2ccccn2)cc1,SZ1TA17
 FC1=CC=C(C2=C(N)C(=C(C)N2)C(=O)C)C=C1,SZ1TA41
