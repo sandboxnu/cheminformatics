@@ -101,12 +101,20 @@ def verify_pains():
           except Exception as e:
             # only search by conversion to smart in a bad case
             for allsmile in all_smiles :
+              #reordering bug
+              if(sanitize(allsmile) == sanitize(smile)) :
+                session['good_smiles'][allsmile] = all_smiles[allsmile]
+                session.changed = True
+                break
               #additional three character bug
               if (sanitize(allsmile[4:]) == sanitize(smile)) :
                 session['good_smiles'][allsmile] = all_smiles[allsmile]
                 session.changed = True
-              #reordering bug
-            print('Could not cluster {smile}')
+                break
+              else:
+                print('Could not cluster {smile}')
+
+
 
   return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'])
 

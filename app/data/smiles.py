@@ -51,10 +51,14 @@ def convert_from_smart(smart):
 
 
 def sanitize(smile):
-  conv = Chem.MolFromSmiles(smile)
+  try:
+    conv = Chem.MolFromSmiles(smile)
 
-  Chem.SanitizeMol(conv)
-  return Chem.MolToSmiles(conv)
+    Chem.SanitizeMol(conv)
+    return Chem.MolToSmiles(conv)
+  except Exception as e:
+    return smile
+
 
 
 def convert_array_of_smarts_to_smiles(smarts):
