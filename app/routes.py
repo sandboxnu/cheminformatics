@@ -5,52 +5,71 @@ from app.data.smiles import construct_smiles, filter_smiles, convert_to_smiles, 
 import scripts.clustering.clustering as clustering
 from app.data.clustering import get_smiles_json
 from app.data.color_functions import color_hex_to_array
+import pandas as pd
 
 @app.route('/')
+@app.route('/welcome')
+def welcome():
+  return render_template('welcome.html', title='Welcome to Cheminformatics Analysis')
+
+
 @app.route('/index')
+@app.route('/index', methods=['GET', 'POST'])
 def index():
+  session.clear()
+  if request.method == 'POST':
+    try:
+      data = request.get_array(field_name='file')
+      smiles, include_property = construct_smiles(data)
+      session['smiles'] = smiles
+      session['include_property'] = include_property
+
+      if include_property:
+        unique_compounds = pd.DataFrame(dict((k, [v.get('property', ''), v['label']]) for k, v in smiles.items()), index=['mpo', 'label']).T
+      else:
+        unique_compounds = pd.DataFrame(dict((k, [v['label']]) for k, v in smiles.items()), index=['label']).T
+      print('break')
+      return render_template('index.html', title='Cheminformatic Analysis',
+        unique_compounds=unique_compounds.to_html(), num_compounds=len(unique_compounds), smiles=smiles, include_property=include_property)
+
+    except Exception as e:
+      return render_template('index.html', title='Cheminformatic Analysis', errors=["Please input a valid file format"])
+
   return render_template('index.html', title='Cheminformatic Analysis')
 
 
-@app.route("/cluster", methods=['GET', 'POST'])
+@app.route("/cluster", methods=['GET'])
 def upload():
-    session.clear()
-    if request.method == 'POST':
-        try:
-            data = request.get_array(field_name='file')
-            smiles, include_property = construct_smiles(data)
+  smiles = session['smiles']
+  include_property = session['include_property']
 
-        except Exception as e:
-            return render_template('index.html', title='Cheminformatic Analysis', errors=["Please input a valid file format"])
+  inputs = smiles.keys()
 
-        inputs = smiles.keys()
+  #global all_smiles
+  session['all_smiles'] = convert_to_smiles(smiles.copy())
+  #global good_smiles
+  good_smiles = convert_to_smiles(filter_smiles(pains.get_smiles(inputs), smiles))
+  session['good_smiles'] = good_smiles
+  #global bad_smiles
+  bs = convert_to_smiles(pains.get_bad_smiles(inputs))
+  bad_smiles = bs if isinstance(bs, dict) else {}
+  session['bad_smiles'] = bad_smiles
+  #global include_property
+  session['include_property'] = include_property
 
-        #global all_smiles
-        session['all_smiles'] = convert_to_smiles(smiles.copy())
-        #global good_smiles
-        good_smiles = convert_to_smiles(filter_smiles(pains.get_smiles(inputs), smiles))
-        session['good_smiles'] = good_smiles
-        #global bad_smiles
-        bs = convert_to_smiles(pains.get_bad_smiles(inputs))
-        bad_smiles = bs if isinstance(bs, dict) else {}
-        session['bad_smiles'] = bad_smiles
-        #global include_property
-        session['include_property'] = include_property
+  #global number of compounds
+  session["num_remaining"] = len(good_smiles)
+  session["num_removed"] = 0
 
-        #global number of compounds
-        session["num_remaining"] = len(good_smiles)
-        session["num_removed"] = 0
+  #global reasons_for_failure
+  reasons_for_failure = dict.fromkeys(set(bad_smiles.values()), 0)
+  for smile in bad_smiles.values():
+    reasons_for_failure[smile] += 1
 
-        #global reasons_for_failure
-        reasons_for_failure = dict.fromkeys(set(bad_smiles.values()), 0)
-        for smile in bad_smiles.values():
-          reasons_for_failure[smile] += 1
+  session['reasons_for_failure'] = reasons_for_failure
+  session.changed = True
 
-        session['reasons_for_failure'] = reasons_for_failure
-        session.changed = True
-
-    return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'])
-
+  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'])
 
 @app.route('/verify_pains', methods=['GET', 'POST'])
 def verify_pains():
