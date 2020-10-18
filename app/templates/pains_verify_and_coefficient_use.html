@@ -2,6 +2,15 @@
 {% block title %}
 {{ title }}
 {% endblock %}
+
+{% block head %}
+<script src="https://unpkg.com/smiles-drawer@1.0.10/dist/smiles-drawer.min.js">
+  let painsDrawer = new SmilesDrawer.Drawer({width: 200, height:200});
+  let canvas = '';
+</script>
+{{super()}}
+{% endblock %}
+
 {% block content %}
 <div class="container">
   <div class="text-center">
@@ -58,8 +67,15 @@
           </tr>
     {% for smile, reason in bad_smiles.items() %}
     <tr id={smile}>
-      <td style="text-align:center">
-        {{smile}}
+      <td >
+        <canvas id={{smile}}></canvas> 
+        <script>
+          painsDrawer = new SmilesDrawer.Drawer({width: 150, height:150});
+          SmilesDrawer.parse('{{ smile }}', function(tree) {
+            // Draw to the canvas
+            painsDrawer.draw(tree,'{{ smile }}', "light", false);
+          });
+        </script>
       </td>
     <td style="text-align:center" width="20">
       {{reason}}
