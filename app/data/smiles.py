@@ -67,4 +67,14 @@ def convert_to_smiles(bad_smiles):
   return result
 
 
+def convert_to_smiles_and_labels(bad_smiles, all_smiles):
+  result = {}
 
+  for (smart, reason) in bad_smiles.items():
+    smile = convert_from_smart(smart)
+    label = all_smiles[smile]['label']
+    result[smile] = {'label': '', 'reason': ''}
+    result[smile]['label'] = label
+    result[smile]['reason'] = reason
+
+  return result
