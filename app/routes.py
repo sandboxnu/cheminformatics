@@ -1,7 +1,7 @@
 from app import app
 from flask import render_template, request, session
 import scripts.pains.LillyMedchemRules.pains as pains
-from app.data.smiles import construct_smiles, filter_smiles, convert_to_smiles
+from app.data.smiles import construct_smiles, filter_smiles, convert_to_smiles, convert_to_smiles_and_labels
 import scripts.clustering.clustering as clustering
 from app.data.clustering import get_smiles_json
 from app.data.color_functions import color_hex_to_array
@@ -31,7 +31,6 @@ def index():
         unique_compounds = pd.DataFrame(dict((k, [v.get('property', ''), v['label']]) for k, v in smiles.items()), index=[include_property, 'label']).T
       else:
         unique_compounds = pd.DataFrame(dict((k, [v['label']]) for k, v in smiles.items()), index=['label']).T
-      print('break')
       return render_template('index.html', title='Cheminformatic Analysis', 
         unique_compounds=unique_compounds.to_html(), num_compounds=len(unique_compounds), smiles=smiles, include_property=include_property)
 
@@ -54,7 +53,8 @@ def upload():
   good_smiles = convert_to_smiles(filter_smiles(pains.get_smiles(inputs), smiles))
   session['good_smiles'] = good_smiles
   #global bad_smiles
-  bs = convert_to_smiles(pains.get_bad_smiles(inputs))
+  failed_smiles = pains.get_bad_smiles(inputs)
+  bs = convert_to_smiles_and_labels(failed_smiles, session['all_smiles'])
   bad_smiles = bs if isinstance(bs, dict) else {}
   session['bad_smiles'] = bad_smiles
   #global include_property
@@ -65,8 +65,8 @@ def upload():
   session["num_removed"] = 0
 
   #global reasons_for_failure
-  reasons_for_failure = dict.fromkeys(set(bad_smiles.values()), 0)
-  for smile in bad_smiles.values():
+  reasons_for_failure = dict.fromkeys(set(convert_to_smiles(failed_smiles).values()), 0)
+  for smile in failed_smiles.values():
     reasons_for_failure[smile] += 1
 
   session['reasons_for_failure'] = reasons_for_failure
