@@ -132,7 +132,6 @@ def verify_pains_by_error():
 
     elif form['action'] == 'Keep Selected Errors':
       for reason in form:
-        print(smile)
         if(reason in reasons_for_failure.keys()):
           del reasons_for_failure[reason]
           session['reasons_for_failure'] = reasons_for_failure
