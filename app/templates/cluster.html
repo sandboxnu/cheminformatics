@@ -31,6 +31,28 @@
     <h1> {{ title }}</h1>
     <h3>Filter and cluster compounds</h3> 
     
+    <br>
+    <br>
+
+    <style>
+        table, th, td {
+          text-align: center;
+          border: 1px solid black;
+        }  
+        th, td {
+          padding: 15px;
+        }
+    </style>
+
+    {% if data %}
+      <div align="center">
+        {{data | safe}}
+      </div>
+    {% endif %}
+    
+    <br>
+    <br>
+    
     <script id='include_property_script' include_property={{include_property}}>
       include_property = document.getElementById('include_property_script').getAttribute('include_property');
       if (include_property == "True") {

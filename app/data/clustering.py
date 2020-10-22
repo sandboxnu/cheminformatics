@@ -49,5 +49,7 @@ def get_smiles_json(smiles, cutoff, clusters, include_property, prop_color1=[255
   with open('../static/js/data.json', 'w+') as outfile:
     json.dump(result, outfile, indent=4, sort_keys=True)
 
+  return result
+
 
 

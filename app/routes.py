@@ -28,7 +28,7 @@ def index():
         unique_compounds = pd.DataFrame(dict((k, [v.get('property', ''), v['label']]) for k, v in smiles.items()), index=['mpo', 'label']).T
       else:
         unique_compounds = pd.DataFrame(dict((k, [v['label']]) for k, v in smiles.items()), index=['label']).T
-      print('break')
+        
       return render_template('index.html', title='Cheminformatic Analysis', 
         unique_compounds=unique_compounds.to_html(), num_compounds=len(unique_compounds), smiles=smiles, include_property=include_property)
 
@@ -185,15 +185,42 @@ def final_compounds():
     recluster_smiles = recluster_data[0]
     recluster_clusters = recluster_data[1]
     tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(recluster_smiles, recluster_clusters, fp_type)
-    get_smiles_json(tanimoto_smiles, float(tanimoto), recluster_clusters, session['include_property'], color1_array, color2_array, shouldRecluster)
+    result = get_smiles_json(tanimoto_smiles, float(tanimoto), recluster_clusters, session['include_property'], color1_array, color2_array, shouldRecluster)
+    print(result)
   else :
     tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(good_smiles, cluster, fp_type)
-    get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, session['include_property'], color1_array, color2_array, shouldRecluster)
+    result = get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, session['include_property'], color1_array, color2_array, shouldRecluster)
+  
+  df = pd.DataFrame({'a': [1, 2, 3], 'b': [4, 5, 6], 'c':[7, 8, 9]})
 
   include_property = session['include_property']
   session.clear()
 
-  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, include_property=include_property)
+  nodes_murcko = []
+  nodes_type = []
+  nodes_id = []
+  nodes_label = []
+
+  for node in result['nodes']:
+    nodes_murcko.append(node['murcko'])
+    nodes_id.append(node['data']['id'])
+    if node['data']['centroid']:
+      nodes_type.append('centroid')
+    else:
+      nodes_type.append('not centroid')
+    nodes_label.append(node['data']['label'].split('\n')[0])
+
+  nodes_cluster = [0] * len(nodes_id)
+  
+  for group, cluster in enumerate(result['clusterInfo']):
+    for index, id in enumerate(nodes_id):
+      if id in cluster:
+        nodes_cluster[index] = group
+
+
+  df2 = pd.DataFrame({'id': nodes_id, 'murcko': nodes_murcko, 'label': nodes_label, 'type': nodes_type, 'cluster': nodes_cluster})
+  # print(nodes_murcko)
+  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, include_property=include_property, data=df2.to_html())
 
 
 @app.after_request
