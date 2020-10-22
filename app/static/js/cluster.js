@@ -144,7 +144,20 @@ fetch('js/data.json', {mode: 'no-cors'})
 
   var png64 = cy.png(img_options);
   
-  
   $('<div class=\'text-center\'><a id="png" download>Download Image!</a></div>').insertBefore('#cy');
     $('#png').attr('href', png64);
+
+  
+  var resetButton = document.createElement("button");
+  resetButton.innerHTML = "<div style=\'text-align: center\'>Reset Cluster View</div>";
+ 
+  resetButton.addEventListener ("click", function() {
+    cy.reset();
+  });
+
+  var legend = document.getElementById("legend");
+  var legendParent = legend.parentNode;
+
+  legendParent.insertBefore(resetButton, legend);
+
 });
