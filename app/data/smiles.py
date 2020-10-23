@@ -72,9 +72,11 @@ def convert_to_smiles_and_labels(bad_smiles, all_smiles):
 
   for (smart, reason) in bad_smiles.items():
     smile = convert_from_smart(smart)
-    label = all_smiles[smile]['label']
-    result[smile] = {'label': '', 'reason': ''}
-    result[smile]['label'] = label
-    result[smile]['reason'] = reason
+    label = ''
+    try:
+      label = all_smiles[smile]['label']
+    except:
+      print('could not find label for ' + smile)
+    result[smile] = {'label': label, 'reason': reason}
 
   return result

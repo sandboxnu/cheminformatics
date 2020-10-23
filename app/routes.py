@@ -121,8 +121,8 @@ def verify_pains_by_error():
           del reasons_for_failure[reason]
           session['reasons_for_failure'] = reasons_for_failure
           smiles_to_remove = []
-          for (smile, smile_reason) in bad_smiles.items():
-            if(reason == smile_reason):
+          for (smile, smile_info) in bad_smiles.items():
+            if(reason == smile_info['reason']):
               smiles_to_remove.append(smile)
           for smile in smiles_to_remove:
             del bad_smiles[smile]
@@ -136,8 +136,8 @@ def verify_pains_by_error():
           del reasons_for_failure[reason]
           session['reasons_for_failure'] = reasons_for_failure
           smiles_to_remove = []
-          for (smile, smile_reason) in bad_smiles.items():
-            if(reason == smile_reason):
+          for (smile, smile_info) in bad_smiles.items():
+            if(reason == smile_info['reason']):
               smiles_to_remove.append(smile)
           for smile in smiles_to_remove:
             try:
