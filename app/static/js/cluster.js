@@ -132,7 +132,6 @@ fetch('js/data.json', {mode: 'no-cors'})
   });
 
   var layout = cy.layout( options );
-
   layout.run();
   const img_options =
   {
@@ -152,7 +151,8 @@ fetch('js/data.json', {mode: 'no-cors'})
   resetButton.innerHTML = "<div style=\'text-align: center\'>Reset Cluster View</div>";
  
   resetButton.addEventListener ("click", function() {
-    cy.reset();
+    layout.stop()
+    layout.run();
   });
 
   var legend = document.getElementById("legend");
