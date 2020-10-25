@@ -105,18 +105,14 @@ def verify_pains():
           except Exception as e:
             # only search by conversion to smart in a bad case
             for allsmile in all_smiles :
-              #reordering bug
-              if(sanitize(allsmile) == sanitize(smile)) :
-                session['good_smiles'][allsmile] = all_smiles[allsmile]
-                session.changed = True
-                break
+              #TODO: fix reordering bug
               #additional three character bug
               if (sanitize(allsmile[4:]) == sanitize(smile)) :
                 session['good_smiles'][allsmile] = all_smiles[allsmile]
                 session.changed = True
                 break
               else:
-                print('Could not cluster {smile}')
+                print('Could not cluster {smile}'.format(smile=smile))
 
 
 
@@ -163,7 +159,16 @@ def verify_pains_by_error():
               session['num_remaining']+= 1
               session.changed = True
             except Exception as e:
-              print('Could not cluster {smile}'.format(smile=smile))
+              # only search by conversion to smart in a bad case
+              for allsmile in all_smiles :
+                #TODO: fix reordering bug
+                #additional three character bug
+                if (sanitize(allsmile[4:]) == sanitize(smile)) :
+                  session['good_smiles'][allsmile] = all_smiles[allsmile]
+                  session.changed = True
+                  break
+                else:
+                  print('Could not cluster {smile}'.format(smile=smile))
 
   return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, highest_val=session["highest_val"], lowest_val=session["lowest_val"], include_property=session['include_property'])
 
