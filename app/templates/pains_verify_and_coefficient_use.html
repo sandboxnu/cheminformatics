@@ -2,6 +2,14 @@
 {% block title %}
 {{ title }}
 {% endblock %}
+
+{% block head %}
+<script src="https://unpkg.com/smiles-drawer@1.0.10/dist/smiles-drawer.min.js">
+  let painsDrawer = new SmilesDrawer.Drawer({width: 150, height:150});
+</script>
+{{super()}}
+{% endblock %}
+
 {% block content %}
 <div class="container">
   <div class="text-center">
@@ -56,13 +64,22 @@
             <th style="text-align:center">Reason</th>
             <th style="text-align:center">Select</th>
           </tr>
-    {% for smile, reason in bad_smiles.items() %}
+    {% for smile, smile_info in bad_smiles.items() %}
     <tr id={smile}>
-      <td style="text-align:center">
-        {{smile}}
+      <td style="text-align:center" >
+        <canvas id={{smile}}></canvas> 
+        <div> {{ smile_info['label'] }} </div>
+        <script>
+          painsDrawer = new SmilesDrawer.Drawer({width: 150, height:150});
+          SmilesDrawer.parse('{{ smile }}', function(tree) {
+            painsDrawer.draw(tree,'{{ smile }}', "light", false);
+          }, function(err) {
+              console.log(err);
+          });
+        </script>
       </td>
     <td style="text-align:center" width="20">
-      {{reason}}
+      {{ smile_info['reason'] }}
     </td>
     <td style="text-align:center">
        <input class='individual_compounds' type="checkbox" name={{smile}} value={{smile}}/>
@@ -97,22 +114,6 @@
           }
           return true;
         }
-
-        var color1 = document.querySelector(".color1"); 
-        var color2 = document.querySelector(".color2"); 
-        var body = document.querySelector(".gradient"); 
-                
-        // Changing color for the gradient 
-        function changeGradient() { 
-          body.style.background = 
-                "linear-gradient(to right, "  
-                    + color1.value + ", "  
-                    + color2.value + ")"; 
-        } 
-                
-        color1.addEventListener("input", changeGradient); 
-        color2.addEventListener("input", changeGradient); 
-
         
         function onReclusterSingletonsCheck() {
             const checkbox = document.getElementById('reclusterCoefficientCheck');
@@ -143,19 +144,35 @@
           </style>
           <div class="parent">
             <div style="margin-right:30px">
-              <b>Current Color for mpo0:</b>
-              <input class="color1" type="color" name="mpo0Color" value="#0000ff" />
+              <b>Current Color for {{ include_property }} {{ lowest_val }}:</b>
+              <input class="color1" type="color" name="lowColor" value="#0000ff" />
               <br>
-              <b>Current Color for mpo6:</b>
-              <input class="color2" type="color" name="mpo6Color" value="#add8e6" />
+              <b>Current Color for {{ include_property }} {{ highest_val }}:</b>
+              <input class="color2" type="color" name="highColor" value="#add8e6" />
             </div>
             <div class="gradient" style="display: flex; justify-content: center; align-items: center;">
               <div>Color Gradient</div>
+              <script>
+                var color1 = document.querySelector(".color1");
+                var color2 = document.querySelector(".color2");
+                var body = document.querySelector(".gradient");
+
+                // Changing color for the gradient
+                function changeGradient() {
+                  body.style.background =
+                        "linear-gradient(to right, "
+                            + color1.value + ", "
+                            + color2.value + ")";
+                }
+
+                color1.addEventListener("input", changeGradient);
+                color2.addEventListener("input", changeGradient);
+              </script>
             </div>
           </div>
         {% else %}
           <b>Display Color</b>
-          <input type="color" name="mpo0Color"/>
+          <input type="color" name="lowColor"/>
         {% endif %}
 
         <br>

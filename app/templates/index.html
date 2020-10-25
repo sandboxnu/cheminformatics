@@ -44,11 +44,11 @@
         <table align="center">
           <tr>
             <th># of Compounds</th>
-            <th>Include MPO?</th> 
+            <th>Color by Property?</th> 
           </tr>
           <tr>
             <td>{{ num_compounds }}</td>
-            <td>{{ include_property }}</td>
+            <td>{% if include_property != None %} {{ include_property}} {% else %} No {% endif %}</td>
           </tr>
         </table>
 
