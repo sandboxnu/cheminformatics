@@ -1,0 +1,8 @@
+{% extends 'bootstrap/base.html' %}
+{% block title %} We encountered an error in the clustering process{% endblock %}
+{% block content %}
+<div class="text-center"> 
+  <h2>There was an error in the clustering process.</h2>
+  <h4>Please go to the <a href="{{ url_for('index') }}">input page</a> to try clustering again.</h4>
+</div>
+{% endblock %}
