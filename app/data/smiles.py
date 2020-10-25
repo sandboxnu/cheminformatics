@@ -37,9 +37,9 @@ def construct_smiles(csv):
       smiles[smile_string]['property_name'] = include_property
     else:
       smiles[smile_string]['property'] = 0
-  
+
   return smiles, include_property, highest_val, lowest_val
- 
+
 
 def filter_smiles(good_smiles, smiles):
   return {smi: data for (smi, data) in smiles.items() if data['smart'] in convert_array_of_smarts_to_smiles(good_smiles)}
@@ -55,6 +55,7 @@ def convert_from_smart(smart):
   return back
 
 
+
 def sanitize(smile):
   try:
     conv = Chem.MolFromSmiles(smile)
@@ -62,8 +63,16 @@ def sanitize(smile):
     Chem.SanitizeMol(conv)
     return Chem.MolToSmiles(conv)
   except Exception as e:
-    return smile
+    return False
 
+def aromaticity(smile):
+  try:
+    conv = Chem.MolFromSmiles(smile)
+
+    Chem.SetAromaticity(conv)
+    return Chem.MolToSmiles(conv)
+  except Exception as e:
+    return smile
 
 
 def convert_array_of_smarts_to_smiles(smarts):
