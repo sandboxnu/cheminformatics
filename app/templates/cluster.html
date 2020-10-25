@@ -37,36 +37,38 @@
         document.write('<div class="text-left"> {{ include_property }} {{ lowest_val }} <span id="square1" class="display:inline-block"></span> {{ highest_val }} <span id="square2" class="display:inline-block"></span> </div></div>');
       } 
     </script>
-    <div class="text-left">
-      Default: <span class="display:inline-block">
-        <svg height="20" width="20">
-          <circle cx="10" cy="12" r="8" fill="black" />
-        </svg>
-      </span>
-      <br>
-      Centriod: <span class="display:inline-block">
-        <svg height="20" width="20">
-          <polygon points="10,2 4,21 20,8.5 1,8.5 16,21"
-          style="fill:black; fill-rule:nonzero;" />
-        </svg>
-      </span>
-      <br>
-      Reclustered: <span class="display:inline-block">
-        <svg height="20" width="20">
-          <polygon points="10,4 18,20 2,20"
+    <div>
+      <div class="text-left">
+        Default: <span class="display:inline-block">
+          <svg height="20" width="20">
+            <circle cx="10" cy="12" r="8" fill="black" />
+          </svg>
+        </span>
+        <br>
+        Centriod: <span class="display:inline-block">
+          <svg height="20" width="20">
+            <polygon points="10,2 4,21 20,8.5 1,8.5 16,21"
             style="fill:black; fill-rule:nonzero;" />
-        </svg>
-      </span>
+          </svg>
+        </span>
+        <br>
+        Reclustered: <span class="display:inline-block">
+          <svg height="20" width="20">
+            <polygon points="10,4 18,20 2,20"
+              style="fill:black; fill-rule:nonzero;" />
+          </svg>
+        </span>
+      </div>
+    <div id="legend"></div>
     </div>
-  <canvas id="drawing"></div>
+  <canvas id="drawing">
+</div>
 <div id="cy"></div>
 </div>
 {% endblock %}
 {% block scripts %}
 {{super()}}
 
-<script src="{{url_for('static', filename='js/cluster.js')}}">
-</script>
-
+<script src="{{url_for('static', filename='js/cluster.js')}}"></script>
 <script src="{{url_for('static', filename='js/squares.js')}}"></script>
 {% endblock %}

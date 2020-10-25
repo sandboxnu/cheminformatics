@@ -132,7 +132,6 @@ fetch('js/data.json', {mode: 'no-cors'})
   });
 
   var layout = cy.layout( options );
-
   layout.run();
   const img_options =
   {
@@ -144,7 +143,21 @@ fetch('js/data.json', {mode: 'no-cors'})
 
   var png64 = cy.png(img_options);
   
-  
   $('<div class=\'text-center\'><a id="png" download>Download Image!</a></div>').insertBefore('#cy');
     $('#png').attr('href', png64);
+
+  
+  var resetButton = document.createElement("button");
+  resetButton.innerHTML = "<div style=\'text-align: center\'>Reset Cluster View</div>";
+ 
+  resetButton.addEventListener ("click", function() {
+    layout.stop()
+    layout.run();
+  });
+
+  var legend = document.getElementById("legend");
+  var legendParent = legend.parentNode;
+
+  legendParent.insertBefore(resetButton, legend);
+
 });
