@@ -1,3 +1,4 @@
+from flask.helpers import send_file
 from app import app
 from flask import render_template, request, session
 import scripts.pains.LillyMedchemRules.pains as pains
@@ -186,12 +187,9 @@ def final_compounds():
     recluster_clusters = recluster_data[1]
     tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(recluster_smiles, recluster_clusters, fp_type)
     result = get_smiles_json(tanimoto_smiles, float(tanimoto), recluster_clusters, session['include_property'], color1_array, color2_array, shouldRecluster)
-    print(result)
   else :
     tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(good_smiles, cluster, fp_type)
     result = get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, session['include_property'], color1_array, color2_array, shouldRecluster)
-  
-  df = pd.DataFrame({'a': [1, 2, 3], 'b': [4, 5, 6], 'c':[7, 8, 9]})
 
   include_property = session['include_property']
   session.clear()
@@ -200,14 +198,20 @@ def final_compounds():
   nodes_type = []
   nodes_id = []
   nodes_label = []
+  nodes_mpo = []
+  nodes_reclustered = []
 
   for node in result['nodes']:
     nodes_murcko.append(node['murcko'])
     nodes_id.append(node['data']['id'])
-    if node['data']['centroid']:
-      nodes_type.append('centroid')
-    else:
-      nodes_type.append('not centroid')
+    
+    nodes_type.append(node['data']['centroid'])
+
+    nodes_reclustered.append(node['data'].get('reclustered', ''))
+
+    if node['data'].get('mpo'):
+      nodes_mpo.append(node['data']['mpo'])
+    
     nodes_label.append(node['data']['label'].split('\n')[0])
 
   nodes_cluster = [0] * len(nodes_id)
@@ -218,10 +222,18 @@ def final_compounds():
         nodes_cluster[index] = group
 
 
-  df2 = pd.DataFrame({'id': nodes_id, 'murcko': nodes_murcko, 'label': nodes_label, 'type': nodes_type, 'cluster': nodes_cluster})
-  # print(nodes_murcko)
-  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, include_property=include_property, data=df2.to_html())
+  df = pd.DataFrame({'id': nodes_id, 'murcko': nodes_murcko, 'label': nodes_label, 'type': nodes_type, 'cluster': nodes_cluster, 'reclustered':nodes_reclustered})
+  if nodes_mpo:
+    df.insert(5, 'mpo', nodes_mpo)
+  df.to_csv('output.csv')
+  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, include_property=include_property, data=df.to_html())
 
+@app.route('/getPlotCSV')
+def plot_csv():
+    return send_file('data\\output.csv',
+                     mimetype='text/csv',
+                     attachment_filename='output.csv',
+                     as_attachment=True)
 
 @app.after_request
 def add_header(response):
