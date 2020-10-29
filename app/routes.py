@@ -226,7 +226,7 @@ def final_compounds():
   if nodes_mpo:
     df.insert(5, 'mpo', nodes_mpo)
   df.to_csv('output.csv')
-  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, include_property=include_property, data=df.to_html())
+  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, include_property=include_property)
 
 @app.route('/getPlotCSV')
 def plot_csv():
