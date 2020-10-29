@@ -11,7 +11,7 @@ def construct_smiles(csv):
 
   if (formattedTitleRow[:2] != ['\ufeffsmiles', 'label'] and formattedTitleRow[:2] != ['smiles', 'label']):
     raise Exception("Malformed file input")
-  
+
   if(len(csv[0]) == 3):
     include_property = csv[0][2]
   else:
@@ -37,9 +37,9 @@ def construct_smiles(csv):
       smiles[smile_string]['property_name'] = include_property
     else:
       smiles[smile_string]['property'] = 0
-  
+
   return smiles, include_property, highest_val, lowest_val
- 
+
 
 def filter_smiles(good_smiles, smiles):
   return {smi: data for (smi, data) in smiles.items() if data['smart'] in convert_array_of_smarts_to_smiles(good_smiles)}
@@ -54,6 +54,17 @@ def convert_from_smart(smart):
   back = Chem.MolToSmiles(conv)
   return back
 
+
+
+def sanitize(smile):
+  try:
+    conv = Chem.MolFromSmiles(smile)
+
+    Chem.SanitizeMol(conv)
+    return Chem.MolToSmiles(conv)
+  except Exception as e:
+    return False
+
 def convert_array_of_smarts_to_smiles(smarts):
   return [convert_from_smart(smart) for smart in smarts]
 
@@ -65,7 +76,6 @@ def convert_to_smiles(bad_smiles):
     result[smile] = reason
 
   return result
-
 
 def convert_to_smiles_and_labels(bad_smiles, all_smiles):
   result = {}
