@@ -205,7 +205,10 @@ def final_compounds():
     nodes_murcko.append(node['murcko'])
     nodes_id.append(node['data']['id'])
     
-    nodes_type.append(node['data']['centroid'])
+    if node['data']['centroid']:
+      nodes_type.append('centroid')
+    else:
+      nodes_type.append('non centroid')
 
     nodes_reclustered.append(node['data'].get('reclustered', ''))
 
