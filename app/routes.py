@@ -5,6 +5,7 @@ from app.data.smiles import construct_smiles, filter_smiles, convert_to_smiles, 
 import scripts.clustering.clustering as clustering
 from app.data.clustering import get_smiles_json
 from app.data.color_functions import color_hex_to_array
+from werkzeug.exceptions import InternalServerError
 import pandas as pd
 
 @app.route('/')
@@ -200,6 +201,13 @@ def final_compounds():
 
   return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, highest_val=highest_val, lowest_val=lowest_val, include_property=include_property)
 
+@app.errorhandler(InternalServerError)
+def page_not_found(e):
+    return render_template('500.html'), 500
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 @app.after_request
 def add_header(response):
