@@ -65,16 +65,6 @@ def sanitize(smile):
   except Exception as e:
     return False
 
-def aromaticity(smile):
-  try:
-    conv = Chem.MolFromSmiles(smile)
-
-    Chem.SetAromaticity(conv)
-    return Chem.MolToSmiles(conv)
-  except Exception as e:
-    return smile
-
-
 def convert_array_of_smarts_to_smiles(smarts):
   return [convert_from_smart(smart) for smart in smarts]
 
@@ -86,7 +76,6 @@ def convert_to_smiles(bad_smiles):
     result[smile] = reason
 
   return result
-
 
 def convert_to_smiles_and_labels(bad_smiles, all_smiles):
   result = {}
