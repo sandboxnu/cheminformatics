@@ -225,12 +225,12 @@ def final_compounds():
   df = pd.DataFrame({'id': nodes_id, 'murcko': nodes_murcko, 'label': nodes_label, 'type': nodes_type, 'cluster': nodes_cluster, 'reclustered':nodes_reclustered})
   if nodes_mpo:
     df.insert(5, 'mpo', nodes_mpo)
-  df.to_csv('output.csv')
+  df.to_csv('export_data/output.csv')
   return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, include_property=include_property)
 
 @app.route('/getPlotCSV')
 def plot_csv():
-    return send_file('data\\output.csv',
+    return send_file('data/export_data/output.csv',
                      mimetype='text/csv',
                      attachment_filename='output.csv',
                      as_attachment=True)
