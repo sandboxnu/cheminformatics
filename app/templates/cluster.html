@@ -59,19 +59,6 @@
     <div class='text-center'>
       <h1><a href='/getPlotCSV' class="button">Download CSV Data</a></h1>
     </div> 
-
-    <br>
-    <br>
-    <br>
-
-    {% if data %}
-      <div align="center">
-        {{data | safe}}
-      </div>
-    {% endif %}
-    
-    <br>
-    <br>
     
     <script id='include_property_script' include_property={{include_property}}>
       include_property = document.getElementById('include_property_script').getAttribute('include_property');
