@@ -31,6 +31,8 @@ fetch('js/data.json', {mode: 'no-cors'})
   let rgb1 = data['color1']   // red
   let rgb2 = data['color2']  // yellow
 
+  let val_range = data['highest_val'] - data['lowest_val']
+
   function getPoint(d, a1, a2) {
   // find a color d% between a1 and a2
     return a1.map((p, i) => Math.floor(a1[i] + d * (a2[i] - a1[i])))
@@ -67,7 +69,7 @@ fetch('js/data.json', {mode: 'no-cors'})
           'text-wrap': 'wrap',
           'font-size': '3px',
           'background-color' : function(ele)  {
-            let colors = getPoint(ele.data('mpo')/6, rgb1, rgb2);
+            let colors = getPoint(ele.data('prop_val')/val_range, rgb1, rgb2);
             let rgbColor = '#' + fullColorHex(colors[0], colors[1], colors[2]);
             return rgbColor;
           },
@@ -130,7 +132,6 @@ fetch('js/data.json', {mode: 'no-cors'})
   });
 
   var layout = cy.layout( options );
-
   layout.run();
   const img_options =
   {
@@ -142,7 +143,21 @@ fetch('js/data.json', {mode: 'no-cors'})
 
   var png64 = cy.png(img_options);
   
-  
   $('<div class=\'text-center\'><a id="png" download>Download Image!</a></div>').insertBefore('#cy');
     $('#png').attr('href', png64);
+
+  
+  var resetButton = document.createElement("button");
+  resetButton.innerHTML = "<div style=\'text-align: center\'>Reset Cluster View</div>";
+ 
+  resetButton.addEventListener ("click", function() {
+    layout.stop()
+    layout.run();
+  });
+
+  var legend = document.getElementById("legend");
+  var legendParent = legend.parentNode;
+
+  legendParent.insertBefore(resetButton, legend);
+
 });

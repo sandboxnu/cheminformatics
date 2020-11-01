@@ -3,12 +3,12 @@ import os
 import scripts.clustering.clustering as clustering
 
 
-def get_smiles_json(smiles, cutoff, clusters, include_property, prop_color1=[255,0,0], prop_color2=[0, 255, 0], shouldRecluster=False):
+def get_smiles_json(smiles, cutoff, clusters, include_property, lowest_val, highest_val, prop_color1=[255,0,0], prop_color2=[0, 255, 0], shouldRecluster=False):
   nodes = []
   edges = []
 
   for smile_name, smile_data in smiles.items():
-    prop_name = smile_data.get('property_name', "")
+    prop_name = smile_data.get('property_name', "mpo")
     prop_val = smile_data['property']
     if include_property:
       label = smile_data['label'] + "\n" + prop_name + ' ' + str(prop_val)
@@ -22,10 +22,10 @@ def get_smiles_json(smiles, cutoff, clusters, include_property, prop_color1=[255
     
     if shouldRecluster:
       smile_node['data'] = {'id': smile_name, 'label': label,
-        'mpo': prop_val, 'reclustered': smile_data['isReclustered'],'centroid': smile_data['isCentroid'] , 'type': 'node'}
+        'prop_name': prop_name, 'prop_val': prop_val, 'reclustered': smile_data['isReclustered'],'centroid': smile_data['isCentroid'] , 'type': 'node'}
     else:
       smile_node['data'] = {'id': smile_name, 'label': label,
-        'mpo': prop_val,'centroid': smile_data['isCentroid'] , 'type': 'node'}
+        'prop_name': prop_name, 'prop_val': prop_val, 'centroid': smile_data['isCentroid'] , 'type': 'node'}
   
     nodes.append(smile_node)
     for sim, similarity_coefficient in smile_data['similarities'].items():
@@ -42,7 +42,11 @@ def get_smiles_json(smiles, cutoff, clusters, include_property, prop_color1=[255
     
     edges+= smile_edges 
 
-  result = {'nodes': nodes, 'edges': edges, 'clusterInfo': clusters, 'color1': prop_color1, 'color2': prop_color2}
+  result = {'nodes': nodes, 'edges': edges, 'clusterInfo': clusters, 'color1': prop_color1, 'color2': prop_color2, 'lowest_val': lowest_val, 'highest_val': highest_val}
+
+  if include_property is None:
+    result['lowest_val'] = 0
+    result['highest_val'] = 1
 
   os.chdir(os.path.abspath(os.path.dirname(__file__)))
   
