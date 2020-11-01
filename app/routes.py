@@ -219,10 +219,10 @@ def final_compounds():
     recluster_smiles = recluster_data[0]
     recluster_clusters = recluster_data[1]
     tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(recluster_smiles, recluster_clusters, fp_type)
-    result = get_smiles_json(tanimoto_smiles, float(tanimoto), recluster_clusters, session['include_property'], color1_array, color2_array, shouldRecluster)
+    result = get_smiles_json(tanimoto_smiles, float(tanimoto), recluster_clusters, session['include_property'], lowest_val, highest_val, color1_array, color2_array, shouldRecluster)
   else :
     tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(good_smiles, cluster, fp_type)
-    result = get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, session['include_property'], color1_array, color2_array, shouldRecluster)
+    result = get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, session['include_property'], lowest_val, highest_val, color1_array, color2_array, shouldRecluster)
 
   include_property = session['include_property']
   session.clear()
@@ -231,7 +231,7 @@ def final_compounds():
   nodes_type = []
   nodes_id = []
   nodes_label = []
-  nodes_mpo = []
+  nodes_property = []
   nodes_reclustered = []
 
   for node in result['nodes']:
@@ -245,8 +245,8 @@ def final_compounds():
 
     nodes_reclustered.append(node['data'].get('reclustered', ''))
 
-    if node['data'].get('mpo'):
-      nodes_mpo.append(node['data']['mpo'])
+    if include_property:
+      nodes_property.append(node['data']['prop_val'])
     
     nodes_label.append(node['data']['label'].split('\n')[0])
 
@@ -259,10 +259,18 @@ def final_compounds():
 
 
   df = pd.DataFrame({'id': nodes_id, 'murcko': nodes_murcko, 'label': nodes_label, 'type': nodes_type, 'cluster': nodes_cluster, 'reclustered':nodes_reclustered})
-  if nodes_mpo:
-    df.insert(5, 'mpo', nodes_mpo)
+  if include_property:
+    df.insert(5, include_property, nodes_property)
   df.to_csv('export_data/output.csv')
-  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, include_property=include_property)
+  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, lowest_val=lowest_val, highest_val=highest_val, include_property=include_property)
+
+@app.errorhandler(InternalServerError)
+def page_not_found(e):
+    return render_template('500.html'), 500
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 @app.route('/getPlotCSV')
 def plot_csv():
