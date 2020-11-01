@@ -1,3 +1,4 @@
+import pandas as pd
 import rdkit
 from rdkit import Chem
 from rdkit import DataStructs
@@ -26,6 +27,7 @@ def cluster(smile_keys, fp_type, cutoff=0.15):
     #note: it seems cutoff is one - similarity coefficient, it's euclidean distance I think??
     nfps = len(smile_keys)
     dists = []
+    combinations = []
 
     data = [None] * nfps
     for i in range(0, nfps):
@@ -43,6 +45,11 @@ def cluster(smile_keys, fp_type, cutoff=0.15):
     for i in range(1,nfps):
         sims = DataStructs.BulkTanimotoSimilarity(data[i],data[:i])
         dists.extend([1-x for x in sims])
+        combinations.extend([(smile_keys[j], smile_keys[i]) for j in list(range(i))])
+    
+    df = pd.DataFrame({'combination': combinations, 'tanimoto': dists})
+    df.to_csv('tanimoto_output.csv')
+    print('converted', df)
 
     result = Butina.ClusterData(dists,nfps,cutoff,isDistData=True)
     clusters = []

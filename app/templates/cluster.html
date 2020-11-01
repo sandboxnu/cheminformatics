@@ -30,6 +30,32 @@
   <div class="text-center"> 
     <h1> {{ title }}</h1>
     <h3>Filter and cluster compounds</h3> 
+
+    <style>
+      table, th, td {
+        text-align: center;
+        border: 1px solid black;
+      }  
+      th, td {
+        padding: 15px;
+      }
+      a.button {
+          -webkit-appearance: button;
+          -moz-appearance: button;
+          appearance: button;
+
+          border: 2px solid black;
+          background-color: lightblue;
+          color: black;
+          padding: 28px 56px;
+          font-size: 20px;
+          cursor: pointer;
+      }
+    </style>
+
+    <div class='text-center'>
+      <h1><a href='/getTanimotoCSV' class="button">Download Tanimoto Data</a></h1>
+    </div> 
     
     <script id='include_property_script' include_property={{include_property}}>
       include_property = document.getElementById('include_property_script').getAttribute('include_property');

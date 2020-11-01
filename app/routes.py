@@ -1,3 +1,4 @@
+from flask.helpers import send_file
 from app import app
 from flask import render_template, request, session
 import scripts.pains.LillyMedchemRules.pains as pains
@@ -227,6 +228,13 @@ def final_compounds():
   session.clear()
 
   return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, highest_val=highest_val, lowest_val=lowest_val, include_property=include_property)
+
+@app.route('/getTanimotoCSV')
+def tanimoto_csv():
+  return send_file('tanimoto_output.csv',
+                    mimetype='text/csv',
+                    attachment_filename='tanimoto_output.csv',
+                    as_attachment=True)
 
 @app.errorhandler(InternalServerError)
 def page_not_found(e):
