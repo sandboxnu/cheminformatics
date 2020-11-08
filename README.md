@@ -21,3 +21,7 @@ Add PAINs script
 
 And to run the site locally:
 - `flask run`
+
+To run tests:
+- install pytest
+- with the conda environment activated, `python -m pytest`
