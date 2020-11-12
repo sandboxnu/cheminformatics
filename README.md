@@ -19,6 +19,9 @@ Add PAINs script
 - install docker and ensure that it is running
 - pull the pains image: `docker pull ianwatson/lilly_medchem_rules:v1.2`
 
+Set up Export Data Folder
+- add a folder called export_data under app/data directory. This is where exported data csv files will be stored to access for export
+
 And to run the site locally:
 - `flask run`
 
