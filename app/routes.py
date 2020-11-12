@@ -214,7 +214,7 @@ def final_compounds():
     color2_array = color1_array
 
   shouldRecluster = reclusterCoefficient != ''
-  cluster = clustering.cluster(list(good_smiles.keys()), fp_type, 1 - float(tanimoto))
+  cluster, tanimoto_csv = clustering.cluster(list(good_smiles.keys()), fp_type, 1 - float(tanimoto))
   if shouldRecluster :
     recluster_data = clustering.recluster_singletons(good_smiles, cluster, float(reclusterCoefficient), fp_type)
     recluster_smiles = recluster_data[0]
@@ -227,6 +227,8 @@ def final_compounds():
 
   include_property = session['include_property']
   session.clear()
+  
+  tanimoto_csv.to_csv('tanimoto_output.csv')
 
   nodes_murcko = []
   nodes_type = []
@@ -264,6 +266,13 @@ def final_compounds():
     df.insert(5, include_property, nodes_property)
   df.to_csv(os.path.join(os.getcwd(), 'export_data', "main_data.csv"))
   return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, lowest_val=lowest_val, highest_val=highest_val, include_property=include_property)
+
+@app.route('/getTanimotoCSV')
+def tanimoto_csv():
+  return send_file('data\\tanimoto_output.csv',
+                    mimetype='text/csv',
+                    attachment_filename='tanimoto_output.csv',
+                    as_attachment=True)
 
 @app.errorhandler(InternalServerError)
 def page_not_found(e):

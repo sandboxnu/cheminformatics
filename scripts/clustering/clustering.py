@@ -1,3 +1,4 @@
+import pandas as pd
 import rdkit
 from rdkit import Chem
 from rdkit import DataStructs
@@ -6,6 +7,7 @@ from rdkit.Chem import AllChem
 from app.data.smiles import  get_murcko_smile
 from rdkit.ML.Cluster import Butina
 from rdkit.Chem.AtomPairs import Pairs
+import os
 
 radius = 2
 def compare_two_smiles(smile1, smile2, fp_type):
@@ -26,6 +28,7 @@ def cluster(smile_keys, fp_type, cutoff=0.15):
     #note: it seems cutoff is one - similarity coefficient, it's euclidean distance I think??
     nfps = len(smile_keys)
     dists = []
+    combinations = []
 
     data = [None] * nfps
     for i in range(0, nfps):
@@ -43,6 +46,9 @@ def cluster(smile_keys, fp_type, cutoff=0.15):
     for i in range(1,nfps):
         sims = DataStructs.BulkTanimotoSimilarity(data[i],data[:i])
         dists.extend([1-x for x in sims])
+        combinations.extend([(smile_keys[j], smile_keys[i]) for j in list(range(i))])
+    
+    df = pd.DataFrame({'combination': combinations, 'tanimoto': dists})
 
     result = Butina.ClusterData(dists,nfps,cutoff,isDistData=True)
     clusters = []
@@ -53,7 +59,7 @@ def cluster(smile_keys, fp_type, cutoff=0.15):
             corresponding_smile = smile_keys[element]
             set.append(corresponding_smile)
         clusters.append(set)
-    return clusters
+    return clusters, df
 
 def in_same_cluster(s1, s2, clusters):
     for clust in clusters:
