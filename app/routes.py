@@ -8,6 +8,7 @@ from app.data.clustering import get_smiles_json
 from app.data.color_functions import color_hex_to_array
 from werkzeug.exceptions import InternalServerError
 import pandas as pd
+import os
 
 @app.route('/')
 @app.route('/welcome')
@@ -261,7 +262,7 @@ def final_compounds():
   df = pd.DataFrame({'id': nodes_id, 'murcko': nodes_murcko, 'label': nodes_label, 'type': nodes_type, 'cluster': nodes_cluster, 'reclustered':nodes_reclustered})
   if include_property:
     df.insert(5, include_property, nodes_property)
-  df.to_csv('export_data/output.csv')
+  df.to_csv(os.path.join(os.getcwd(), 'export_data', "main_data.csv"))
   return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, lowest_val=lowest_val, highest_val=highest_val, include_property=include_property)
 
 @app.errorhandler(InternalServerError)
@@ -274,7 +275,7 @@ def page_not_found(e):
 
 @app.route('/getPlotCSV')
 def plot_csv():
-    return send_file('data/export_data/output.csv',
+    return send_file(os.path.join(os.getcwd(), 'export_data', "main_data.csv"),
                      mimetype='text/csv',
                      attachment_filename='output.csv',
                      as_attachment=True)
