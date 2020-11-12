@@ -7,7 +7,7 @@ from rdkit.Chem import AllChem
 from app.data.smiles import  get_murcko_smile
 from rdkit.ML.Cluster import Butina
 from rdkit.Chem.AtomPairs import Pairs
-import os
+from rdkit.Chem import MACCSkeys
 
 radius = 2
 def compare_two_smiles(smile1, smile2, fp_type):
@@ -36,8 +36,8 @@ def cluster(smile_keys, fp_type, cutoff=0.15):
         mol = Chem.MolFromSmiles(murcko)
         if fp_type == "atom-pair":
             fps = Pairs.GetAtomPairFingerprintAsBitVect(mol)
-        elif fp_type == "fpm":
-            fps = FingerprintMols.FingerprintMol(mol)
+        elif fp_type == "maccs":
+            fps = MACCSkeys.GenMACCSKeys(mol)
         else:
             fps = AllChem.GetMorganFingerprintAsBitVect(mol, radius, nBits=1024)
         data[i] = fps

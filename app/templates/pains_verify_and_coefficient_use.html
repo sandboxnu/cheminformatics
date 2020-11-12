@@ -18,8 +18,8 @@
     <br>
     <br>
 
-    <p> Compounds remaining: {{ num_remaining }}, compounds removed: {{ num_removed }} </p>
-    <h3>Step 1: Remove all compounds matching select rules</h3>
+    <p> Compounds for Clustering: {{ num_remaining }}, Failed compounds removed: {{ num_removed }} </p>
+    <h3>Step 1: Remove all failed compounds matching select rules</h3>
     <form action="\verify_pains_by_error" method=POST enctype=multipart/form-data>
       <table border=1 width="90%">
           <tr>
@@ -56,7 +56,7 @@
     <br/>
     <br>
 
-    <h3>Step 2: Remove individual compounds matching select rules</h3>
+    <h3>Step 2: Remove individual failed compounds matching select rules</h3>
     <form action="\verify_pains" method=POST enctype=multipart/form-data>
     <table border=1 width="90%">
         <tr>
@@ -67,7 +67,7 @@
     {% for smile, smile_info in bad_smiles.items() %}
     <tr id={smile}>
       <td style="text-align:center" >
-        <canvas id={{smile}}></canvas> 
+        <canvas id={{smile}}></canvas>
         <div> {{ smile_info['label'] }} </div>
         <script>
           painsDrawer = new SmilesDrawer.Drawer({width: 150, height:150});
@@ -114,7 +114,7 @@
           }
           return true;
         }
-        
+
         function onReclusterSingletonsCheck() {
             const checkbox = document.getElementById('reclusterCoefficientCheck');
             console.log(checkbox)
@@ -130,10 +130,10 @@
       </script>
       <form action="\final_compounds" method=POST enctype=multipart/form-data onsubmit="return confirmation();">
         {% if include_property %}
-          <style> 
-            .gradient { 
-              font: "Roboto"; 
-              text-align: center; 
+          <style>
+            .gradient {
+              font: "Roboto";
+              text-align: center;
               min-width: 300px;
               background: linear-gradient(to right,
               #0000ff, #add8e6);
@@ -184,6 +184,9 @@
         <input type="radio" name="fp_radio" id="atom-pair" value="atom-pair">
           <a target="_blank" href="https://www.rdkit.org/docs/GettingStartedInPython.html#atom-pairs-and-topological-torsions">Atom Pair</a>
         </input><br/>
+        <input type="radio" name="fp_radio" id="maccs" value="maccs">
+          <a target="_blank" href="https://www.rdkit.org/docs/GettingStartedInPython.html#maccs-keys">MACCs Key</a>
+        </input><br/>
         <div>
           Should we attempt to recluster singletons?
           <input type="checkbox" id="reclusterCoefficientCheck"  name="reclusterCoefficientCheck" onChange="onReclusterSingletonsCheck()"/>
@@ -192,8 +195,8 @@
             <input type="number" id="reclusterCoefficientValue" name="reclusterCoefficientValue" step=".01" max=100 min=0/>
           </div>
         </div>
-      Tanimoto Coefficient: 
-        <input type="number" id="tanimoto" name="tanimoto" step=".01" max=100 min=0/>      
+      Tanimoto Coefficient:
+        <input type="number" id="tanimoto" name="tanimoto" step=".01" max=100 min=0/>
         <input type="submit" value="Cluster Compounds">
     </form>
       {% for error in errors %}
