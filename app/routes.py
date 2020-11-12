@@ -228,7 +228,7 @@ def final_compounds():
   include_property = session['include_property']
   session.clear()
   
-  tanimoto_csv.to_csv('tanimoto_output.csv')
+  tanimoto_csv.to_csv(os.path.join(os.getcwd(), 'export_data', "tanimoto_output.csv"))
 
   nodes_murcko = []
   nodes_type = []
@@ -269,7 +269,7 @@ def final_compounds():
 
 @app.route('/getTanimotoCSV')
 def tanimoto_csv():
-  return send_file('data\\tanimoto_output.csv',
+  return send_file(os.path.join(os.getcwd(), 'export_data', "tanimoto_output.csv"),
                     mimetype='text/csv',
                     attachment_filename='tanimoto_output.csv',
                     as_attachment=True)
