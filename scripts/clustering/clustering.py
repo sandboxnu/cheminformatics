@@ -7,6 +7,7 @@ from rdkit.Chem import AllChem
 from app.data.smiles import  get_murcko_smile
 from rdkit.ML.Cluster import Butina
 from rdkit.Chem.AtomPairs import Pairs
+import os
 
 radius = 2
 def compare_two_smiles(smile1, smile2, fp_type):
@@ -48,8 +49,6 @@ def cluster(smile_keys, fp_type, cutoff=0.15):
         combinations.extend([(smile_keys[j], smile_keys[i]) for j in list(range(i))])
     
     df = pd.DataFrame({'combination': combinations, 'tanimoto': dists})
-    df.to_csv('tanimoto_output.csv')
-    print('converted', df)
 
     result = Butina.ClusterData(dists,nfps,cutoff,isDistData=True)
     clusters = []
@@ -60,7 +59,7 @@ def cluster(smile_keys, fp_type, cutoff=0.15):
             corresponding_smile = smile_keys[element]
             set.append(corresponding_smile)
         clusters.append(set)
-    return clusters
+    return clusters, df
 
 def in_same_cluster(s1, s2, clusters):
     for clust in clusters:
