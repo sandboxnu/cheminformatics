@@ -1,3 +1,4 @@
+from numpy.matrixlib.defmatrix import matrix
 import pandas as pd
 import rdkit
 from rdkit import Chem
@@ -49,6 +50,32 @@ def cluster(smile_keys, fp_type, cutoff=0.15):
         combinations.extend([(smile_keys[j], smile_keys[i]) for j in list(range(i))])
     
     df = pd.DataFrame({'combination': combinations, 'tanimoto': dists})
+    all_unique = []
+    for pair in df['combination']:
+        if pair[0] not in all_unique:
+            all_unique.append(pair[0])
+        if pair[1] not in all_unique:
+            all_unique.append(pair[1])
+    
+    pair_values = {head:{} for head in all_unique}
+    for pair, value in zip(df['combination'], df['tanimoto']):
+        pair_values[pair[0]][pair[1]] = value
+        pair_values[pair[1]][pair[0]] = value
+    
+    matrix_data = {}
+    for row in all_unique:
+        data = []
+        for col in all_unique:
+            if pair_values[row]:
+                if col in pair_values[row].keys():
+                    data.append(pair_values[row][col])
+                else:
+                    data.append(0)
+            else:
+                data.append(0)
+        matrix_data[row] = data
+
+    matrix_df = pd.DataFrame(matrix_data, index=[index for index in all_unique])
 
     result = Butina.ClusterData(dists,nfps,cutoff,isDistData=True)
     clusters = []
@@ -59,7 +86,7 @@ def cluster(smile_keys, fp_type, cutoff=0.15):
             corresponding_smile = smile_keys[element]
             set.append(corresponding_smile)
         clusters.append(set)
-    return clusters, df
+    return clusters, matrix_df
 
 def in_same_cluster(s1, s2, clusters):
     for clust in clusters:
