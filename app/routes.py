@@ -189,11 +189,11 @@ def final_compounds():
   if request.method == 'POST':
     try:
       tanimoto = request.form['tanimoto']
-      reclusterCoefficient = request.form['reclusterCoefficientValue']
+      recluster_coefficient = request.form['reclusterCoefficientValue']
 
       if (float(tanimoto) < 0 or float(tanimoto) > 1):
         return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, errors=["Please input a valid tanimoto coefficient"], highest_val=highest_val, lowest_val=lowest_val, include_property=session['include_property'])
-      elif ((reclusterCoefficient != '') and (float(tanimoto) < 0 or float(tanimoto) > 1)):
+      elif ((recluster_coefficient != '') and (float(tanimoto) < 0 or float(tanimoto) > 1)):
         return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, errors=["Please input a valid recluster coefficient"], highest_val=highest_val, lowest_val=lowest_val, include_property=session['include_property'])
     except:
       return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, reasons_for_failure=reasons_for_failure, errors=["Please input a valid tanimoto coefficient"], highest_val=highest_val, lowest_val=lowest_val, include_property=session['include_property'])
@@ -211,22 +211,28 @@ def final_compounds():
     color2 = color1
     color2_array = color1_array
 
-  shouldRecluster = reclusterCoefficient != ''
-  cluster = clustering.cluster(list(good_smiles.keys()), fp_type, 1 - float(tanimoto))
-  if shouldRecluster :
-    recluster_data = clustering.recluster_singletons(good_smiles, cluster, float(reclusterCoefficient), fp_type)
-    recluster_smiles = recluster_data[0]
-    recluster_clusters = recluster_data[1]
-    tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(recluster_smiles, recluster_clusters, fp_type)
-    get_smiles_json(tanimoto_smiles, float(tanimoto), recluster_clusters, session['include_property'], lowest_val, highest_val, color1_array, color2_array, shouldRecluster)
-  else :
-    tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(good_smiles, cluster, fp_type)
-    get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, session['include_property'], lowest_val, highest_val, color1_array, color2_array, shouldRecluster)
+  should_recluster = recluster_coefficient != ''
+  session["recluster"] = should_recluster
+  clusters = clustering.cluster(list(good_smiles.keys()), fp_type, 1 - float(tanimoto))
+  if should_recluster:
+    reclustered_clusters, tanimoto_smiles = recluster(clusters, good_smiles, float(tanimoto), fp_type)
+    get_smiles_json(tanimoto_smiles, float(tanimoto), reclustered_clusters, session['include_property'], lowest_val, highest_val, color1_array, color2_array, should_recluster)
+  
+  else:
+    tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(good_smiles, clusters, fp_type)
+    get_smiles_json(tanimoto_smiles, float(tanimoto), clusters, session['include_property'], lowest_val, highest_val, color1_array, color2_array, should_recluster)
 
   include_property = session['include_property']
   session.clear()
 
   return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, highest_val=highest_val, lowest_val=lowest_val, include_property=include_property)
+
+def recluster(clusters, good_smiles, reclusterCoefficient, fp_type):
+  reclustered_data = clustering.recluster_singletons(good_smiles, clusters, float(reclusterCoefficient), fp_type)
+  reclustered_smiles = reclustered_data[0]
+  reclustered_clusters = reclustered_data[1]
+  return reclustered_clusters, clustering.get_tanimoto_coeffient_by_cluster(reclustered_smiles, reclustered_clusters, fp_type)
+
 
 @app.errorhandler(InternalServerError)
 def page_not_found(e):
