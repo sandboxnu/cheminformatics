@@ -4,7 +4,7 @@ from flask import render_template, request, session
 import scripts.pains.LillyMedchemRules.pains as pains
 from app.data.smiles import construct_smiles, filter_smiles, convert_to_smiles, convert_to_smiles_and_labels, sanitize
 import scripts.clustering.clustering as clustering
-from app.data.clustering import get_smiles_json
+from app.data.clustering import get_smiles_json, create_dataframe
 from app.data.color_functions import color_hex_to_array
 from werkzeug.exceptions import InternalServerError
 import pandas as pd
@@ -229,41 +229,7 @@ def final_compounds():
   session.clear()
   
   tanimoto_csv.to_csv(os.path.join(os.getcwd(), 'export_data', "tanimoto_output.csv"))
-
-  nodes_murcko = []
-  nodes_type = []
-  nodes_id = []
-  nodes_label = []
-  nodes_property = []
-  nodes_reclustered = []
-
-  for node in result['nodes']:
-    nodes_murcko.append(node['murcko'])
-    nodes_id.append(node['data']['id'])
-    
-    if node['data']['centroid']:
-      nodes_type.append('centroid')
-    else:
-      nodes_type.append('non centroid')
-
-    nodes_reclustered.append(node['data'].get('reclustered', ''))
-
-    if include_property:
-      nodes_property.append(node['data']['prop_val'])
-    
-    nodes_label.append(node['data']['label'].split('\n')[0])
-
-  nodes_cluster = [0] * len(nodes_id)
-  
-  for group, cluster in enumerate(result['clusterInfo']):
-    for index, id in enumerate(nodes_id):
-      if id in cluster:
-        nodes_cluster[index] = group
-
-
-  df = pd.DataFrame({'id': nodes_id, 'murcko': nodes_murcko, 'label': nodes_label, 'type': nodes_type, 'cluster': nodes_cluster, 'reclustered':nodes_reclustered})
-  if include_property:
-    df.insert(5, include_property, nodes_property)
+  df = create_dataframe(result, include_property)
   df.to_csv(os.path.join(os.getcwd(), 'export_data', "main_data.csv"))
   return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, lowest_val=lowest_val, highest_val=highest_val, include_property=include_property)
 
