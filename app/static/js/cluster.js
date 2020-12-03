@@ -32,7 +32,6 @@ fetch('js/data.json', {mode: 'no-cors'})
   let rgb2 = data['color2']  // yellow
 
   let val_range = data['highest_val'] - data['lowest_val']
-
   function getPoint(d, a1, a2) {
   // find a color d% between a1 and a2
     return a1.map((p, i) => Math.floor(a1[i] + d * (a2[i] - a1[i])))

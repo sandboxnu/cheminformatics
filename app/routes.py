@@ -1,12 +1,14 @@
+from flask.helpers import send_file
 from app import app
 from flask import render_template, request, session
 import scripts.pains.LillyMedchemRules.pains as pains
 from app.data.smiles import construct_smiles, filter_smiles, convert_to_smiles, convert_to_smiles_and_labels, sanitize
 import scripts.clustering.clustering as clustering
-from app.data.clustering import get_smiles_json
+from app.data.clustering import get_smiles_json, create_dataframe
 from app.data.color_functions import color_hex_to_array
 from werkzeug.exceptions import InternalServerError
 import pandas as pd
+import os
 
 @app.route('/')
 @app.route('/welcome')
@@ -212,21 +214,31 @@ def final_compounds():
     color2_array = color1_array
 
   shouldRecluster = reclusterCoefficient != ''
-  cluster = clustering.cluster(list(good_smiles.keys()), fp_type, 1 - float(tanimoto))
+  cluster, tanimoto_csv = clustering.cluster(list(good_smiles.keys()), fp_type, 1 - float(tanimoto))
   if shouldRecluster :
     recluster_data = clustering.recluster_singletons(good_smiles, cluster, float(reclusterCoefficient), fp_type)
     recluster_smiles = recluster_data[0]
     recluster_clusters = recluster_data[1]
     tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(recluster_smiles, recluster_clusters, fp_type)
-    get_smiles_json(tanimoto_smiles, float(tanimoto), recluster_clusters, session['include_property'], lowest_val, highest_val, color1_array, color2_array, shouldRecluster)
+    result = get_smiles_json(tanimoto_smiles, float(tanimoto), recluster_clusters, session['include_property'], lowest_val, highest_val, color1_array, color2_array, shouldRecluster)
   else :
     tanimoto_smiles = clustering.get_tanimoto_coeffient_by_cluster(good_smiles, cluster, fp_type)
-    get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, session['include_property'], lowest_val, highest_val, color1_array, color2_array, shouldRecluster)
+    result = get_smiles_json(tanimoto_smiles, float(tanimoto), cluster, session['include_property'], lowest_val, highest_val, color1_array, color2_array, shouldRecluster)
 
   include_property = session['include_property']
   session.clear()
+  
+  tanimoto_csv.to_csv(os.path.join(os.getcwd(), 'export_data', "tanimoto_output.csv"))
+  df = create_dataframe(result, include_property)
+  df.to_csv(os.path.join(os.getcwd(), 'export_data', "main_data.csv"))
+  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, lowest_val=lowest_val, highest_val=highest_val, include_property=include_property)
 
-  return render_template('cluster.html', title='Cheminformatic Analysis', color1=color1, color2=color2, highest_val=highest_val, lowest_val=lowest_val, include_property=include_property)
+@app.route('/getTanimotoCSV')
+def tanimoto_csv():
+  return send_file(os.path.join(os.getcwd(), 'export_data', "tanimoto_output.csv"),
+                    mimetype='text/csv',
+                    attachment_filename='tanimoto_output.csv',
+                    as_attachment=True)
 
 @app.errorhandler(InternalServerError)
 def page_not_found(e):
@@ -235,6 +247,13 @@ def page_not_found(e):
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
+
+@app.route('/getPlotCSV')
+def plot_csv():
+    return send_file(os.path.join(os.getcwd(), 'export_data', "main_data.csv"),
+                     mimetype='text/csv',
+                     attachment_filename='output.csv',
+                     as_attachment=True)
 
 @app.after_request
 def add_header(response):

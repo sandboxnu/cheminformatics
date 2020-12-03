@@ -133,3 +133,6 @@ dmypy.json
 
 /app/static/js/data.json
 
+# Export file
+app/data/export_data/output.csv
+
