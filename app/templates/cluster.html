@@ -27,7 +27,7 @@
 {% endblock %}
 {% block content %}
 <div class="container">
-  <div class="text-center"> 
+  <div class="text-center">
     <h1> {{ title }}</h1>
     <h3>Filter and cluster compounds</h3> 
 
@@ -66,12 +66,19 @@
         <a href='/getTanimotoCSV' class="button">Download Tanimoto Data</a>
       </div>
     </div> 
+
+    <br>
+    <br>
+    <br>
+    <br>
     
+    <h3>Filter and cluster compounds</h3>
+
     <script id='include_property_script' include_property={{include_property}}>
       include_property = document.getElementById('include_property_script').getAttribute('include_property');
       if (include_property != "None") {
         document.write('<div class="text-left"> {{ include_property }} {{ lowest_val }} <span id="square1" class="display:inline-block"></span> {{ highest_val }} <span id="square2" class="display:inline-block"></span> </div></div>');
-      } 
+      }
     </script>
     <div>
       <div class="text-left">
@@ -99,7 +106,7 @@
     </div>
   <canvas id="drawing">
 </div>
-<div id="cy"></div>
+<div id="cy" width="95%"></div>
 </div>
 {% endblock %}
 {% block scripts %}
