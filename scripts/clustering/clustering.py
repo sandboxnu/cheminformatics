@@ -127,19 +127,19 @@ def get_tanimoto_coeffient_by_cluster(smiles, clusters, fp_type):
             index += 1
     return smiles
 
+#Recluster singletons of the butina clustering algorithm
 def recluster_singletons(smiles, clusters, recluster_coefficient, fp_type):
     singletons = []
     realClusters = []
     realSingletons = []
+
+    #Distinguin between singletons and real clusters
     for clust in clusters:
         if(len(clust) == 1):
             singletons.append(clust[0])
         else:
             realClusters.append(clust)
-
-    if len(singletons) == len(clusters):
-        return [smiles, clusters]
-
+    #For each singleton, see if it meets the requirement to join a cluster
     for singleton in singletons:
         centroid_similarities = []
         for cluster in realClusters:
@@ -163,6 +163,7 @@ def recluster_singletons(smiles, clusters, recluster_coefficient, fp_type):
 
     return [smiles, realClusters]
 
+# Find the max number in a list
 def max(array):
     currMax = -1
     index = -1
