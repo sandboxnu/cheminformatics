@@ -75,7 +75,6 @@ def upload():
   session['reasons_for_failure'] = reasons_for_failure
   session.changed = True
 
-  print(label_failures)
   return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'], label_failures=label_failures)
 
 @app.route('/verify_pains', methods=['GET', 'POST'])
