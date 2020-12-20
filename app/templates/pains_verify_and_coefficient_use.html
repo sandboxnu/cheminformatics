@@ -13,12 +13,13 @@
 {% block content %}
 
 {% if label_failures %}
+    <div class="alert alert-warning    alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    Chemicals that failed to be labeled:
     {% for message in label_failures %}
-      <div class="alert alert-warning alert-dismissible" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <!-- <strong>Title</strong> --> {{ message }}
-      </div>
+      <li>{{ message }}</li>
     {% endfor %}
+    </div>
 {% endif %}
 <div class="container">
   <div class="text-center">
