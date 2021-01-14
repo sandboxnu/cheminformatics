@@ -83,6 +83,7 @@ def verify_pains():
   bad_smiles = session.get('bad_smiles')
   all_smiles = session.get('all_smiles')
   reasons_for_failure = session.get('reasons_for_failure')
+  cluster_failures = []
   #TODO: check if reasons are still even the list? Does it matter?
   if request.method == 'POST':
     form = request.form
@@ -117,10 +118,11 @@ def verify_pains():
 
             if(not(found)):
               print('Could not cluster {smile}'.format(smile=smile))
+              cluster_failures.append(smile)
             else:
               print('Could not decipher {smile}'.format(smile=smile))
   
-  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], highest_val=session["highest_val"], lowest_val=session["lowest_val"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'])
+  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], highest_val=session["highest_val"], lowest_val=session["lowest_val"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'], cluster_failures=cluster_failures)
 
 @app.route('/verify_pains_by_error', methods=['GET', 'POST'])
 def verify_pains_by_error():
