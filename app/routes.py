@@ -117,6 +117,8 @@ def verify_pains():
 
             if(not(found)):
               print('Could not cluster {smile}'.format(smile=smile))
+            else:
+              print('Could not decipher {smile}'.format(smile=smile))
   
   return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], highest_val=session["highest_val"], lowest_val=session["lowest_val"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'])
 
