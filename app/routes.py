@@ -128,6 +128,7 @@ def verify_pains_by_error():
   bad_smiles = session.get('bad_smiles')
   all_smiles = session.get('all_smiles')
   reasons_for_failure = session.get('reasons_for_failure')
+  cluster_failures = []
 
   if request.method == 'POST':
     form = request.form
@@ -175,8 +176,9 @@ def verify_pains_by_error():
 
               if(not(found)):
                   print('Could not cluster {smile}'.format(smile=smile))
+                  cluster_failures.append(smile)
 
-  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, highest_val=session["highest_val"], lowest_val=session["lowest_val"], include_property=session['include_property'])
+  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, highest_val=session["highest_val"], lowest_val=session["lowest_val"], include_property=session['include_property'], cluster_failures=cluster_failures)
 
 @app.route('/final_compounds', methods=['GET', 'POST'])
 def final_compounds():
