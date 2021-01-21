@@ -1,6 +1,6 @@
 from flask.helpers import send_file
 from app import app
-from flask import render_template, request, session
+from flask import render_template, request, session, flash
 import scripts.pains.LillyMedchemRules.pains as pains
 from app.data.smiles import construct_smiles, filter_smiles, convert_to_smiles, convert_to_smiles_and_labels, sanitize
 import scripts.clustering.clustering as clustering
@@ -57,7 +57,7 @@ def upload():
   session['good_smiles'] = good_smiles
   #global bad_smiles
   failed_smiles = pains.get_bad_smiles(inputs)
-  bs = convert_to_smiles_and_labels(failed_smiles, session['all_smiles'])
+  bs, label_failures = convert_to_smiles_and_labels(failed_smiles, session['all_smiles'])
   bad_smiles = bs if isinstance(bs, dict) else {}
   session['bad_smiles'] = bad_smiles
   #global include_property
@@ -75,7 +75,7 @@ def upload():
   session['reasons_for_failure'] = reasons_for_failure
   session.changed = True
 
-  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'])
+  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'], label_failures=label_failures)
 
 @app.route('/verify_pains', methods=['GET', 'POST'])
 def verify_pains():
@@ -83,6 +83,7 @@ def verify_pains():
   bad_smiles = session.get('bad_smiles')
   all_smiles = session.get('all_smiles')
   reasons_for_failure = session.get('reasons_for_failure')
+  cluster_failures = []
   #TODO: check if reasons are still even the list? Does it matter?
   if request.method == 'POST':
     form = request.form
@@ -116,12 +117,10 @@ def verify_pains():
                 found = True
 
             if(not(found)):
-                print('Could not cluster {smile}'.format(smile=smile))
-
-
-
-
-  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], highest_val=session["highest_val"], lowest_val=session["lowest_val"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'])
+              print('Could not cluster {smile}'.format(smile=smile))
+              cluster_failures.append(smile)
+  
+  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], highest_val=session["highest_val"], lowest_val=session["lowest_val"], reasons_for_failure=reasons_for_failure, include_property=session['include_property'], cluster_failures=cluster_failures)
 
 @app.route('/verify_pains_by_error', methods=['GET', 'POST'])
 def verify_pains_by_error():
@@ -129,6 +128,7 @@ def verify_pains_by_error():
   bad_smiles = session.get('bad_smiles')
   all_smiles = session.get('all_smiles')
   reasons_for_failure = session.get('reasons_for_failure')
+  cluster_failures = []
 
   if request.method == 'POST':
     form = request.form
@@ -176,10 +176,9 @@ def verify_pains_by_error():
 
               if(not(found)):
                   print('Could not cluster {smile}'.format(smile=smile))
+                  cluster_failures.append(smile)
 
-
-
-  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, highest_val=session["highest_val"], lowest_val=session["lowest_val"], include_property=session['include_property'])
+  return render_template('pains_verify_and_coefficient_use.html', title='Cheminformatic Analysis', bad_smiles=bad_smiles, num_remaining=session["num_remaining"], num_removed=session["num_removed"], reasons_for_failure=reasons_for_failure, highest_val=session["highest_val"], lowest_val=session["lowest_val"], include_property=session['include_property'], cluster_failures=cluster_failures)
 
 @app.route('/final_compounds', methods=['GET', 'POST'])
 def final_compounds():
@@ -260,4 +259,3 @@ def add_header(response):
   response.cache_control.public = True
   response.cache_control.max_age = 0
   return response
-
